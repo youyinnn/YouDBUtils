@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+        Configuration后面的status，这个用于设置log4j2自身内部的信息输出，可以不设置，当设置成trace时，你会看到log4j2内部各种详细输出。
+    -->
+<!--
+    monitorInterval：Log4j能够自动检测修改配置 文件和重新配置本身，设置间隔秒数。
+-->
+<Configuration status="off" monitorInterval="300">
+    <properties>
+        <property name="LOG_HOME">Log</property>
+        <property name="FILE_NAME">mylog</property>
+    </properties>
+
+    <!--先定义所有的appender-->
+    <Appenders>
+        <!--这个输出控制台的配置-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--控制台只输出level及以上级别的信息（onMatch），其他的直接拒绝（onMismatch）-->
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <Console
+                name="infoOnly"
+                target="SYSTEM_OUT">
+
+            <!-- 下面这个日志过滤就是只输入info日志 -->
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <Console
+                name="sqlConsole"
+                target="SYSTEM_OUT">
+
+            <Filters>
+                <!--
+                    需要说明的是onMatch和onMismatch可以选择的值及其含义。可选的值分别是，ACCEPT, DENY, NEUTRAL，
+                    ACCEPT和DENY比较好理解就是接受和拒绝的意思，在使用单个过滤器的时候，一般就是使用这两个值。
+                    但是在组合过滤器中，如果用接受ACCEPT的话，日志信息就会直接写入日志文件,后续的过滤器不再进行过滤。
+                    所以，在组合过滤器中，接受使用NEUTRAL（中立），被第一个过滤器接受的日志信息，会继续用后面的过滤器进行过滤，
+                    只有符合所有过滤器条件的日志信息，才会被最终写入日志文件。
+                -->
+
+                <!--
+                    在取得连接的时候 我们会使用“select 1”来先验证连接的合法性
+                    这样在连接池初始化的时候会疯狂的打印：
+                        14:44:43.756 [main] DEBUG druid.sql.Statement - {conn-1000x, stmt-2000x} executed. select 1
+                    所以我们为sqlConsole设置过滤器
+                    使用RegexFilter来设置不打印包含语句“select 1”的日志 也就过滤了上面这种日志的打印
+                -->
+                <RegexFilter regex=".* select[\s]1.*" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </Console>
+
+        <!--文件会打印出所有信息，这个log每次运行程序会自动清空，由append属性决定，这个也挺有用的，适合临时测试用-->
+        <File name="log" fileName="log/app.log">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+        </File>
+
+        <!--
+            RollingRandomAccessFile的属性：
+                fileName  指定当前日志文件的位置和文件名称
+                filePattern  指定当发生Rolling时，文件的转移和重命名规则
+                SizeBasedTriggeringPolicy  指定当文件体积大于size指定的值时，触发Rolling
+                DefaultRolloverStrategy  指定最多保存的文件个数
+                TimeBasedTriggeringPolicy
+                    这个配置需要和filePattern结合使用，注意filePattern中配置的文件重命名规则是${FILE_NAME}-%d{yyyy-MM-dd HH-mm}-%i，
+                    最小的时间粒度是mm，即分钟，TimeBasedTriggeringPolicy指定的size是1，结合起来就是每1分钟生成一个新文件。如果改成%d{yyyy-MM-dd HH}，
+                    最小粒度为小时，则每一个小时生成一个文件。
+        -->
+        <RollingRandomAccessFile name="MyFile2"
+            fileName="${LOG_HOME}/${FILE_NAME}.log"
+            filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{yyyy-MM-dd HH-mm}-%i.log">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="1 MB" />
+            </Policies>
+
+            <DefaultRolloverStrategy max="20" />
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile
+            name="error"
+            fileName="log/errors/error.log"
+            filePattern="log/errors/${date:yyyy-MM}/error-%d{yyyy-MM-dd HH-mm}-%i.log">
+            <PatternLayout
+                    pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+
+            <Filters>
+                <ThresholdFilter level="fatal" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="1 MB" />
+            </Policies>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="InfoFile"
+                                 fileName="log/info/info.log"
+                                 filePattern="log/info/${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} %level [%thread][%file:%line] - %msg%n" />
+
+            <Filters>
+                <ThresholdFilter level="warn" onMatch="DENY" onMismatch="NEUTRAL" />
+                <ThresholdFilter level="info" onMatch="ACCEPT" onMismatch="DENY" />
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingRandomAccessFile>
+
+    </Appenders>
+
+
+    <!--然后定义logger，只有定义了logger并引入的appender，appender才会生效-->
+    <Loggers>
+        <!--建立一个默认的root的logger-->
+        <Root level="info">
+            <AppenderRef ref="Console" />
+        </Root>
+
+        <!-- druid配置 -->
+        <logger name="druid.sql.Statement" level="debug" additivity="false">
+            <appender-ref ref="sqlConsole"/>
+        </logger>
+
+        <Logger name="mylog" level="trace" additivity="false">
+            <!--<AppenderRef ref="MyFile2"/>-->
+            <AppenderRef ref="infoOnly"/>
+            <AppenderRef ref="InfoFile"/>
+        </Logger>
+    </Loggers>
+</Configuration>
