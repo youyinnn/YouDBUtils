@@ -22,7 +22,7 @@ public class YouLog4j2Filter {
     public static final String      CONNECTION_CLOSE_AFTER_LOG_ENABLE           = "connectionCloseAfterLogEnable";
 
     public static final String      STATEMENT_CREATE_AFTER_LOG_ENABLE           = "statementCreateAfterLogEnable";
-    public static final String      STATEMENT_PREPAREAFTERLOG_ENABLE            = "statementPrepareAfterLogEnable";
+    public static final String      STATEMENT_PREPARE_AFTER_LOG_ENABLE          = "statementPrepareAfterLogEnable";
     public static final String      STATEMENT_PREPARE_CALL_AFTER_ENABLE         = "statementPrepareCallAfterLogEnable";
 
     public static final String      STATEMENT_EXECUTE_AFTER_LOG_ENABLE          = "statementExecuteAfterLogEnable";
