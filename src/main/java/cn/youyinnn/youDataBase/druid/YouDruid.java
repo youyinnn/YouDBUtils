@@ -22,26 +22,22 @@ import java.util.Properties;
  */
 public class YouDruid {
 
-    private static final String         MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
-    private static final String         SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
+    private static final String             MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
+    private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
 
-    private ArrayList<Filter>    filters                     = new ArrayList<>();
+    private ArrayList<Filter>               filters                     = new ArrayList<>();
     /**
      * The constant instance.
      */
-    public static YouDruid instance                    = new YouDruid() ;
+    public static YouDruid                  instance                    = new YouDruid() ;
 
-    private static DruidDataSource      mysqlDataSource ;
-    private static DruidDataSource      sqliteDataSource ;
+    private static DruidDataSource          currentDataSource ;
+    private static String                   currentDataSourceType ;
 
     private YouDruid() {}
 
     public void printDataSource() {
-        if (mysqlDataSource == null){
-            System.out.println(sqliteDataSource);
-        }else {
-            System.out.println(mysqlDataSource);
-        }
+        System.out.println(currentDataSource);
     }
 
 
@@ -86,6 +82,9 @@ public class YouDruid {
     }
 
     private static void generateDataSource(String dataSourceType,String propertiesFile)  {
+
+        currentDataSourceType = dataSourceType;
+
         Properties properties = new Properties();
         if (propertiesFile == null){
             if (dataSourceType.equals("mysql")){
@@ -105,9 +104,9 @@ public class YouDruid {
             }
             try {
                 if (dataSourceType.equals("mysql")){
-                    mysqlDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
-                } else {
-                    sqliteDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+                    currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+                 } else {
+                    currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -120,11 +119,7 @@ public class YouDruid {
      */
     public void init(){
         try {
-            if (mysqlDataSource == null){
-                sqliteDataSource.init();
-            }else {
-                mysqlDataSource.init();
-            }
+            currentDataSource.init();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -136,11 +131,7 @@ public class YouDruid {
      * @return the boolean
      */
     public boolean isInit(){
-        if (mysqlDataSource == null){
-            return sqliteDataSource.isInited();
-        }else {
-            return mysqlDataSource.isInited();
-        }
+        return currentDataSource.isInited();
     }
 
     public void statOnByFilter(){
@@ -160,18 +151,10 @@ public class YouDruid {
     }
 
     private void addFilters(String filterName){
-        if (mysqlDataSource == null) {
-            try {
-                sqliteDataSource.addFilters(filterName);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            try {
-                mysqlDataSource.addFilters(filterName);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            currentDataSource.addFilters(filterName);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -186,19 +169,11 @@ public class YouDruid {
     }
 
     private void setProxyFilters(ArrayList<Filter> filters){
-        if (mysqlDataSource == null){
-            sqliteDataSource.setProxyFilters(filters);
-        } else {
-            mysqlDataSource.setProxyFilters(filters);
-        }
+        currentDataSource.setProxyFilters(filters);
     }
 
     public void showProxyFilters(){
-        if (mysqlDataSource == null) {
-            System.out.println(sqliteDataSource.getProxyFilters());
-        } else {
-            System.out.println(mysqlDataSource.getProxyFilters());
-        }
+        System.out.println(currentDataSource.getProxyFilters());
     }
 
     /**
@@ -208,10 +183,6 @@ public class YouDruid {
      * @throws SQLException the sql exception
      */
     public DruidPooledConnection getConn() throws SQLException {
-        if (mysqlDataSource == null){
-            return sqliteDataSource.getConnection();
-        }else {
-            return mysqlDataSource.getConnection();
-        }
+        return currentDataSource.getConnection();
     }
 }
