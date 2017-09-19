@@ -1,4 +1,4 @@
-package cn.youyinnn.dao;
+package cn.lab.dao;
 
 import cn.youyinnn.myDataBase.annotation.Dao;
 

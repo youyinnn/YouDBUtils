@@ -1,4 +1,4 @@
-package cn.youyinnn.helloworld;
+package cn.lab.helloworld;
 
 import java.sql.*;
 

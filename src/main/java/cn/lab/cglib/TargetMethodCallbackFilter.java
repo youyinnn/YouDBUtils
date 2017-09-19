@@ -1,4 +1,4 @@
-package cn.youyinnn.cglib;
+package cn.lab.cglib;
 
 import net.sf.cglib.proxy.CallbackFilter;
 
