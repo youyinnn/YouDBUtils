@@ -1,7 +1,8 @@
 package cn.youyinnn.youDataBase.druid;
 
+import cn.youyinnn.youDataBase.druid.filter.YouLog4j2Filter;
+import cn.youyinnn.youDataBase.druid.filter.YouStatFilter;
 import com.alibaba.druid.filter.Filter;
-import com.alibaba.druid.filter.logging.Log4j2Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
@@ -174,8 +175,13 @@ public class YouDruid {
         }
     }
 
-    public void setLog4j2Filter(Log4j2Filter log4j2Filter) {
-        filters.add(log4j2Filter);
+    public void addLog4j2Filter() {
+        filters.add(YouLog4j2Filter.getLog4j2Filter());
+        setProxyFilters(filters);
+    }
+
+    public void addStatFilter(){
+        filters.add(YouStatFilter.getStatFilter());
         setProxyFilters(filters);
     }
 
