@@ -132,14 +132,18 @@
         </Root>
 
         <!-- druid配置 -->
-        <logger name="druid.sql.Statement" level="debug" additivity="false">
+        <Logger name="druid.sql.Statement" level="debug" additivity="false">
             <appender-ref ref="sqlConsole"/>
-        </logger>
+        </Logger>
 
         <Logger name="mylog" level="trace" additivity="false">
             <!--<AppenderRef ref="MyFile2"/>-->
             <AppenderRef ref="infoOnly"/>
             <AppenderRef ref="InfoFile"/>
+        </Logger>
+
+        <Logger name="com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
         </Logger>
     </Loggers>
 </Configuration>

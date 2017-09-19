@@ -36,6 +36,9 @@ public class YouDruid {
 
     private YouDruid() {}
 
+    /**
+     * Print data source.
+     */
     public void printDataSource() {
         System.out.println(currentDataSource);
     }
@@ -54,7 +57,7 @@ public class YouDruid {
     }
 
     /**
-     * 返回一个MySQL数据源的连接池 使用你指定的路径
+     * 返回一个MySQL数据源的连接池 使用你指定的配置文件路径
      *
      * @param propertiesFile the properties file
      * @return the my druid
@@ -67,6 +70,11 @@ public class YouDruid {
     }
 
 
+    /**
+     * 返回一个Sqlite数据源的连接池 默认使用"conf/sqlite.properties"路径下的配置
+     *
+     * @return the sq lite data source
+     */
     public static YouDruid getSQLiteDataSource() {
 
         generateDataSource("sqlite",null);
@@ -74,6 +82,12 @@ public class YouDruid {
         return instance;
     }
 
+    /**
+     * 返回Sqlite数据源的连接池 使用你指定的配置文件路径
+     *
+     * @param propertiesFile the properties file
+     * @return the you druid
+     */
     public static YouDruid getSQLiteDataSource(String propertiesFile){
 
         generateDataSource("sqlite",propertiesFile);
@@ -134,18 +148,30 @@ public class YouDruid {
         return currentDataSource.isInited();
     }
 
+    /**
+     * Stat on by filter.
+     */
     public void statOnByFilter(){
         addFilters("stat");
     }
 
+    /**
+     * Log 4 j on by filter.
+     */
     public void log4jOnByFilter(){
         addFilters("log4j");
     }
 
+    /**
+     * Log 4 j 2 on by filter.
+     */
     public void log4j2OnByFilter(){
         addFilters("log4j2");
     }
 
+    /**
+     * Wall on by filter.
+     */
     public void wallOnByFilter(){
         addFilters("wall");
     }
@@ -158,23 +184,42 @@ public class YouDruid {
         }
     }
 
+    /**
+     * Add log 4 j 2 filter.
+     */
     public void addLog4j2Filter() {
         setProxyFilters(YouLog4j2Filter.getLog4j2Filter());
     }
 
+    /**
+     * Add stat filter.
+     */
     public void addStatFilter(){
         setProxyFilters(YouStatFilter.getStatFilter());
     }
 
     private void setProxyFilters(Filter filter){
-
         currentDataSource.setProxyFilters(new ArrayList<>(Collections.singletonList(filter)));
     }
 
-    public static void setTimeBetweenLogStatsMillis(long logStatsMillis){
+    /**
+     * 打开监控数据输出到日志中
+     *
+     * 特别需要在log4j2设置这个logger来定制化你的日志输出：
+     *
+     *    <Logger name="com.alibaba.druid.pool.DruidDataSourceStatLoggerImpl" level="info" additivity="false">
+     *      <AppenderRef ref="..."/>
+     *    </Logger>
+     *
+     * @param logStatsMillis the log stats millis
+     */
+    public void setTimeBetweenLogStatsMillis(long logStatsMillis){
         currentDataSource.setTimeBetweenLogStatsMillis(logStatsMillis);
     }
 
+    /**
+     * Show proxy filters.
+     */
     public void showProxyFilters(){
         System.out.println(currentDataSource.getProxyFilters());
     }
