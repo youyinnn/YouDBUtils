@@ -1,4 +1,4 @@
-package cn.youyinnn.myDataBase.druid.filter;
+package cn.youyinnn.youDataBase.druid.filter;
 
 import com.alibaba.druid.filter.logging.Log4j2Filter;
 
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * @author: youyinnn
  * @date: 2017/9/18
  */
-public class MyLog4j2Filter {
+public class YouLog4j2Filter {
 
     /**
      * 下面这些开关常量名 除了STATEMENT_EXECUTABLE_SQL_LOG_ENABLE是false以外 其它默认都是true
@@ -51,7 +51,7 @@ public class MyLog4j2Filter {
 
     private static Log4j2Filter      log4j2Filter                                = new Log4j2Filter();
 
-    private MyLog4j2Filter(){}
+    private YouLog4j2Filter(){}
 
     /**
      * 获取一个正常的Log4j2Filter 即开关值取默认值

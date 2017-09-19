@@ -1,4 +1,4 @@
-package cn.youyinnn.myDataBase.druid;
+package cn.youyinnn.youDataBase.druid;
 
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.filter.logging.Log4j2Filter;
@@ -19,7 +19,7 @@ import java.util.Properties;
  * @author: youyinnn
  * @date: 2017 /9/15
  */
-public class MyDruid {
+public class YouDruid {
 
     private static final String         MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
     private static final String         SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
@@ -28,12 +28,12 @@ public class MyDruid {
     /**
      * The constant instance.
      */
-    public static MyDruid               instance                    = new MyDruid() ;
+    public static YouDruid instance                    = new YouDruid() ;
 
     private static DruidDataSource      mysqlDataSource ;
     private static DruidDataSource      sqliteDataSource ;
 
-    private MyDruid() {}
+    private YouDruid() {}
 
     public void printDataSource() {
         if (mysqlDataSource == null){
@@ -49,7 +49,7 @@ public class MyDruid {
      *
      * @return the instance for my sql
      */
-    public static MyDruid getInstanceForMySQL() {
+    public static YouDruid getMySQLDataSource() {
 
         generateDataSource("mysql",null);
 
@@ -62,9 +62,24 @@ public class MyDruid {
      * @param propertiesFile the properties file
      * @return the my druid
      */
-    public static MyDruid getInstanceForMySQL(String propertiesFile) {
+    public static YouDruid getMySQLDataSource(String propertiesFile) {
 
         generateDataSource("mysql",propertiesFile);
+
+        return instance;
+    }
+
+
+    public static YouDruid getSQLiteDataSource() {
+
+        generateDataSource("sqlite",null);
+
+        return instance;
+    }
+
+    public static YouDruid getSQLiteDataSource(String propertiesFile){
+
+        generateDataSource("sqlite",propertiesFile);
 
         return instance;
     }
@@ -79,7 +94,7 @@ public class MyDruid {
             }
         }
 
-        InputStream inputStream = MyDruid.class.getClassLoader().getResourceAsStream(propertiesFile);
+        InputStream inputStream = YouDruid.class.getClassLoader().getResourceAsStream(propertiesFile);
 
         if (inputStream != null){
             try {
@@ -97,20 +112,6 @@ public class MyDruid {
                 e.printStackTrace();
             }
         }
-    }
-
-    public static MyDruid getInstanceForSQLite() {
-
-        generateDataSource("sqlite",null);
-
-        return instance;
-    }
-
-    public static MyDruid getInstanceForSQLite(String propertiesFile){
-
-        generateDataSource("sqlite",propertiesFile);
-
-        return instance;
     }
 
     /**
@@ -174,7 +175,6 @@ public class MyDruid {
     }
 
     public void setLog4j2Filter(Log4j2Filter log4j2Filter) {
-
         filters.add(log4j2Filter);
         setProxyFilters(filters);
     }

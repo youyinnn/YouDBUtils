@@ -1,6 +1,6 @@
-package cn.youyinnn.myDataBase.proxy;
+package cn.youyinnn.youDataBase.proxy;
 
-import cn.youyinnn.myDataBase.annotation.Dao;
+import cn.youyinnn.youDataBase.annotation.Dao;
 import net.sf.cglib.proxy.Enhancer;
 
 /**

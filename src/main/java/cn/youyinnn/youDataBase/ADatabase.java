@@ -1,4 +1,4 @@
-package cn.youyinnn.myDataBase;
+package cn.youyinnn.youDataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

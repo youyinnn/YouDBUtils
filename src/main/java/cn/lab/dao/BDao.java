@@ -1,6 +1,6 @@
 package cn.lab.dao;
 
-import cn.youyinnn.myDataBase.annotation.Dao;
+import cn.youyinnn.youDataBase.annotation.Dao;
 
 /**
  * @description:
