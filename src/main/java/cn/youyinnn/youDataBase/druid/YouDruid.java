@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 
 /**
@@ -25,7 +26,6 @@ public class YouDruid {
     private static final String             MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
     private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
 
-    private ArrayList<Filter>               filters                     = new ArrayList<>();
     /**
      * The constant instance.
      */
@@ -159,17 +159,20 @@ public class YouDruid {
     }
 
     public void addLog4j2Filter() {
-        filters.add(YouLog4j2Filter.getLog4j2Filter());
-        setProxyFilters(filters);
+        setProxyFilters(YouLog4j2Filter.getLog4j2Filter());
     }
 
     public void addStatFilter(){
-        filters.add(YouStatFilter.getStatFilter());
-        setProxyFilters(filters);
+        setProxyFilters(YouStatFilter.getStatFilter());
     }
 
-    private void setProxyFilters(ArrayList<Filter> filters){
-        currentDataSource.setProxyFilters(filters);
+    private void setProxyFilters(Filter filter){
+
+        currentDataSource.setProxyFilters(new ArrayList<>(Collections.singletonList(filter)));
+    }
+
+    public static void setTimeBetweenLogStatsMillis(long logStatsMillis){
+        currentDataSource.setTimeBetweenLogStatsMillis(logStatsMillis);
     }
 
     public void showProxyFilters(){
