@@ -17,10 +17,10 @@ public class ConnectionContainer {
 
     private ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
 
-    public void bind(Connection connection) { connectionThreadLocal.set(connection);}
+    public void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
 
-    public Connection get() { return connectionThreadLocal.get(); }
+    public Connection getConn() { return connectionThreadLocal.get(); }
 
-    public void remove() {connectionThreadLocal.remove();}
+    public void removeConn() {connectionThreadLocal.remove();}
 
 }
