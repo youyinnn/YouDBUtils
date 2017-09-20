@@ -3,6 +3,7 @@ package cn.youyinnn.youDataBase;
 import cn.youyinnn.youDataBase.utils.ClassUtils;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.Vector;
 
@@ -20,7 +21,12 @@ public class AnnotationScanner {
         Set<Class<?>> fileClass = ClassUtils.findFileClass(daoPackageNamePrefix);
 
         for (Class<?> aClass : fileClass) {
-            System.out.println(aClass);
+            Class<?>[] interfaces = aClass.getInterfaces();
+            for (Class<?> anInterface : interfaces) {
+                if (anInterface.getName().equals("cn.youyinnn.youDataBase.annotation.YouDao")) {
+                    System.out.println(Arrays.toString(aClass.getDeclaredMethods()));
+                }
+            }
         }
 
     }

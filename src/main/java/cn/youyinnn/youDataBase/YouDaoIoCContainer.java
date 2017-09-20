@@ -1,6 +1,6 @@
 package cn.youyinnn.youDataBase;
 
-import cn.youyinnn.youDataBase.annotation.YouDao;
+import cn.youyinnn.youDataBase.interfaces.YouDao;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package cn.lab.dao;
 
 import cn.youyinnn.youDataBase.SqlExecuteHandler;
-import cn.youyinnn.youDataBase.annotation.YouDao;
+import cn.youyinnn.youDataBase.interfaces.YouDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
