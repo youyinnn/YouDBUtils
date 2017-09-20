@@ -25,6 +25,8 @@ public class TargetInterceptor implements MethodInterceptor {
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
+        System.out.println(method.getDeclaringClass());
+
         System.out.println("---------调用前---------");
 
         Object result = methodProxy.invokeSuper(o,objects);

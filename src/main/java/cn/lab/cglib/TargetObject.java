@@ -24,4 +24,8 @@ public class TargetObject {
         return "method c";
     }
 
+    @Override
+    public String toString() {
+        return "target object";
+    }
 }

@@ -17,8 +17,10 @@ public class TestCglib {
 
         TargetObject targetObject = (TargetObject) enhancer.create();
 
-        targetObject.say("aaa");
-        targetObject.a();
+        System.out.println(targetObject);
+
+        //targetObject.say("aaa");
+        //targetObject.a();
 
     }
 

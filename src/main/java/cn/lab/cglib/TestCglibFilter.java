@@ -33,11 +33,13 @@ public class TestCglibFilter {
 
         TargetObject targetObject = (TargetObject) enhancer.create();
 
-        targetObject.say("bbb");
+        //targetObject.say("bbb");
+        //
+        //targetObject.a();
+        //targetObject.b();
+        //System.out.println(targetObject.c());
 
-        targetObject.a();
-        targetObject.b();
-        System.out.println(targetObject.c());
+        System.out.println(targetObject);
 
     }
 

@@ -18,7 +18,7 @@ public class TargetMethodCallbackFilter implements CallbackFilter {
     public int accept(Method method) {
 
         if (method.getName().equals("a")) {
-            //System.out.println("method a");
+            //System.out.println(method.getDeclaringClass().getName());
             return 0;
         }
         if (method.getName().equals("b")) {

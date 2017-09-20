@@ -1,9 +1,11 @@
 package cn.youyinnn.youDataBase;
 
+import cn.youyinnn.youDataBase.interfaces.YouDao;
+import cn.youyinnn.youDataBase.proxy.TransactionProxyGenerator;
 import cn.youyinnn.youDataBase.utils.ClassUtils;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Vector;
 
@@ -16,19 +18,33 @@ public class AnnotationScanner {
 
     private Object proxyObject;
 
-    public AnnotationScanner(String daoPackageNamePrefix){
+    private ArrayList<YouDao> proxyYouDaoList = new ArrayList<>();
+
+    public AnnotationScanner(String daoPackageNamePrefix)  {
 
         Set<Class<?>> fileClass = ClassUtils.findFileClass(daoPackageNamePrefix);
 
         for (Class<?> aClass : fileClass) {
             Class<?>[] interfaces = aClass.getInterfaces();
             for (Class<?> anInterface : interfaces) {
-                if (anInterface.getName().equals("cn.youyinnn.youDataBase.annotation.YouDao")) {
-                    System.out.println(Arrays.toString(aClass.getDeclaredMethods()));
+                if (anInterface.getName().equals("cn.youyinnn.youDataBase.interfaces.YouDao")) {
+                    YouDao youDao = null;
+                    try {
+                        youDao = (YouDao) aClass.newInstance();
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                    YouDao proxyObject = TransactionProxyGenerator.getProxyObject(youDao);
+
+                    proxyYouDaoList.add(proxyObject);
                 }
             }
         }
+    }
 
+    public ArrayList<YouDao> getProxyYouDaoList() {
+        return proxyYouDaoList;
     }
 
     public void showCurrentProjectLoadedClass(){

@@ -1,6 +1,7 @@
 package cn.lab.dao;
 
 import cn.youyinnn.youDataBase.SqlExecuteHandler;
+import cn.youyinnn.youDataBase.annotations.Transaction;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
 import java.sql.ResultSet;
@@ -37,6 +38,7 @@ public class BDao implements YouDao {
         }
     }
 
+    @Transaction
     public void c() {
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (1,'paul',22,'California',30000) ;";

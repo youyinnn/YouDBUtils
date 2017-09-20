@@ -10,12 +10,12 @@ import net.sf.cglib.proxy.Enhancer;
  */
 public class TransactionProxyGenerator {
 
-    public static Object getProxyObject(YouDao dao){
+    public static YouDao getProxyObject(YouDao dao){
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(dao.getClass());
+        enhancer.setCallback(new TransactionInterceptor());
 
-
-        return null;
+        return (YouDao) enhancer.create();
     }
 
 }
