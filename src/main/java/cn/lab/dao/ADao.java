@@ -12,7 +12,7 @@ public class ADao implements YouDao{
 
     public void dao(){
 
-        AnnotationScanner annotationScanner = new AnnotationScanner();
+        AnnotationScanner annotationScanner = new AnnotationScanner("cn.youyinn");
     }
 
 }
