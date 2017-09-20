@@ -18,11 +18,10 @@ public class SqlExecuteHandler {
     private static void checkConnection(){
 
         ConnectionContainer instance = ConnectionContainer.getInstance();
-
-        if (instance.get() == null){
+        if (instance.getConn() == null){
             try {
-                System.out.println("bind conn");
-                instance.bind(YouDruid.getCurrentDataSourceConn());
+                Connection conn = YouDruid.getCurrentDataSourceConn();
+                instance.bindConn(conn);
             } catch (SQLException | NoDataSourceInitException e) {
                 e.printStackTrace();
             }
@@ -32,16 +31,25 @@ public class SqlExecuteHandler {
     public static ResultSet executeQuery(String sql) {
 
         checkConnection();
-
         ResultSet result = null;
-
-        Connection conn = ConnectionContainer.getInstance().get();
-
+        Connection conn = ConnectionContainer.getInstance().getConn();
         try {
             Statement statement = conn.createStatement();
-
             result = statement.executeQuery(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
+    public static int executeUpdate(String sql){
+
+        checkConnection();
+        int result = 0;
+        Connection conn = ConnectionContainer.getInstance().getConn();
+        try {
+            Statement statement = conn.createStatement();
+            result = statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
