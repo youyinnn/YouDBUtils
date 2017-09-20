@@ -28,8 +28,6 @@ public class YouDruid {
     private static final String             MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
     private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
 
-    private static YouDruid                  instance                    = new YouDruid() ;
-
     private static DruidDataSource          currentDataSource ;
 
     private YouDruid() {}
@@ -50,60 +48,24 @@ public class YouDruid {
     /**
      * Print data source.
      */
-    public void printDataSource() {
+    public static void printDataSource() {
         System.out.println(currentDataSource);
     }
 
-
-    /**
-     * 返回一个MySQL数据源的连接池 默认使用"conf/mysql.properties"路径下的配置
-     *
-     * @return the instance for my sql
-     */
-    public static YouDruid getMySQLDataSource() {
-
+    public static void initMySQLDataSource() {
         generateDataSource("mysql",null);
-
-        return instance;
     }
 
-    /**
-     * 返回一个MySQL数据源的连接池 使用你指定的配置文件路径
-     *
-     * @param propertiesFile the properties file
-     * @return the my druid
-     */
-    public static YouDruid getMySQLDataSource(String propertiesFile) {
-
+    public static void initMySQLDataSource(String propertiesFile){
         generateDataSource("mysql",propertiesFile);
-
-        return instance;
     }
 
-
-    /**
-     * 返回一个Sqlite数据源的连接池 默认使用"conf/sqlite.properties"路径下的配置
-     *
-     * @return the sq lite data source
-     */
-    public static YouDruid getSQLiteDataSource() {
-
+    public static void initSQLiteDataSource() {
         generateDataSource("sqlite",null);
-
-        return instance;
     }
 
-    /**
-     * 返回Sqlite数据源的连接池 使用你指定的配置文件路径
-     *
-     * @param propertiesFile the properties file
-     * @return the you druid
-     */
-    public static YouDruid getSQLiteDataSource(String propertiesFile){
-
+    public static void initSQLiteDataSource(String propertiesFile) {
         generateDataSource("sqlite",propertiesFile);
-
-        return instance;
     }
 
     private static void generateDataSource(String dataSourceType,String propertiesFile)  {
@@ -140,7 +102,7 @@ public class YouDruid {
     /**
      * Init.
      */
-    public void init(){
+    public static void init(){
         try {
             currentDataSource.init();
         } catch (SQLException e) {
@@ -153,39 +115,39 @@ public class YouDruid {
      *
      * @return the boolean
      */
-    public boolean isInit(){
+    public static boolean isInit(){
         return currentDataSource.isInited();
     }
 
     /**
      * Stat on by filter.
      */
-    public void statOnByFilter(){
+    public static void statOnByFilter(){
         addFilters("stat");
     }
 
     /**
      * Log 4 j on by filter.
      */
-    public void log4jOnByFilter(){
+    public static void log4jOnByFilter(){
         addFilters("log4j");
     }
 
     /**
      * Log 4 j 2 on by filter.
      */
-    public void log4j2OnByFilter(){
+    public static void log4j2OnByFilter(){
         addFilters("log4j2");
     }
 
     /**
      * Wall on by filter.
      */
-    public void wallOnByFilter(){
+    public static void wallOnByFilter(){
         addFilters("wall");
     }
 
-    private void addFilters(String filterName){
+    private static void addFilters(String filterName){
         try {
             currentDataSource.addFilters(filterName);
         } catch (SQLException e) {
@@ -196,18 +158,18 @@ public class YouDruid {
     /**
      * Add log 4 j 2 filter.
      */
-    public void addLog4j2Filter() {
+    public static void addLog4j2Filter() {
         setProxyFilters(YouLog4j2Filter.getLog4j2Filter());
     }
 
     /**
      * Add stat filter.
      */
-    public void addStatFilter(){
+    public static void addStatFilter(){
         setProxyFilters(YouStatFilter.getStatFilter());
     }
 
-    private void setProxyFilters(Filter filter){
+    private static void setProxyFilters(Filter filter){
         currentDataSource.setProxyFilters(new ArrayList<>(Collections.singletonList(filter)));
     }
 
@@ -222,14 +184,14 @@ public class YouDruid {
      *
      * @param logStatsMillis the log stats millis
      */
-    public void setTimeBetweenLogStatsMillis(long logStatsMillis){
+    public static void setTimeBetweenLogStatsMillis(long logStatsMillis){
         currentDataSource.setTimeBetweenLogStatsMillis(logStatsMillis);
     }
 
     /**
      * Show proxy filters.
      */
-    public void showProxyFilters(){
+    public static void showProxyFilters(){
         System.out.println(currentDataSource.getProxyFilters());
     }
 
@@ -239,7 +201,7 @@ public class YouDruid {
      * @return the conn
      * @throws SQLException the sql exception
      */
-    public DruidPooledConnection getConn() throws SQLException {
+    public static DruidPooledConnection getConn() throws SQLException {
         return currentDataSource.getConnection();
     }
 }

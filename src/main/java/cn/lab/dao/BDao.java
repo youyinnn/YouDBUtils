@@ -29,8 +29,6 @@ public class BDao implements Dao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        SqlExecuteHandler.executeQuery(sql);
-
         ResultSet resultSet = SqlExecuteHandler.executeQuery(sql);
 
         while (resultSet.next()) {
