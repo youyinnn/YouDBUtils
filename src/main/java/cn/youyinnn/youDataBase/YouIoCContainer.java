@@ -9,11 +9,11 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/9/10
  */
-public class MyIoCContainer {
+public class YouIoCContainer {
 
     private static HashMap<String,Dao> daoMap = new HashMap<>();;
 
-    private MyIoCContainer() {}
+    private YouIoCContainer() {}
 
     public static Dao addDao(String key, Dao dao) {
         return daoMap.put(key,dao);

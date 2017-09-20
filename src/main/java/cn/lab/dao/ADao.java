@@ -12,10 +12,6 @@ public class ADao implements Dao{
 
     public void dao(){
 
-        ADATABASE.setDatabaseName("test.db");
-
-        System.out.println("aDAO");
-
         AnnotationScanner annotationScanner = new AnnotationScanner();
     }
 

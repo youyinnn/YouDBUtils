@@ -1,5 +1,6 @@
 package cn.youyinnn.youDataBase.druid;
 
+import cn.youyinnn.youDataBase.druid.exception.NoLoadedDataSource;
 import cn.youyinnn.youDataBase.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youDataBase.druid.filter.YouStatFilter;
 import com.alibaba.druid.filter.Filter;
@@ -9,6 +10,7 @@ import com.alibaba.druid.pool.DruidPooledConnection;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,15 +28,24 @@ public class YouDruid {
     private static final String             MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
     private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
 
-    /**
-     * The constant instance.
-     */
-    public static YouDruid                  instance                    = new YouDruid() ;
+    private static YouDruid                  instance                    = new YouDruid() ;
 
     private static DruidDataSource          currentDataSource ;
-    private static String                   currentDataSourceType ;
 
     private YouDruid() {}
+
+    public static DruidDataSource getCurrentDataSource() {
+        return currentDataSource;
+    }
+
+    public static Connection getCurrentDataSourceConn() throws SQLException, NoLoadedDataSource {
+
+        if (currentDataSource == null){
+            throw new NoLoadedDataSource("没有装载过数据源！");
+        }
+
+        return currentDataSource.getConnection();
+    }
 
     /**
      * Print data source.
@@ -96,8 +107,6 @@ public class YouDruid {
     }
 
     private static void generateDataSource(String dataSourceType,String propertiesFile)  {
-
-        currentDataSourceType = dataSourceType;
 
         Properties properties = new Properties();
         if (propertiesFile == null){
