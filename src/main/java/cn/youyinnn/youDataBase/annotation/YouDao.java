@@ -1,5 +1,5 @@
 package cn.youyinnn.youDataBase.annotation;
 
-public interface Dao {
+public interface YouDao {
 
 }

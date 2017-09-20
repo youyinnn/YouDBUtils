@@ -1,6 +1,6 @@
 package cn.youyinnn.youDataBase.proxy;
 
-import cn.youyinnn.youDataBase.annotation.Dao;
+import cn.youyinnn.youDataBase.annotation.YouDao;
 import net.sf.cglib.proxy.Enhancer;
 
 /**
@@ -10,7 +10,7 @@ import net.sf.cglib.proxy.Enhancer;
  */
 public class TransactionProxyGenerator {
 
-    public static Object getProxyObject(Dao dao){
+    public static Object getProxyObject(YouDao dao){
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(dao.getClass());
 
