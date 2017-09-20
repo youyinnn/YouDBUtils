@@ -5,9 +5,9 @@ package cn.youyinnn.youDataBase.druid.exception;
  * @author: youyinnn
  * @date: 2017/9/20
  */
-public class NoLoadedDataSource extends Throwable {
+public class NoDataSourceInitException extends Throwable {
 
-    public NoLoadedDataSource(String msg) {
+    public NoDataSourceInitException(String msg) {
         super(msg);
     }
 

@@ -1,7 +1,7 @@
 package cn.youyinnn.youDataBase;
 
 import cn.youyinnn.youDataBase.druid.YouDruid;
-import cn.youyinnn.youDataBase.druid.exception.NoLoadedDataSource;
+import cn.youyinnn.youDataBase.druid.exception.NoDataSourceInitException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -23,7 +23,7 @@ public class SqlExecuteHandler {
             try {
                 System.out.println("bind conn");
                 instance.bind(YouDruid.getCurrentDataSourceConn());
-            } catch (SQLException | NoLoadedDataSource e) {
+            } catch (SQLException | NoDataSourceInitException e) {
                 e.printStackTrace();
             }
         }

@@ -1,6 +1,6 @@
 package cn.youyinnn.youDataBase.druid;
 
-import cn.youyinnn.youDataBase.druid.exception.NoLoadedDataSource;
+import cn.youyinnn.youDataBase.druid.exception.NoDataSourceInitException;
 import cn.youyinnn.youDataBase.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youDataBase.druid.filter.YouStatFilter;
 import com.alibaba.druid.filter.Filter;
@@ -38,10 +38,10 @@ public class YouDruid {
         return currentDataSource;
     }
 
-    public static Connection getCurrentDataSourceConn() throws SQLException, NoLoadedDataSource {
+    public static Connection getCurrentDataSourceConn() throws SQLException, NoDataSourceInitException {
 
         if (currentDataSource == null){
-            throw new NoLoadedDataSource("没有装载过数据源！");
+            throw new NoDataSourceInitException("没有初始化数据源！");
         }
 
         return currentDataSource.getConnection();
