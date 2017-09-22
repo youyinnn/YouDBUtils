@@ -20,12 +20,7 @@ public class TargetObject {
         System.out.println("method b");
     }
 
-    public Object c(){
-        return "method c";
-    }
-
-    @Override
-    public String toString() {
-        return "target object";
+    public String c() {
+        return "aaaa";
     }
 }

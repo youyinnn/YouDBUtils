@@ -17,7 +17,7 @@ public class TestCglib {
 
         TargetObject targetObject = (TargetObject) enhancer.create();
 
-        System.out.println(targetObject);
+        System.out.println(targetObject.hashCode());
 
         //targetObject.say("aaa");
         //targetObject.a();

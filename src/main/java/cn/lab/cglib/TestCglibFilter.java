@@ -26,7 +26,7 @@ public class TestCglibFilter {
         Callback noopCb = NoOp.INSTANCE;
         Callback callback1 = new TargetInterceptor();
         Callback fixedValue = new TargetResultFixed();
-        Callback[] cbArray = new Callback[]{callback1,noopCb,fixedValue};
+        Callback[] cbArray = new Callback[]{noopCb,callback1,fixedValue};
 
         enhancer.setCallbacks(cbArray);
         enhancer.setCallbackFilter(callbackFilter);
