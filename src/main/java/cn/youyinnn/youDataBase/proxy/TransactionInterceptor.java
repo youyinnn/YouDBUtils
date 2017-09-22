@@ -1,6 +1,7 @@
 package cn.youyinnn.youDataBase.proxy;
 
 import cn.youyinnn.youDataBase.ConnectionContainer;
+import cn.youyinnn.youDataBase.SqlExecuteHandler;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -17,22 +18,16 @@ public class TransactionInterceptor implements MethodInterceptor{
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
-        System.out.println("绑定了事务的操作");
-
         Connection conn = ConnectionContainer.getInstance().getConn();
-
         conn.setAutoCommit(false);
+        Object result = methodProxy.invokeSuper(o,objects);
 
-        Object result = null;
-
-        try {
-             result = methodProxy.invokeSuper(o,objects);
-
-             conn.commit();
-        } catch (Exception e) {
-            System.out.println("roll back");
+        if (SqlExecuteHandler.isRollback) {
+            SqlExecuteHandler.isRollback = false;
             conn.rollback();
         }
+
+        conn.commit();
 
         return result;
     }

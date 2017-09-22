@@ -12,21 +12,33 @@ import java.sql.Statement;
  */
 public class SqlExecuteHandler {
 
-    public static ResultSet executeQuery(String sql) throws SQLException {
+    public static boolean isRollback = false;
+
+    public static ResultSet executeQuery(String sql)  {
 
         ResultSet result = null;
         Connection conn = ConnectionContainer.getInstance().getConn();
-        Statement statement = conn.createStatement();
-        result = statement.executeQuery(sql);
+        try {
+            Statement statement = conn.createStatement();
+            result = statement.executeQuery(sql);
+        } catch (SQLException e) {
+            isRollback = true;
+            e.printStackTrace();
+        }
         return result;
     }
 
-    public static int executeUpdate(String sql) throws SQLException {
+    public static int executeUpdate(String sql)  {
 
         int result = 0;
         Connection conn = ConnectionContainer.getInstance().getConn();
-        Statement statement = conn.createStatement();
-        result = statement.executeUpdate(sql);
+        try {
+            Statement statement = conn.createStatement();
+            result = statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            isRollback = true;
+            e.printStackTrace();
+        }
 
         return result;
     }

@@ -48,19 +48,22 @@ public class BDao implements YouDao {
     }
 
     @Transaction
-    public void c () throws SQLException {
+    public void c () {
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (1,'paul',22,'California',30000) ;";
 
-        System.out.println(SqlExecuteHandler.executeUpdate(sql));
 
         String sql1 = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (1,'Jame',21,'Norway',50000) ;";
 
+
+        System.out.println(SqlExecuteHandler.executeUpdate(sql));
+
         System.out.println(SqlExecuteHandler.executeUpdate(sql1));
     }
 
-    public void d () throws SQLException {
+    @Transaction
+    public void d (){
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (2,'Jame',21,'Norway',50000) ;";
 
