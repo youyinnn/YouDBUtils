@@ -14,39 +14,48 @@ import java.sql.SQLException;
  */
 public class BDao implements YouDao {
 
-    public void a() throws SQLException {
+    public void a() {
 
         String sql = "SELECT * FROM COMPANY ;";
 
         ResultSet resultSet = SqlExecuteHandler.executeQuery(sql);
 
-        while (resultSet.next()) {
+        try {
+            while (resultSet.next()) {
 
-            System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
-        }
-    }
-
-    public void b() throws SQLException {
-
-        String sql = "SELECT * FROM COMPANY ;";
-
-        ResultSet resultSet = SqlExecuteHandler.executeQuery(sql);
-
-        while (resultSet.next()) {
-
-            System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
+                System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     @Transaction
-    public void c() {
+    public void b() {
+
+        String sql = "SELECT * FROM COMPANY ;";
+
+        ResultSet resultSet = SqlExecuteHandler.executeQuery(sql);
+
+        try {
+            while (resultSet.next()) {
+
+                System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Transaction
+    public void c () {
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (1,'paul',22,'California',30000) ;";
 
         System.out.println(SqlExecuteHandler.executeUpdate(sql));
     }
 
-    public void d() {
+    public void d () {
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (2,'Jame',21,'Norway',50000) ;";
 
