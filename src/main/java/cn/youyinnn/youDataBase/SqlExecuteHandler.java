@@ -12,29 +12,22 @@ import java.sql.Statement;
  */
 public class SqlExecuteHandler {
 
-    public static ResultSet executeQuery(String sql) {
+    public static ResultSet executeQuery(String sql) throws SQLException {
 
         ResultSet result = null;
         Connection conn = ConnectionContainer.getInstance().getConn();
-        try {
-            Statement statement = conn.createStatement();
-            result = statement.executeQuery(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Statement statement = conn.createStatement();
+        result = statement.executeQuery(sql);
         return result;
     }
 
-    public static int executeUpdate(String sql){
+    public static int executeUpdate(String sql) throws SQLException {
 
         int result = 0;
         Connection conn = ConnectionContainer.getInstance().getConn();
-        try {
-            Statement statement = conn.createStatement();
-            result = statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Statement statement = conn.createStatement();
+        result = statement.executeUpdate(sql);
+
         return result;
     }
 
