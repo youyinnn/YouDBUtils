@@ -1,6 +1,6 @@
 .idea
 src/test/
 target
-src/main/java/cn/lab/*
+src/main/java/cn/lab/
 YouDBUtils.iml
 log
