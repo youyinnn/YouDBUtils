@@ -28,14 +28,10 @@ public class AnnotationScanner {
             Class<?>[] interfaces = aClass.getInterfaces();
             for (Class<?> anInterface : interfaces) {
                 if (anInterface.getName().equals("cn.youyinnn.youDataBase.interfaces.YouDao")) {
-                    YouDao youDao = null;
-                    try {
-                        youDao = (YouDao) aClass.newInstance();
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
 
-                    YouDao proxyObject = TransactionProxyGenerator.getProxyObject(youDao);
+                    System.out.println("-----------"+aClass);
+
+                    YouDao proxyObject = TransactionProxyGenerator.getProxyObject(aClass);
 
                     proxyYouDaoList.add(proxyObject);
                 }

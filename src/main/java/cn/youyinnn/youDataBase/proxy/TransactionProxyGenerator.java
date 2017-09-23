@@ -2,9 +2,10 @@ package cn.youyinnn.youDataBase.proxy;
 
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 import net.sf.cglib.proxy.Callback;
-import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
+
+import java.lang.annotation.Annotation;
 
 /**
  * @description:
@@ -13,19 +14,36 @@ import net.sf.cglib.proxy.NoOp;
  */
 public class TransactionProxyGenerator {
 
-    public static YouDao getProxyObject(YouDao dao){
+    public static YouDao getProxyObject(Class youDaoClass){
+
+        Annotation[] annotations = youDaoClass.getAnnotations();
+
+        boolean isAll = false;
+
+        for (Annotation annotation : annotations) {
+            if (annotation.annotationType().getName().equals("cn.youyinnn.youDataBase.annotations.Transaction")){
+                isAll = true;
+                break;
+            }
+        }
+
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(dao.getClass());
-        CallbackFilter transactionCallbackFilter = new TransactionCallbackFilter();
+        enhancer.setSuperclass(youDaoClass);
 
         Callback doNothing = NoOp.INSTANCE;
         Callback transaction = new TransactionInterceptor();
         Callback[] callbacks = new Callback[]{doNothing, transaction};
 
         enhancer.setCallbacks(callbacks);
-        enhancer.setCallbackFilter(transactionCallbackFilter);
+
+        if (isAll) {
+            enhancer.setCallbackFilter(new TransactionClassCallbackFilter());
+        } else {
+            enhancer.setCallbackFilter(new TransactionMethodCallbackFilter());
+        }
 
         return (YouDao) enhancer.create();
+
     }
 
 }

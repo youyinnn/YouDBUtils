@@ -2,21 +2,20 @@ package cn.youyinnn.youDataBase.proxy;
 
 import net.sf.cglib.proxy.CallbackFilter;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * The type Transaction callback filter.
- *
  * @description:
  * @author: youyinnn
- * @date: 2017 /9/22
+ * @date: 2017/9/23
  */
-public class TransactionCallbackFilter implements CallbackFilter{
+public class TransactionClassCallbackFilter implements CallbackFilter {
 
     /**
      *
      * 设置基代理过滤
+     *
+     * 这个过滤器除了继承的Object方法 其它方法都进行代理
      *
      * 0 : 不进行代理
      *
@@ -30,19 +29,12 @@ public class TransactionCallbackFilter implements CallbackFilter{
 
         try {
             if (!declaringClass.equals(Class.forName("java.lang.Object"))){
-                Annotation[] annotations = method.getAnnotations();
-
-                if (annotations.length > 0) {
-                    for (Annotation annotation : annotations) {
-                        if(annotation.toString().contains("cn.youyinnn.youDataBase.annotations.Transaction")) {
-                            return 1;
-                        }
-                    }
-                }
+                return 1;
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         return 0;
     }
 }
