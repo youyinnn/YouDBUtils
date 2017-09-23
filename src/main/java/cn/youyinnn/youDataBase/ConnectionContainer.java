@@ -30,6 +30,7 @@ public class ConnectionContainer {
         if (connection == null) {
             try {
                 connection = YouDruid.getCurrentDataSourceConn();
+                System.out.println("Bind conn :"+connection);
                 bindConn(connection);
             } catch (SQLException | NoDataSourceInitException e) {
                 e.printStackTrace();

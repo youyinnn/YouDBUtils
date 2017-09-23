@@ -29,8 +29,6 @@ public class AnnotationScanner {
             for (Class<?> anInterface : interfaces) {
                 if (anInterface.getName().equals("cn.youyinnn.youDataBase.interfaces.YouDao")) {
 
-                    System.out.println("-----------"+aClass);
-
                     YouDao proxyObject = TransactionProxyGenerator.getProxyObject(aClass);
 
                     proxyYouDaoList.add(proxyObject);

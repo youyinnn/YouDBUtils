@@ -28,6 +28,11 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         conn.commit();
+        conn.close();
+        {
+            System.out.println("remove conn："+conn);
+            ConnectionContainer.getInstance().removeConn();
+        }
 
         return result;
     }

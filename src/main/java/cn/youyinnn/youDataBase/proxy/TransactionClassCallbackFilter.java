@@ -25,16 +25,12 @@ public class TransactionClassCallbackFilter implements CallbackFilter {
     @Override
     public int accept(Method method) {
 
-        Class<?> declaringClass = method.getDeclaringClass();
+        String name = method.getName();
 
-        try {
-            if (!declaringClass.equals(Class.forName("java.lang.Object"))){
-                return 1;
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+        if (name.equals("toString") || name.equals("equals") || name.equals("hashCode") || name.equals("clone")) {
+            return 0;
         }
 
-        return 0;
+        return 1;
     }
 }

@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class BDao implements YouDao {
 
-    public void a() throws SQLException {
+    public void a() {
 
         String sql = "SELECT * FROM COMPANY ;";
 
@@ -31,7 +31,7 @@ public class BDao implements YouDao {
     }
 
     @Transaction
-    public void b() throws SQLException {
+    public void b() {
 
         String sql = "SELECT * FROM COMPANY ;";
 
@@ -54,7 +54,7 @@ public class BDao implements YouDao {
 
 
         String sql1 = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
-                "VALUES (1,'Jame',21,'Norway',50000) ;";
+                "VALUES (2,'Jame',21,'Norway',50000) ;";
 
 
         System.out.println(SqlExecuteHandler.executeUpdate(sql));
