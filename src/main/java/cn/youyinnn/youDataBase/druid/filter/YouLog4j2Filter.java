@@ -15,31 +15,31 @@ public class YouLog4j2Filter {
      * 下面这些开关常量名 除了STATEMENT_EXECUTABLE_SQL_LOG_ENABLE是false以外 其它默认都是true
      * */
 
-    public static final String      CONNECTION_CONNECT_BEFORE_LOG_ENABLE        = "connectionConnectBeforeLogEnable";
-    public static final String      CONNECTION_CONNECT_AFTER_LOG_ENABLE         = "connectionConnectAfterLogEnable";
-    public static final String      CONNECTION_COMMIT_AFTER_LOG_ENABLE          = "connectionCommitAfterLogEnable";
-    public static final String      CONNECTION_ROLLBACK_AFTER_LOG_ENABLE        = "connectionRollbackAfterLogEnable";
-    public static final String      CONNECTION_CLOSE_AFTER_LOG_ENABLE           = "connectionCloseAfterLogEnable";
+    public static final String      CONNECTION_CONNECT_BEFORE_LOG_ENABLE        = "connectionConnectBeforeLogEnabled";
+    public static final String      CONNECTION_CONNECT_AFTER_LOG_ENABLE         = "connectionConnectAfterLogEnabled";
+    public static final String      CONNECTION_COMMIT_AFTER_LOG_ENABLE          = "connectionCommitAfterLogEnabled";
+    public static final String      CONNECTION_ROLLBACK_AFTER_LOG_ENABLE        = "connectionRollbackAfterLogEnabled";
+    public static final String      CONNECTION_CLOSE_AFTER_LOG_ENABLE           = "connectionCloseAfterLogEnabled";
 
-    public static final String      STATEMENT_CREATE_AFTER_LOG_ENABLE           = "statementCreateAfterLogEnable";
-    public static final String      STATEMENT_PREPARE_AFTER_LOG_ENABLE          = "statementPrepareAfterLogEnable";
-    public static final String      STATEMENT_PREPARE_CALL_AFTER_ENABLE         = "statementPrepareCallAfterLogEnable";
+    public static final String      STATEMENT_CREATE_AFTER_LOG_ENABLE           = "statementCreateAfterLogEnabled";
+    public static final String      STATEMENT_PREPARE_AFTER_LOG_ENABLE          = "statementPrepareAfterLogEnabled";
+    public static final String      STATEMENT_PREPARE_CALL_AFTER_ENABLE         = "statementPrepareCallAfterLogEnabled";
 
-    public static final String      STATEMENT_EXECUTE_AFTER_LOG_ENABLE          = "statementExecuteAfterLogEnable";
-    public static final String      STATEMENT_EXECUTE_QUERY_AFTER_LOG_ENABLE    = "statementExecuteQueryAfterLogEnable";
-    public static final String      STATEMENT_EXECUTE_UPDATE_AFTER_LOG_ENABLE   = "statementExecuteUpdateAfterLogEnable";
-    public static final String      STATEMENT_EXECUTE_BATCH_AFTER_LOG_ENABLE    = "statementExecuteBatchAfterLogEnable";
+    public static final String      STATEMENT_EXECUTE_AFTER_LOG_ENABLE          = "statementExecuteAfterLogEnabled";
+    public static final String      STATEMENT_EXECUTE_QUERY_AFTER_LOG_ENABLE    = "statementExecuteQueryAfterLogEnabled";
+    public static final String      STATEMENT_EXECUTE_UPDATE_AFTER_LOG_ENABLE   = "statementExecuteUpdateAfterLogEnabled";
+    public static final String      STATEMENT_EXECUTE_BATCH_AFTER_LOG_ENABLE    = "statementExecuteBatchAfterLogEnabled";
 
     public static final String      STATEMENT_EXECUTABLE_SQL_LOG_ENABLE        = "statementExecutableSqlLogEnable";
 
-    public static final String      STATEMENT_CLOSE_AFTER_LOG_ENABLE            = "statementCloseAfterLogEnable";
+    public static final String      STATEMENT_CLOSE_AFTER_LOG_ENABLE            = "statementCloseAfterLogEnabled";
 
     public static final String      STATEMENT_PARAMETER_CLEAR_LOG_ENABLE        = "statementParameterClearLogEnable";
-    public static final String      STATEMENT_PARAMETERSET_LOG_ENABLE           = "statementParameterSetLogEnable";
+    public static final String      STATEMENT_PARAMETERSET_LOG_ENABLE           = "statementParameterSetLogEnabled";
 
-    public static final String      RESULTSET_NEXT_AFTER_LOG_ENABLE             = "resultSetNextAfterLogEnable";
-    public static final String      RESULTSET_OPEN_AFTER_LOG_ENABLE             = "resultSetOpenAfterLogEnable";
-    public static final String      RESULTSET_CLOSE_AFTER_LOG_ENABLE            = "resultSetCloseAfterLogEnable";
+    public static final String      RESULTSET_NEXT_AFTER_LOG_ENABLE             = "resultSetNextAfterLogEnabled";
+    public static final String      RESULTSET_OPEN_AFTER_LOG_ENABLE             = "resultSetOpenAfterLogEnabled";
+    public static final String      RESULTSET_CLOSE_AFTER_LOG_ENABLE            = "resultSetCloseAfterLogEnabled";
 
     public static final String      DATASOURCE_LOG_ENABLE                       = "dataSourceLogEnabled";
     public static final String      CONNECTION_LOG_ENABLE                       = "connectionLogEnabled";

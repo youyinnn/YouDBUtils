@@ -1,6 +1,0 @@
-15:10:47.158 [main] TRACE mylog - trace level
-15:10:47.160 [main] DEBUG mylog - debug level
-15:10:47.160 [main] INFO  mylog - info level
-15:10:47.160 [main] WARN  mylog - warn level
-15:10:47.160 [main] ERROR mylog - error level
-15:10:47.160 [main] FATAL mylog - fatal level
