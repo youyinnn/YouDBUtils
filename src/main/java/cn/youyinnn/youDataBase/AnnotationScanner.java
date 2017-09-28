@@ -1,7 +1,8 @@
 package cn.youyinnn.youDataBase;
 
+import cn.youyinnn.IocBean;
+import cn.youyinnn.youDataBase.annotations.Scope;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
-import cn.youyinnn.youDataBase.proxy.TransactionProxyGenerator;
 import cn.youyinnn.youDataBase.utils.ClassUtils;
 
 import java.lang.reflect.Field;
@@ -29,9 +30,18 @@ public class AnnotationScanner {
             for (Class<?> anInterface : interfaces) {
                 if (anInterface.getName().equals("cn.youyinnn.youDataBase.interfaces.YouDao")) {
 
-                    YouDao proxyObject = TransactionProxyGenerator.getProxyObject(aClass);
+                    Scope scope = aClass.getAnnotation(Scope.class);
 
-                    proxyYouDaoList.add(proxyObject);
+                    // 单例dao
+                    if (scope == null || scope.value().equals(IocBean.SINGLETON)){
+
+                    } else {
+
+                    }
+
+                    //YouDao proxyObject = TransactionProxyGenerator.getProxyObject(aClass);
+                    //
+                    //proxyYouDaoList.add(proxyObject);
                 }
             }
         }

@@ -1,6 +1,9 @@
 package cn.lab.dao;
 
+import cn.youyinnn.IocBean;
 import cn.youyinnn.youDataBase.SqlExecuteHandler;
+import cn.youyinnn.youDataBase.YouDaoIoCContainer;
+import cn.youyinnn.youDataBase.annotations.Scope;
 import cn.youyinnn.youDataBase.annotations.Transaction;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
@@ -12,6 +15,7 @@ import java.sql.SQLException;
  * @author: youyinnn
  * @date: 2017/9/13
  */
+//@Scope
 public class BDao implements YouDao {
 
     public void a() {
