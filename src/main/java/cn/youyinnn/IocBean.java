@@ -1,7 +1,6 @@
 package cn.youyinnn;
 
 import cn.youyinnn.youDataBase.interfaces.YouDao;
-import cn.youyinnn.youDataBase.proxy.TransactionProxyGenerator;
 
 /**
  * @description:
@@ -14,27 +13,37 @@ public class IocBean {
 
     public static final String PROTOTYPE = "prototype";
 
-    private YouDao dao;
+    private Class<YouDao> daoClass;
 
     private String scope;
 
     private String className;
 
-    public IocBean(YouDao dao, String scope) {
-        this.dao = dao;
+
+    public IocBean(Class<YouDao> daoClass, String scope) {
+        this.daoClass = daoClass;
         this.scope = scope;
-        className = dao.getClass().getName();
+        this.className = daoClass.getName();
     }
 
-    public YouDao getDao(){
+    public Class<YouDao> getDaoClass() {
+        return daoClass;
+    }
 
-        switch (scope) {
-            case SINGLETON:
-                return dao;
-            case PROTOTYPE:
-                return TransactionProxyGenerator.getProxyObject(dao.getClass());
-            default:
-                return null;
-        }
+    public String getScope() {
+        return scope;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    @Override
+    public String toString() {
+        return "IocBean{" +
+                "daoClass=" + daoClass +
+                ", scope='" + scope + '\'' +
+                ", className='" + className + '\'' +
+                '}';
     }
 }

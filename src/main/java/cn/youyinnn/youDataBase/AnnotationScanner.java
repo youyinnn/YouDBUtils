@@ -34,14 +34,10 @@ public class AnnotationScanner {
 
                     // 单例dao
                     if (scope == null || scope.value().equals(IocBean.SINGLETON)){
-
+                        YouDaoIoCContainer.addYouDao(new IocBean((Class<YouDao>) aClass,IocBean.SINGLETON));
                     } else {
-
+                        YouDaoIoCContainer.addYouDao(new IocBean((Class<YouDao>) aClass,IocBean.PROTOTYPE));
                     }
-
-                    //YouDao proxyObject = TransactionProxyGenerator.getProxyObject(aClass);
-                    //
-                    //proxyYouDaoList.add(proxyObject);
                 }
             }
         }

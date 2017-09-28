@@ -15,17 +15,15 @@ public class YouDaoIoCContainer {
 
     private YouDaoIoCContainer() {}
 
-    public static IocBean addYouDao(String key, IocBean daoBean) {
-        return daoMap.put(key,daoBean);
+    public static IocBean addYouDao(IocBean daoBean) {
+        return daoMap.put(daoBean.getClassName(),daoBean);
     }
 
-    public static IocBean getYouDaoByKey(String keyStr){
-        return daoMap.get(keyStr);
+    public static IocBean getYouDaoByClassName(String className){
+        return daoMap.get(className);
     }
 
-    //public static YouDao getYouDaoByClassName(String className){
-    //
-    //}
-
-
+    public static HashMap<String, IocBean> getDaoMap() {
+        return daoMap;
+    }
 }
