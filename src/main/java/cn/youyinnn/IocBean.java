@@ -19,6 +19,15 @@ public class IocBean {
 
     private String className;
 
+    private YouDao singleton;
+
+    public YouDao getSingleton() {
+        return singleton;
+    }
+
+    public void setSingleton(YouDao singleton) {
+        this.singleton = singleton;
+    }
 
     public IocBean(Class<YouDao> daoClass, String scope) {
         this.daoClass = daoClass;

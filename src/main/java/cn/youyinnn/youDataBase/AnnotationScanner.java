@@ -6,7 +6,6 @@ import cn.youyinnn.youDataBase.interfaces.YouDao;
 import cn.youyinnn.youDataBase.utils.ClassUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.Vector;
 
@@ -17,11 +16,9 @@ import java.util.Vector;
  */
 public class AnnotationScanner {
 
-    private Object proxyObject;
+    private AnnotationScanner() {}
 
-    private ArrayList<YouDao> proxyYouDaoList = new ArrayList<>();
-
-    public AnnotationScanner(String daoPackageNamePrefix)  {
+    public static void scanPackage(String daoPackageNamePrefix)  {
 
         Set<Class<?>> fileClass = ClassUtils.findFileClass(daoPackageNamePrefix);
 
@@ -34,20 +31,17 @@ public class AnnotationScanner {
 
                     // 单例dao
                     if (scope == null || scope.value().equals(IocBean.SINGLETON)){
-                        YouDaoIoCContainer.addYouDao(new IocBean((Class<YouDao>) aClass,IocBean.SINGLETON));
+                        YouDaoIoCContainer.addSingletonYouDao(new IocBean((Class<YouDao>) aClass,IocBean.SINGLETON));
                     } else {
-                        YouDaoIoCContainer.addYouDao(new IocBean((Class<YouDao>) aClass,IocBean.PROTOTYPE));
+                        YouDaoIoCContainer.addPrototypeYouDao(new IocBean((Class<YouDao>) aClass,IocBean.PROTOTYPE));
                     }
                 }
             }
         }
     }
 
-    public ArrayList<YouDao> getProxyYouDaoList() {
-        return proxyYouDaoList;
-    }
 
-    public void showCurrentProjectLoadedClass(){
+    public static void showCurrentProjectLoadedClass(){
         try {
             Field field = ClassLoader.class.getDeclaredField("classes");
 
@@ -64,7 +58,7 @@ public class AnnotationScanner {
         }
     }
 
-    public void showCurrentProjectLoadedClass(String packageName) {
+    public static void showCurrentProjectLoadedClass(String packageName) {
         try {
             Field field = ClassLoader.class.getDeclaredField("classes");
 
@@ -84,11 +78,4 @@ public class AnnotationScanner {
         }
     }
 
-    public void setProxyObject(Object proxyObject) {
-        this.proxyObject = proxyObject;
-    }
-
-    public Object getProxyObject() {
-        return proxyObject;
-    }
 }
