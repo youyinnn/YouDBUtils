@@ -13,13 +13,13 @@ import java.sql.SQLException;
  */
 public class ConnectionContainer {
 
+    private static ConnectionContainer          instance                    = new ConnectionContainer();
+
+    private ThreadLocal<Connection>             connectionThreadLocal       = new ThreadLocal<>();
+
     private ConnectionContainer(){}
 
-    private static ConnectionContainer instance = new ConnectionContainer();
-
     public static ConnectionContainer getInstance() { return instance ; }
-
-    private ThreadLocal<Connection> connectionThreadLocal = new ThreadLocal<>();
 
     public void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
 

@@ -1,6 +1,5 @@
 package cn.youyinnn.youDataBase;
 
-import cn.youyinnn.IocBean;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 import cn.youyinnn.youDataBase.proxy.TransactionProxyGenerator;
 
@@ -14,8 +13,8 @@ import java.util.Map;
  */
 public class YouDaoIoCContainer {
 
-    private static HashMap<String,IocBean> prototypeDaoMap = new HashMap<>();
-    private static HashMap<String,IocBean> singletonDaoMap = new HashMap<>();
+    private static HashMap<String,IocBean>              prototypeDaoMap             = new HashMap<>();
+    private static HashMap<String,IocBean>              singletonDaoMap             = new HashMap<>();
 
     private YouDaoIoCContainer() {}
 

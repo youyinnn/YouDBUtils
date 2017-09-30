@@ -1,5 +1,6 @@
 package cn.youyinnn.youDataBase.druid;
 
+import cn.youyinnn.youDataBase.AnnotationScanner;
 import cn.youyinnn.youDataBase.druid.exception.NoDataSourceInitException;
 import cn.youyinnn.youDataBase.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youDataBase.druid.filter.YouStatFilter;
@@ -32,6 +33,11 @@ public class YouDruid {
 
     private YouDruid() {}
 
+    /**
+     * Gets current data source.
+     *
+     * @return the current data source
+     */
     public static DruidDataSource getCurrentDataSource() {
         return currentDataSource;
     }
@@ -52,20 +58,59 @@ public class YouDruid {
         System.out.println(currentDataSource);
     }
 
+    /**
+     * 按照默认的路径初始化mysql数据源
+     */
     public static void initMySQLDataSource() {
         generateDataSource("mysql",null);
     }
 
-    public static void initMySQLDataSource(String propertiesFile){
-        generateDataSource("mysql",propertiesFile);
+
+    /**
+     * 按照给定的配置文件路径去初始化数据源
+     *
+     * @param propertiesFilePath the properties file path
+     */
+    public static void initMySQLDataSource(String propertiesFilePath){
+        generateDataSource("mysql",propertiesFilePath);
     }
 
+    /**
+     * Init sq lite data source.
+     */
     public static void initSQLiteDataSource() {
         generateDataSource("sqlite",null);
     }
 
-    public static void initSQLiteDataSource(String propertiesFile) {
-        generateDataSource("sqlite",propertiesFile);
+    /**
+     * Init sq lite data source.
+     *
+     * @param propertiesFilePath the properties file path
+     */
+    public static void initSQLiteDataSource(String propertiesFilePath) {
+        generateDataSource("sqlite",propertiesFilePath);
+    }
+
+    /**
+     * 扫描指定包下的类 生成代理Dao 可以在cn.youyinnn.youDataBase.YouDaoIoCContainer类中取出
+     *
+     * 同spring的Ioc容器
+     *
+     * @param packageName the package name
+     */
+    public static void scanPackage(String packageName){
+        AnnotationScanner.scanPackage(packageName);
+    }
+
+    /**
+     * 扫描多个包
+     *
+     * @param packageNames the package names
+     */
+    public static void scanPackage(ArrayList<String> packageNames){
+        for (String packageName : packageNames) {
+            AnnotationScanner.scanPackage(packageName);
+        }
     }
 
     private static void generateDataSource(String dataSourceType,String propertiesFile)  {

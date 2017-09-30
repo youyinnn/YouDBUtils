@@ -1,6 +1,6 @@
 package cn.youyinnn.youDataBase.annotations;
 
-import cn.youyinnn.IocBean;
+import cn.youyinnn.youDataBase.IocBean;
 
 import java.lang.annotation.*;
 

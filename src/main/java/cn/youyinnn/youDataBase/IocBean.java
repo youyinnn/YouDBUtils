@@ -1,4 +1,4 @@
-package cn.youyinnn;
+package cn.youyinnn.youDataBase;
 
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
@@ -9,17 +9,17 @@ import cn.youyinnn.youDataBase.interfaces.YouDao;
  */
 public class IocBean {
 
-    public static final String SINGLETON = "singleton";
+    public static final String                  SINGLETON                   = "singleton";
 
-    public static final String PROTOTYPE = "prototype";
+    public static final String                  PROTOTYPE                   = "prototype";
 
-    private Class<YouDao> daoClass;
+    private Class<YouDao>                       daoClass;
 
-    private String scope;
+    private String                              scope;
 
-    private String className;
+    private String                              className;
 
-    private YouDao singleton;
+    private YouDao                              singleton;
 
     public YouDao getSingleton() {
         return singleton;
