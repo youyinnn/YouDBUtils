@@ -1,11 +1,11 @@
 package cn.youyinnn.youDataBase;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import cn.youyinnn.youDataBase.utils.SqlStringUtils;
+
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * @description:
@@ -16,27 +16,71 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
     public static boolean isRollback = false;
 
-    private SqlExecuteHandler(){}
-
     private static SqlExecuteHandler instance = new SqlExecuteHandler();
+
+    private SqlExecuteHandler(){}
 
     public static SqlExecuteHandler getInstance() {
         return instance;
     }
 
-    @Override
-    public ResultSet executeQuery(String sql)  {
-
-        ResultSet result = null;
-        Connection conn = ConnectionContainer.getInstance().getConn();
+    private void release(Statement statement,ResultSet resultSet) {
         try {
-            Statement statement = conn.createStatement();
-            result = statement.executeQuery(sql);
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private ArrayList<T> statementExecuteQuery(Connection conn, String sql,Class modelClass) {
+        ResultSet resultSet = null;
+        Statement statement = null;
+        ArrayList<T> resultModelList = null;
+        try {
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(sql);
+            resultModelList = ModelResultFactory.getResultModelList(resultSet, modelClass);
         } catch (SQLException e) {
             isRollback = true;
             e.printStackTrace();
+        } finally {
+            release(statement,resultSet);
         }
-        return result;
+        return resultModelList;
+    }
+
+    private ArrayList<T> preparedStatementExecuteQuery(Connection conn, String sql, Class modelClass, Collection values){
+
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        ArrayList<T> resultModelList = null;
+        try {
+            ps = conn.prepareStatement(sql);
+            int i = 1;
+            for (Object value : values) {
+                ps.setObject(i++,value);
+            }
+            resultSet = ps.executeQuery();
+
+            resultModelList = ModelResultFactory.getResultModelList(resultSet,modelClass);
+        } catch (SQLException e) {
+            isRollback = true;
+            e.printStackTrace();
+        } finally {
+            release(ps,resultSet);
+        }
+        return resultModelList;
+    }
+
+    @Override
+    public ArrayList<T> executeQuery(Class modelClass,String sql)  {
+
+        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
     @Override
@@ -44,40 +88,58 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
         int result = 0;
         Connection conn = ConnectionContainer.getInstance().getConn();
+        Statement statement = null;
         try {
-            Statement statement = conn.createStatement();
+            statement = conn.createStatement();
             result = statement.executeUpdate(sql);
         } catch (SQLException e) {
             isRollback = true;
             e.printStackTrace();
+        } finally {
+            release(statement,null);
         }
 
         return result;
     }
 
     @Override
-    public List<T> queryList(Class modelClass){
+    public ArrayList<T> getListForAll(Class modelClass, ArrayList<String> queryFieldList){
 
-        Connection conn = ConnectionContainer.getInstance().getConn();
+        String sql = SqlStringUtils.getSql(modelClass.getSimpleName(),queryFieldList);
 
-        String sql = "SELECT * FROM "+modelClass.getSimpleName();
+        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+    }
 
-        ResultSet result;
+    @Override
+    public ArrayList<T> getListWhereAAndB(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
 
-        ArrayList resultModelList = null;
+        String sql = SqlStringUtils.getWhereSql(modelClass.getSimpleName(),conditionMap.keySet(),"AND",queryFieldList);
 
-        try {
-            Statement statement = conn.createStatement();
+        return preparedStatementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionMap.values());
+    }
 
-            result = statement.executeQuery(sql);
+    @Override
+    public ArrayList<T> getListWhereAOrB(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
 
-            resultModelList = ModelResultFactory.getResultModelList(result, modelClass);
+        String sql = SqlStringUtils.getWhereSql(modelClass.getSimpleName(),conditionMap.keySet(),"OR",queryFieldList);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return preparedStatementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionMap.values());
+    }
 
-        return resultModelList;
+    @Override
+    public ArrayList<T> getListWhereLikeAndLike(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+
+        String sql = SqlStringUtils.getWhereLikeSql(modelClass.getSimpleName(),conditionMap,"AND",queryFieldList);
+
+        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+    }
+
+    @Override
+    public ArrayList<T> getListWhereLikeOrLike(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+
+        String sql = SqlStringUtils.getWhereLikeSql(modelClass.getSimpleName(),conditionMap,"OR",queryFieldList);
+
+        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
 }

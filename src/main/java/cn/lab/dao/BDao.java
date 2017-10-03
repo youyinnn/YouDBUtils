@@ -1,11 +1,11 @@
 package cn.lab.dao;
 
+import cn.lab.model.Company;
 import cn.youyinnn.youDataBase.SqlExecuteHandler;
 import cn.youyinnn.youDataBase.annotations.Transaction;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * @description:
@@ -19,15 +19,10 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ResultSet resultSet = SqlExecuteHandler.getInstance().executeQuery(sql);
+        ArrayList<Company> arrayList = SqlExecuteHandler.getInstance().executeQuery(Company.class, sql);
 
-        try {
-            while (resultSet.next()) {
-
-                System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        for (Company company : arrayList) {
+            System.out.println(company);
         }
     }
 
@@ -36,16 +31,7 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ResultSet resultSet = SqlExecuteHandler.getInstance().executeQuery(sql);
-
-        try {
-            while (resultSet.next()) {
-
-                System.out.println(resultSet.getObject(1)+" "+resultSet.getObject(2));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        ArrayList arrayList = SqlExecuteHandler.getInstance().executeQuery(Company.class, sql);
     }
 
     @Transaction
