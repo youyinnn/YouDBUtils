@@ -26,9 +26,9 @@ public class AnnotationScanner {
      */
     public static void scanPackage(String daoPackageNamePrefix)  {
 
-        Set<Class<?>> fileClass = ClassUtils.findFileClass(daoPackageNamePrefix);
+        Set<Class<?>> daoClassSet = ClassUtils.findFileClass(daoPackageNamePrefix);
 
-        for (Class<?> aClass : fileClass) {
+        for (Class<?> aClass : daoClassSet) {
             Class<?>[] interfaces = aClass.getInterfaces();
             for (Class<?> anInterface : interfaces) {
                 if (anInterface.getName().equals("cn.youyinnn.youDataBase.interfaces.YouDao")) {

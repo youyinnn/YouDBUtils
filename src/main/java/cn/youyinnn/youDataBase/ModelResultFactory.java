@@ -1,8 +1,11 @@
 package cn.youyinnn.youDataBase;
 
-import com.mysql.cj.api.mysqla.result.Resultset;
 
-import java.util.List;
+import cn.youyinnn.youDataBase.utils.ReflectionUtils;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * @description:
@@ -11,17 +14,24 @@ import java.util.List;
  */
 public class ModelResultFactory {
 
-    public static List createInstance(Resultset resultset, Class modelClass) {
+    public static ArrayList getResultModelList(ResultSet result, Class modelClass) {
 
-
+        ArrayList resultModelList = new ArrayList();
+        ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());
 
         try {
-            modelClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            while (result.next()) {
+                Object instance = modelClass.newInstance();
+                for (String field : fieldList) {
+                    ReflectionUtils.setFieldValue(instance,field,result.getObject(field));
+                }
+                resultModelList.add(instance);
+            }
+        } catch (SQLException | IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
         }
 
-        return null;
+        return resultModelList;
     }
 
 }
