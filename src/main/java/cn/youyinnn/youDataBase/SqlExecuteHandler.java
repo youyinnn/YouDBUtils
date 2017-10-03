@@ -4,17 +4,27 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 /**
  * @description:
  * @author: youyinnn
  * @date: 2017/9/19
  */
-public class SqlExecuteHandler {
+public class SqlExecuteHandlerImpl implements cn.youyinnn.youDataBase.interfaces.SqlExecuteHandler {
 
     public static boolean isRollback = false;
 
-    public static ResultSet executeQuery(String sql)  {
+    private SqlExecuteHandlerImpl(){}
+
+    private static SqlExecuteHandlerImpl instance = new SqlExecuteHandlerImpl();
+
+    public static SqlExecuteHandlerImpl getInstance() {
+        return instance;
+    }
+
+    @Override
+    public ResultSet executeQuery(String sql)  {
 
         ResultSet result = null;
         Connection conn = ConnectionContainer.getInstance().getConn();
@@ -28,7 +38,8 @@ public class SqlExecuteHandler {
         return result;
     }
 
-    public static int executeUpdate(String sql)  {
+    @Override
+    public int executeUpdate(String sql)  {
 
         int result = 0;
         Connection conn = ConnectionContainer.getInstance().getConn();
@@ -41,6 +52,14 @@ public class SqlExecuteHandler {
         }
 
         return result;
+    }
+
+    public List queryList(){
+
+        Connection conn = ConnectionContainer.getInstance().getConn();
+
+
+        return null;
     }
 
 }
