@@ -105,7 +105,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     @Override
     public ArrayList<T> getListForAll(Class modelClass, ArrayList<String> queryFieldList){
 
-        String sql = SqlStringUtils.getSql(modelClass.getSimpleName(),queryFieldList);
+        String sql = SqlStringUtils.getSelectAllSql(modelClass.getSimpleName(),queryFieldList);
 
         return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
