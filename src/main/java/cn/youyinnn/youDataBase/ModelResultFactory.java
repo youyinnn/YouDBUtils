@@ -23,7 +23,15 @@ public class ModelResultFactory {
             while (result.next()) {
                 Object instance = modelClass.newInstance();
                 for (String field : fieldList) {
-                    ReflectionUtils.setFieldValue(instance,field,result.getObject(field));
+                    boolean hasColumn = true;
+                    try {
+                        result.findColumn(field);
+                    } catch (SQLException ignore){
+                        hasColumn = false;
+                    }
+                    if (hasColumn){
+                        ReflectionUtils.setFieldValue(instance,field,result.getObject(field));
+                    }
                 }
                 resultModelList.add(instance);
             }
