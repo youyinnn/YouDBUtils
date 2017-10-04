@@ -77,7 +77,7 @@ public class YouLog4j2Filter {
     }
 
     /**
-     * 获取一个关闭了所有开关的Log4j2Filter
+     * 获取一个开启了所有开关的Log4j2Filter
      *
      * 特别需要注意的是STATEMENT_EXECUTABLE_SQL_LOG_ENABLE开关在这个时候是关着的
      *
