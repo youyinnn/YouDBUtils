@@ -24,15 +24,16 @@ public class SqlStringUtils {
      *      SELECT * FROM tableName
      *
      *  2 当不为空的时候
-     *      SELECT field1, field2, ... , fieldn FROM tableName
+     *      SELECT field1, field2, ... , fieldn
+     *      FROM tableName
      *
      * @param tableName      the table name
      * @param queryFieldList the query field list
      * @return the select all sql
      */
     public static String getSelectAllSql(String tableName, ArrayList<String> queryFieldList) {
-        StringBuilder sb = new StringBuilder();
-        checkQueryField(sb, queryFieldList);
+        StringBuffer sb = new StringBuffer();
+        getSelectFromSubStr(sb, queryFieldList);
         sb.append(tableName);
 
         return sb.toString();
@@ -43,25 +44,29 @@ public class SqlStringUtils {
      *
      * exp：
      *  1 当separate为AND、queryFieldList为空的时候
-     *      SELECT * FROM tableName WHERE key1 = ? AND key2 = ? ... AND keyn = ?
+     *      SELECT *
+     *      FROM tableName
+     *      WHERE conditionKey1 = ? AND conditionKey2 = ? ... AND conditionKeyn = ?
      *
      *  2 当为OR的时候、queryFieldList为空的时候
-     *      SELECT * FROM tableName WHERE key1 = ? OR key2 = ? ... OR keyn = ?
+     *      SELECT *
+     *      FROM tableName
+     *      WHERE conditionKey1 = ? OR conditionKey2 = ? ... OR conditionKeyn = ?
      *
      *  3 queryFieldList不为空
      *      略
      *
      * @param tableName      the table name
-     * @param keySet         the key set
+     * @param conditionKeySet         the key set
      * @param separateMark       the separateMark
      * @param queryFieldList the query field list
      * @return the string
      */
-    public static String getWhereSql(String tableName, Set<String> keySet, String separateMark, ArrayList<String> queryFieldList){
-        StringBuilder sb = new StringBuilder();
-        checkQueryField(sb, queryFieldList);
+    public static String getSelectFromWhereSql(String tableName, Set<String> conditionKeySet, String separateMark, ArrayList<String> queryFieldList){
+        StringBuffer sb = new StringBuffer();
+        getSelectFromSubStr(sb, queryFieldList);
         sb.append(tableName)
-                .append(getWhereSubStr(keySet,separateMark));
+                .append(getWhereSubStr(conditionKeySet,separateMark));
 
         return sb.toString();
     }
@@ -71,22 +76,61 @@ public class SqlStringUtils {
      *
      * exp：
      *  1 当separate为AND、queryFieldList为空的时候
-     *      SELECT * FROM tableName WHERE key1 LIKE '%value1%' AND key2 LIKE '%value2%' ... AND keyn LIKE '%valuen%'
+     *      SELECT *
+     *      FROM tableName
+     *      WHERE key1 LIKE '%value1%' AND key2 LIKE '%value2%' ... AND keyn LIKE '%valuen%'
      *
      *  2 separate为OR、queryFieldList不为空
      *      略
      *
      * @param tableName      the table name
-     * @param conditionMap   the condition map
+     * @param conditionsMap   the conditions map
      * @param separateMark   the separateMark
      * @param queryFieldList the query field list
      * @return the string
      */
-    public static String getWhereLikeSql(String tableName, HashMap<String,Object> conditionMap, String separateMark, ArrayList<String> queryFieldList){
-        StringBuilder sb = new StringBuilder();
-        checkQueryField(sb, queryFieldList);
+    public static String getSelectFromWhereLikeSql(String tableName, HashMap<String,Object> conditionsMap, String separateMark, ArrayList<String> queryFieldList){
+        StringBuffer sb = new StringBuffer();
+        getSelectFromSubStr(sb, queryFieldList);
         sb.append(tableName)
-                .append(getWhereLikeSubStr(conditionMap,separateMark));
+                .append(getWhereLikeSubStr(conditionsMap,separateMark));
+
+        return sb.toString();
+    }
+
+    /**
+     * 获取一个用于更新的语句 可以接收新值的key和查询条件的key 条件全部使用选定的separateMark连接
+     *
+     * exp:
+     *  1 UPDATE tableName
+     *      SET updateField1 = ?, updateField2 = ?, ... , updateFieldn = ?
+     *      WHERE conditionKey1 = ? AND conditionKey2 = ? ... AND conditionKeyn = ?
+     *
+     *  2 后略
+     *
+     * @param tableName       the table name
+     * @param updateFieldSet  the update field set
+     * @param separateMark    the separate mark
+     * @param conditionKeySet the condition key set
+     * @return the update set where sql
+     */
+    public static String getUpdateSetWhereSql(String tableName, Set<String> updateFieldSet, String separateMark, Set<String> conditionKeySet) {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("UPDATE ")
+                .append(tableName)
+                .append(" SET ");
+
+        for (String updateField : updateFieldSet) {
+            sb.append(updateField)
+                    .append(" = ? , ");
+        }
+
+        sb.deleteCharAt(sb.lastIndexOf(","));
+
+        if (conditionKeySet != null) {
+            sb.append(getWhereSubStr(conditionKeySet,separateMark));
+        }
 
         return sb.toString();
     }
@@ -97,11 +141,11 @@ public class SqlStringUtils {
      * @param sb
      * @param queryFieldList
      */
-    private static void checkQueryField(StringBuilder sb, ArrayList<String> queryFieldList) {
+    private static void getSelectFromSubStr(StringBuffer sb, ArrayList<String> queryFieldList) {
         if (queryFieldList == null) {
             sb.append(SELECT_ALL_FROM);
         } else {
-            sb.append("SELECT");
+            sb.append("SELECT ");
             for (String s : queryFieldList) {
                 sb.append(s)
                         .append(", ");
@@ -114,15 +158,15 @@ public class SqlStringUtils {
     /**
      * 生成条件子串 这个子串使用?占位符来配合PreparedStatement查询 条件使用指定的separateMark连接
      *
-     * @param keySet
+     * @param conditionKeySet
      * @param separateMark
      * @return
      */
-    private static String getWhereSubStr(Set<String> keySet, String separateMark) {
+    private static String getWhereSubStr(Set<String> conditionKeySet, String separateMark) {
 
-        StringBuilder sb = new StringBuilder(" WHERE ");
+        StringBuffer sb = new StringBuffer(" WHERE ");
 
-        for (String s : keySet) {
+        for (String s : conditionKeySet) {
             sb.append(s).append(" = ? ").append(separateMark).append(" ");
         }
 
@@ -134,15 +178,15 @@ public class SqlStringUtils {
     /**
      * 生成模糊条件子串 条件使用指定的separateMark连接
      *
-     * @param conditionMap
+     * @param conditionsMap
      * @param separateMark
      * @return
      */
-    private static String getWhereLikeSubStr(HashMap<String,Object> conditionMap, String separateMark) {
+    private static String getWhereLikeSubStr(HashMap<String,Object> conditionsMap, String separateMark) {
 
-        StringBuilder sb = new StringBuilder(" WHERE ");
+        StringBuffer sb = new StringBuffer(" WHERE ");
 
-        for (Map.Entry<String, Object> stringObjectEntry : conditionMap.entrySet()) {
+        for (Map.Entry<String, Object> stringObjectEntry : conditionsMap.entrySet()) {
             sb.append(stringObjectEntry.getKey())
                     .append(" LIKE ")
                     .append("'%")

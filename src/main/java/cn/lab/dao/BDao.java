@@ -19,7 +19,7 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ArrayList<Company> arrayList = SqlExecuteHandler.getInstance().executeQuery(Company.class, sql);
+        ArrayList<Company> arrayList = SqlExecuteHandler.getInstance().executeStatementQuery(Company.class, sql);
 
         for (Company company : arrayList) {
             System.out.println(company);
@@ -31,7 +31,7 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ArrayList arrayList = SqlExecuteHandler.getInstance().executeQuery(Company.class, sql);
+        ArrayList arrayList = SqlExecuteHandler.getInstance().executeStatementQuery(Company.class, sql);
     }
 
     @Transaction
@@ -44,9 +44,9 @@ public class BDao implements YouDao {
                 "VALUES (2,'Jame',21,'Norway',50000) ;";
 
 
-        System.out.println(SqlExecuteHandler.getInstance().executeUpdate(sql));
+        System.out.println(SqlExecuteHandler.getInstance().executeStatementUpdate(sql));
 
-        System.out.println(SqlExecuteHandler.getInstance().executeUpdate(sql1));
+        System.out.println(SqlExecuteHandler.getInstance().executeStatementUpdate(sql1));
     }
 
     @Transaction
@@ -54,7 +54,7 @@ public class BDao implements YouDao {
         String sql = "INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY)" +
                 "VALUES (2,'Jame',21,'Norway',50000) ;";
 
-        System.out.println(SqlExecuteHandler.getInstance().executeUpdate(sql));
+        System.out.println(SqlExecuteHandler.getInstance().executeStatementUpdate(sql));
     }
 
 }

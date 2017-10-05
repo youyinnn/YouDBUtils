@@ -37,7 +37,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         }
     }
 
-    private ArrayList<T> statementExecuteQuery(Connection conn, String sql,Class modelClass) {
+    private ArrayList<T> statementQuery(Connection conn, String sql,Class modelClass) {
         ResultSet resultSet = null;
         Statement statement = null;
         ArrayList<T> resultModelList = null;
@@ -54,7 +54,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         return resultModelList;
     }
 
-    private ArrayList<T> preparedStatementExecuteQuery(Connection conn, String sql, Class modelClass, Collection values){
+    private ArrayList<T> preparedStatementQuery(Connection conn, String sql, Class modelClass, Collection conditionValues){
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
@@ -62,7 +62,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         try {
             ps = conn.prepareStatement(sql);
             int i = 1;
-            for (Object value : values) {
+            for (Object value : conditionValues) {
                 ps.setObject(i++,value);
             }
             resultSet = ps.executeQuery();
@@ -77,14 +77,44 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         return resultModelList;
     }
 
-    @Override
-    public ArrayList<T> executeQuery(Class modelClass,String sql)  {
-
-        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+    private int preparedStatementUpdate(Connection conn, String sql, Collection newFieldValues, Collection conditionValues){
+        int result = 0;
+        PreparedStatement ps = null;
+        try {
+            ps = conn.prepareStatement(sql);
+            int i = 1;
+            for (Object newFieldValue : newFieldValues) {
+                ps.setObject(i++,newFieldValue);
+            }
+            if (conditionValues != null) {
+                for (Object conditionValue : conditionValues) {
+                    ps.setObject(i++,conditionValue);
+                }
+            }
+            result = ps.executeUpdate();
+        } catch (SQLException e) {
+            isRollback = true;
+            e.printStackTrace();
+        } finally {
+            release(ps,null);
+        }
+        return result;
     }
 
     @Override
-    public int executeUpdate(String sql)  {
+    public ArrayList<T> executeStatementQuery(Class modelClass,String sql)  {
+
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+    }
+
+    @Override
+    public ArrayList<T> executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
+
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,values);
+    }
+
+    @Override
+    public int executeStatementUpdate(String sql)  {
 
         int result = 0;
         Connection conn = ConnectionContainer.getInstance().getConn();
@@ -103,43 +133,56 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
+    public int executePreparedStatementUpdate(Class modelClass, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
+        String sql = SqlStringUtils.getUpdateSetWhereSql(modelClass.getSimpleName(),newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
+
+        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
+    }
+
+    @Override
+    public int executePreparedStatementUpdate(String sql, Collection newFieldValues, Collection conditionValues) {
+
+        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValues, conditionValues);
+    }
+
+    @Override
     public ArrayList<T> getListForAll(Class modelClass, ArrayList<String> queryFieldList){
 
         String sql = SqlStringUtils.getSelectAllSql(modelClass.getSimpleName(),queryFieldList);
 
-        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
     @Override
-    public ArrayList<T> getListWhereAAndB(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereAAndB(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getWhereSql(modelClass.getSimpleName(),conditionMap.keySet(),"AND",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"AND",queryFieldList);
 
-        return preparedStatementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionMap.values());
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionsMap.values());
     }
 
     @Override
-    public ArrayList<T> getListWhereAOrB(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereAOrB(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getWhereSql(modelClass.getSimpleName(),conditionMap.keySet(),"OR",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"OR",queryFieldList);
 
-        return preparedStatementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionMap.values());
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,conditionsMap.values());
     }
 
     @Override
-    public ArrayList<T> getListWhereLikeAndLike(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereLikeAndLike(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getWhereLikeSql(modelClass.getSimpleName(),conditionMap,"AND",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"AND",queryFieldList);
 
-        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
     @Override
-    public ArrayList<T> getListWhereLikeOrLike(Class modelClass, HashMap<String, Object> conditionMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereLikeOrLike(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getWhereLikeSql(modelClass.getSimpleName(),conditionMap,"OR",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"OR",queryFieldList);
 
-        return statementExecuteQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
 }
