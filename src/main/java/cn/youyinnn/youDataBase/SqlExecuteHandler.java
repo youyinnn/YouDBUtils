@@ -140,7 +140,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public int executePreparedStatementUpdate(String sql, Collection newFieldValues, Collection conditionValues) {
+    public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) {
 
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValues, conditionValues);
     }
