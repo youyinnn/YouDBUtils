@@ -164,6 +164,17 @@ public class SqlStringUtils {
         return sb.toString();
     }
 
+    public static String getDeleteSql(String tableName,String separateMark, Set<String> conditionKeySet) {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("DELETE FROM ")
+                .append(tableName);
+
+        getWhereSubStr(conditionKeySet,separateMark);
+
+        return sb.toString();
+    }
+
     /**
      * 检查queryFieldList是否为空 来构造tableName之前的Sql语句
      *

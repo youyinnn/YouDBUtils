@@ -1,10 +1,12 @@
 package cn.lab.dao;
 
 import cn.lab.model.Company;
+import cn.youyinnn.youDataBase.ModelResultFactory;
 import cn.youyinnn.youDataBase.SqlExecuteHandler;
 import cn.youyinnn.youDataBase.annotations.Transaction;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
@@ -16,15 +18,18 @@ import java.util.ArrayList;
 public class BDao implements YouDao {
 
     private SqlExecuteHandler<Company> sqlExecuteHandler = new SqlExecuteHandler<>();
+    private ModelResultFactory<Company> modelResultFactory = new ModelResultFactory<>();
 
     public void a() {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ArrayList<Company> arrayList = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
 
-        for (Company company : arrayList) {
-            System.out.println(company);
+        ArrayList<Company> arrayList = modelResultFactory.getResultModelList(resultSet,Company.class);
+
+        for (Company o : arrayList) {
+            System.out.println(o);
         }
     }
 
@@ -33,7 +38,13 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ArrayList arrayList = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
+
+        ArrayList<Company> arrayList = modelResultFactory.getResultModelList(resultSet,Company.class);
+
+        for (Company o : arrayList) {
+            System.out.println(o);
+        }
     }
 
     @Transaction

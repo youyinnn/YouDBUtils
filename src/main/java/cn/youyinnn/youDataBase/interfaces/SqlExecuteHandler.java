@@ -1,5 +1,6 @@
 package cn.youyinnn.youDataBase.interfaces;
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -48,6 +49,8 @@ public interface SqlExecuteHandler<T> {
 
     int executePreparedStatementDelete(String sql, ArrayList conditionValues);
 
+    int executePreparedStatementDelete(Class modelClass, HashMap<String, Object> conditionsMap);
+
     /**
      * 使用Statement执行query操作
      *
@@ -55,7 +58,7 @@ public interface SqlExecuteHandler<T> {
      * @param sql        一个完整的select类型的sql语句
      * @return 查询结果集转化出的Model类列表
      */
-    ArrayList<T> executeStatementQuery(Class modelClass,String sql);
+    ResultSet executeStatementQuery(Class modelClass, String sql);
 
     /**
      * 使用PreparedStatement执行query操作
@@ -65,7 +68,7 @@ public interface SqlExecuteHandler<T> {
      * @param values     占位符的填充列表
      * @return 查询结果集转化出的Model类列表
      */
-    ArrayList<T> executePreparedStatementQuery(Class modelClass,String sql, ArrayList values);
+    ResultSet executePreparedStatementQuery(Class modelClass,String sql, ArrayList values);
 
 
 }

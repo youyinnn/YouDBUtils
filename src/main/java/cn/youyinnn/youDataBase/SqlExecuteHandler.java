@@ -16,8 +16,6 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
     public static boolean isRollback = false;
 
-    private ModelResultFactory<T> modelResultFactory = new ModelResultFactory<>();
-
     private void release(Statement statement,ResultSet resultSet) {
         try {
             if (resultSet != null) {
@@ -31,28 +29,25 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         }
     }
 
-    private ArrayList<T> statementQuery(Connection conn, String sql,Class modelClass) {
+    private ResultSet statementQuery(Connection conn, String sql,Class modelClass) {
         ResultSet resultSet = null;
         Statement statement = null;
-        ArrayList<T> resultModelList = null;
         try {
             statement = conn.createStatement();
             resultSet = statement.executeQuery(sql);
-            resultModelList = modelResultFactory.getResultModelList(resultSet, modelClass);
         } catch (SQLException e) {
             isRollback = true;
             e.printStackTrace();
         } finally {
             release(statement,resultSet);
         }
-        return resultModelList;
+        return resultSet;
     }
 
-    private ArrayList<T> preparedStatementQuery(Connection conn, String sql, Class modelClass, Collection conditionValues){
+    private ResultSet preparedStatementQuery(Connection conn, String sql, Class modelClass, Collection conditionValues){
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
-        ArrayList<T> resultModelList = null;
         try {
             ps = conn.prepareStatement(sql);
             int i = 1;
@@ -61,14 +56,13 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
             }
             resultSet = ps.executeQuery();
 
-            resultModelList = modelResultFactory.getResultModelList(resultSet,modelClass);
         } catch (SQLException e) {
             isRollback = true;
             e.printStackTrace();
         } finally {
             release(ps,resultSet);
         }
-        return resultModelList;
+        return resultSet;
     }
 
     private int preparedStatementUpdate(Connection conn, String sql, Collection newFieldValues, Collection conditionValues){
@@ -163,13 +157,21 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public ArrayList<T> executeStatementQuery(Class modelClass,String sql)  {
+    public int executePreparedStatementDelete(Class modelClass, HashMap<String, Object> conditionsMap) {
+
+        String sql = SqlStringUtils.getDeleteSql(modelClass.getSimpleName(),"AND",conditionsMap.keySet());
+
+        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionsMap.values());
+    }
+
+    @Override
+    public ResultSet executeStatementQuery(Class modelClass,String sql)  {
 
         return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
     }
 
     @Override
-    public ArrayList<T> executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
+    public ResultSet executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
 
         return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,values);
     }

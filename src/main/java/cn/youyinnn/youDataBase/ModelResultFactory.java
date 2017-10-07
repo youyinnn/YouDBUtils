@@ -12,9 +12,9 @@ import java.util.ArrayList;
  * @author: youyinnn
  * @date: 2017/10/3
  */
-class ModelResultFactory<T> {
+public class ModelResultFactory<T> {
 
-    ArrayList<T> getResultModelList(ResultSet result, Class modelClass) {
+    public ArrayList<T> getResultModelList(ResultSet result, Class modelClass) {
 
         ArrayList<T> resultModelList = new ArrayList<>();
         ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());
