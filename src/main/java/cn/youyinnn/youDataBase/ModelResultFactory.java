@@ -12,16 +12,16 @@ import java.util.ArrayList;
  * @author: youyinnn
  * @date: 2017/10/3
  */
-public class ModelResultFactory {
+class ModelResultFactory<T> {
 
-    public static ArrayList getResultModelList(ResultSet result, Class modelClass) {
+    ArrayList<T> getResultModelList(ResultSet result, Class modelClass) {
 
-        ArrayList resultModelList = new ArrayList();
+        ArrayList<T> resultModelList = new ArrayList<>();
         ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());
 
         try {
             while (result.next()) {
-                Object instance = modelClass.newInstance();
+                T instance = (T) modelClass.newInstance();
                 for (String field : fieldList) {
                     boolean hasColumn = true;
                     try {
