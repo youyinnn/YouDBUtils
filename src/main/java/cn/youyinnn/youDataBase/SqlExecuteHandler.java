@@ -98,18 +98,6 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public ArrayList<T> executeStatementQuery(Class modelClass,String sql)  {
-
-        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
-    }
-
-    @Override
-    public ArrayList<T> executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
-
-        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,values);
-    }
-
-    @Override
     public int executeStatementUpdate(String sql)  {
 
         int result = 0;
@@ -155,6 +143,14 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
+    public int executePreparedStatementInsert(Class modelClass, HashMap<String, Object> newFieldValuesMap) {
+
+        String sql = SqlStringUtils.getInsertSql(modelClass.getSimpleName(),newFieldValuesMap.keySet());
+
+        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(),null);
+    }
+
+    @Override
     public int executeStatementDelete(String sql) {
 
         return executeStatementUpdate(sql);
@@ -166,4 +162,15 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionValues);
     }
 
+    @Override
+    public ArrayList<T> executeStatementQuery(Class modelClass,String sql)  {
+
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+    }
+
+    @Override
+    public ArrayList<T> executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
+
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,values);
+    }
 }

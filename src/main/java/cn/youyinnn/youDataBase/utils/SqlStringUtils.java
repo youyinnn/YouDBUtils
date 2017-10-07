@@ -135,6 +135,35 @@ public class SqlStringUtils {
         return sb.toString();
     }
 
+    public static String getInsertSql(String tableName, Set<String> insertFieldSet) {
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("INSERT INTO ")
+                .append(tableName)
+                .append("(");
+
+        for (String insertField : insertFieldSet) {
+            sb.append(insertField)
+                    .append(",");
+        }
+
+        int lastIndexOf = sb.lastIndexOf(",");
+
+        sb.replace(lastIndexOf,lastIndexOf+1,")");
+
+        sb.append(" VALUES(");
+
+        for (int i = 0 ; i < insertFieldSet.size() ; ++i) {
+            sb.append("?,");
+        }
+
+        lastIndexOf = sb.lastIndexOf(",");
+
+        sb.replace(lastIndexOf,lastIndexOf+1,")");
+
+        return sb.toString();
+    }
+
     /**
      * 检查queryFieldList是否为空 来构造tableName之前的Sql语句
      *
