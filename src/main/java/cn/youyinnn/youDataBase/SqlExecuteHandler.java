@@ -32,6 +32,8 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         ResultSet resultSet;
 
         ps = conn.prepareStatement(sql);
+
+        System.out.println(ps);
         int i = 1;
         for (Object value : conditionValues) {
             ps.setObject(i++,value);

@@ -4,6 +4,7 @@ import cn.youyinnn.youDataBase.utils.SqlStringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -21,13 +22,15 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
     private ArrayList<T> getStatementResultModelList(Class modelClass,String sql){
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
+        Statement statement = null;
         try {
             resultSet = sqlExecuteHandler.executeStatementQuery(sql);
+            statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet, modelClass);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(null,resultSet);
+            ConnectionContainer.release(statement,resultSet);
         }
         return resultModelList;
     }
@@ -44,13 +47,15 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
+        Statement statement = null;
         try {
             resultSet = sqlExecuteHandler.executePreparedStatementQuery(modelClass.getSimpleName(),queryFieldList,conditionsMap);
+            statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet, modelClass);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(null,resultSet);
+            ConnectionContainer.release(statement,resultSet);
         }
 
         return resultModelList;
@@ -62,13 +67,15 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
+        Statement statement = null;
         try {
             resultSet = sqlExecuteHandler.executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
+            statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet, modelClass);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(null,resultSet);
+            ConnectionContainer.release(statement,resultSet);
         }
 
         return resultModelList;
