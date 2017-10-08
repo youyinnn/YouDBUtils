@@ -161,6 +161,8 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
         String sql = SqlStringUtils.getDeleteSql(modelClass.getSimpleName(),"AND",conditionsMap.keySet());
 
+        System.out.println(sql);
+
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionsMap.values());
     }
 

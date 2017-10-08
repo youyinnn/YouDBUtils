@@ -170,7 +170,7 @@ public class SqlStringUtils {
         sb.append("DELETE FROM ")
                 .append(tableName);
 
-        getWhereSubStr(conditionKeySet,separateMark);
+        sb.append(getWhereSubStr(conditionKeySet,separateMark));
 
         return sb.toString();
     }
