@@ -29,7 +29,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         }
     }
 
-    private ResultSet statementQuery(Connection conn, String sql,Class modelClass) {
+    private ResultSet statementQuery(Connection conn, String sql) {
         ResultSet resultSet = null;
         Statement statement = null;
         try {
@@ -44,7 +44,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
         return resultSet;
     }
 
-    private ResultSet preparedStatementQuery(Connection conn, String sql, Class modelClass, Collection conditionValues){
+    private ResultSet preparedStatementQuery(Connection conn, String sql, Collection conditionValues){
 
         PreparedStatement ps = null;
         ResultSet resultSet = null;
@@ -161,20 +161,18 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
         String sql = SqlStringUtils.getDeleteSql(modelClass.getSimpleName(),"AND",conditionsMap.keySet());
 
-        System.out.println(sql);
-
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionsMap.values());
     }
 
     @Override
     public ResultSet executeStatementQuery(Class modelClass,String sql)  {
 
-        return statementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass);
+        return statementQuery(ConnectionContainer.getInstance().getConn(),sql);
     }
 
     @Override
     public ResultSet executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
 
-        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,modelClass,values);
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,values);
     }
 }
