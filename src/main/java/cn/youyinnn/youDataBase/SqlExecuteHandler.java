@@ -16,52 +16,28 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
 
     public static boolean isRollback = false;
 
-    private void release(Statement statement,ResultSet resultSet) {
-        try {
-            if (resultSet != null) {
-                resultSet.close();
-            }
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    private ResultSet statementQuery(Connection conn, String sql) throws SQLException {
+        ResultSet resultSet;
+        Statement statement;
 
-    private ResultSet statementQuery(Connection conn, String sql) {
-        ResultSet resultSet = null;
-        Statement statement = null;
-        try {
-            statement = conn.createStatement();
-            resultSet = statement.executeQuery(sql);
-        } catch (SQLException e) {
-            isRollback = true;
-            e.printStackTrace();
-        } finally {
-            release(statement,resultSet);
-        }
+        statement = conn.createStatement();
+        resultSet = statement.executeQuery(sql);
+
         return resultSet;
     }
 
-    private ResultSet preparedStatementQuery(Connection conn, String sql, Collection conditionValues){
+    private ResultSet preparedStatementQuery(Connection conn, String sql, Collection conditionValues) throws SQLException {
 
-        PreparedStatement ps = null;
-        ResultSet resultSet = null;
-        try {
-            ps = conn.prepareStatement(sql);
-            int i = 1;
-            for (Object value : conditionValues) {
-                ps.setObject(i++,value);
-            }
-            resultSet = ps.executeQuery();
+        PreparedStatement ps;
+        ResultSet resultSet;
 
-        } catch (SQLException e) {
-            isRollback = true;
-            e.printStackTrace();
-        } finally {
-            release(ps,resultSet);
+        ps = conn.prepareStatement(sql);
+        int i = 1;
+        for (Object value : conditionValues) {
+            ps.setObject(i++,value);
         }
+        resultSet = ps.executeQuery();
+
         return resultSet;
     }
 
@@ -86,7 +62,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
             isRollback = true;
             e.printStackTrace();
         } finally {
-            release(ps,null);
+            ConnectionContainer.release(ps,null);
         }
         return result;
     }
@@ -104,7 +80,7 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
             isRollback = true;
             e.printStackTrace();
         } finally {
-            release(statement,null);
+            ConnectionContainer.release(statement,null);
         }
 
         return result;
@@ -165,14 +141,22 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public ResultSet executeStatementQuery(String sql)  {
+    public ResultSet executeStatementQuery(String sql) throws SQLException {
 
         return statementQuery(ConnectionContainer.getInstance().getConn(),sql);
     }
 
     @Override
-    public ResultSet executePreparedStatementQuery(String sql, ArrayList values) {
+    public ResultSet executePreparedStatementQuery(String sql, ArrayList values) throws SQLException {
 
         return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,values);
+    }
+
+    @Override
+    public ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String, Object> conditionMap) throws SQLException {
+
+        String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),"AND",queryFieldList);
+
+        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql, conditionMap.values());
     }
 }

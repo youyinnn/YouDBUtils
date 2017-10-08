@@ -7,6 +7,7 @@ import cn.youyinnn.youDataBase.annotations.Transaction;
 import cn.youyinnn.youDataBase.interfaces.YouDao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +21,7 @@ public class BDao implements YouDao {
     private SqlExecuteHandler<Company> sqlExecuteHandler = new SqlExecuteHandler<>();
     private ModelResultFactory<Company> modelResultFactory = new ModelResultFactory<>();
 
-    public void a() {
+    public void a() throws SQLException {
 
         String sql = "SELECT * FROM COMPANY ;";
 
@@ -34,7 +35,7 @@ public class BDao implements YouDao {
     }
 
     @Transaction
-    public void b() {
+    public void b() throws SQLException {
 
         String sql = "SELECT * FROM COMPANY ;";
 

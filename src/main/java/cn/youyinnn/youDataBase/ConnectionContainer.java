@@ -4,7 +4,9 @@ import cn.youyinnn.youDataBase.druid.YouDruid;
 import cn.youyinnn.youDataBase.druid.exception.NoDataSourceInitException;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * @description:
@@ -42,4 +44,16 @@ public class ConnectionContainer {
 
     public void removeConn() {connectionThreadLocal.remove();}
 
+    static void release(Statement statement, ResultSet resultSet) {
+        try {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
