@@ -111,9 +111,9 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public int executePreparedStatementUpdate(Class modelClass, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
+    public int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
 
-        String sql = SqlStringUtils.getUpdateSetWhereSql(modelClass.getSimpleName(),newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
+        String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
 
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
     }
@@ -137,9 +137,9 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public int executePreparedStatementInsert(Class modelClass, HashMap<String, Object> newFieldValuesMap) {
+    public int executePreparedStatementInsert(String modelName, HashMap<String, Object> newFieldValuesMap) {
 
-        String sql = SqlStringUtils.getInsertSql(modelClass.getSimpleName(),newFieldValuesMap.keySet());
+        String sql = SqlStringUtils.getInsertSql(modelName,newFieldValuesMap.keySet());
 
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(),null);
     }
@@ -157,21 +157,21 @@ public class SqlExecuteHandler<T> implements cn.youyinnn.youDataBase.interfaces.
     }
 
     @Override
-    public int executePreparedStatementDelete(Class modelClass, HashMap<String, Object> conditionsMap) {
+    public int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) {
 
-        String sql = SqlStringUtils.getDeleteSql(modelClass.getSimpleName(),"AND",conditionsMap.keySet());
+        String sql = SqlStringUtils.getDeleteSql(modelName,"AND",conditionsMap.keySet());
 
         return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionsMap.values());
     }
 
     @Override
-    public ResultSet executeStatementQuery(Class modelClass,String sql)  {
+    public ResultSet executeStatementQuery(String sql)  {
 
         return statementQuery(ConnectionContainer.getInstance().getConn(),sql);
     }
 
     @Override
-    public ResultSet executePreparedStatementQuery(Class modelClass, String sql, ArrayList values) {
+    public ResultSet executePreparedStatementQuery(String sql, ArrayList values) {
 
         return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,values);
     }

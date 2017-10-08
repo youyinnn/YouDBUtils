@@ -21,7 +21,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         String sql = SqlStringUtils.getSelectAllSql(modelClass.getSimpleName(),queryFieldList);
 
-        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(modelClass, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(sql);
 
         return modelResultFactory.getResultModelList(resultSet,modelClass);
     }
@@ -30,7 +30,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"AND",queryFieldList);
 
-        ResultSet resultSet = sqlExecuteHandler.executePreparedStatementQuery(modelClass, sql, new ArrayList<>(conditionsMap.values()));
+        ResultSet resultSet = sqlExecuteHandler.executePreparedStatementQuery( sql, new ArrayList<>(conditionsMap.values()));
 
         return modelResultFactory.getResultModelList(resultSet,modelClass);
     }
@@ -39,7 +39,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"OR",queryFieldList);
 
-        ResultSet resultSet = sqlExecuteHandler.executePreparedStatementQuery(modelClass, sql, new ArrayList<>(conditionsMap.values()));
+        ResultSet resultSet = sqlExecuteHandler.executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
 
         return modelResultFactory.getResultModelList(resultSet,modelClass);
     }
@@ -48,7 +48,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"AND",queryFieldList);
 
-        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(modelClass, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(sql);
 
         return modelResultFactory.getResultModelList(resultSet,modelClass);
     }
@@ -57,7 +57,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"OR",queryFieldList);
 
-        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(modelClass, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(sql);
 
         return modelResultFactory.getResultModelList(resultSet,modelClass);
     }

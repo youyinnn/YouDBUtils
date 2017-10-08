@@ -24,7 +24,7 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(sql);
 
         ArrayList<Company> arrayList = modelResultFactory.getResultModelList(resultSet,Company.class);
 
@@ -38,7 +38,7 @@ public class BDao implements YouDao {
 
         String sql = "SELECT * FROM COMPANY ;";
 
-        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery(Company.class, sql);
+        ResultSet resultSet = sqlExecuteHandler.executeStatementQuery( sql);
 
         ArrayList<Company> arrayList = modelResultFactory.getResultModelList(resultSet,Company.class);
 
