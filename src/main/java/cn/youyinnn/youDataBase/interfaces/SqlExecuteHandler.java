@@ -97,6 +97,7 @@ public interface SqlExecuteHandler<T> {
      *
      * @param sql 一个完整的select类型的sql语句
      * @return 查询结果集转化出的Model类列表 result set
+     * @throws SQLException the sql exception
      */
     ResultSet executeStatementQuery(String sql) throws SQLException;
 
@@ -104,12 +105,22 @@ public interface SqlExecuteHandler<T> {
      * 使用PreparedStatement执行query操作
      *
      * @param sql             一个完整的带有占位符的select类型的sql语句
-     * @param conditionValues the condition values
+     * @param conditionValues 要填充的条件值列表
      * @return 查询结果集转化出的Model类列表 result set
+     * @throws SQLException the sql exception
      */
     ResultSet executePreparedStatementQuery(String sql, ArrayList conditionValues) throws SQLException;
 
 
+    /**
+     * 使用PreparedStatement执行query操作
+     *
+     * @param modelName      需要查询的model类名 我们使用这个来对应数据表
+     * @param queryFieldList 需要查询的字段列名
+     * @param conditionMap   需要定位查询记录的条件字段以及条件值组成的键值对
+     * @return the result set
+     * @throws SQLException the sql exception
+     */
     ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String,Object> conditionMap) throws SQLException;
 
 

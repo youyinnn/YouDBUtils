@@ -23,7 +23,7 @@ public class ConnectionContainer {
 
     public static ConnectionContainer getInstance() { return instance ; }
 
-    public void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
+    private void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
 
     public Connection getConn() {
 
