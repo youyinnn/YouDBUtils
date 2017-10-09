@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class ModelResultFactory<T> {
 
-    public ArrayList<T> getResultModelList(ResultSet result, Class modelClass) {
+    public ArrayList<T> getResultModelList(ResultSet result, Class<T> modelClass) {
 
         ArrayList<T> resultModelList = new ArrayList<>();
         ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());
 
         try {
             while (result.next()) {
-                T instance = (T) modelClass.newInstance();
+                T instance = modelClass.newInstance();
                 for (String field : fieldList) {
                     boolean hasColumn = true;
                     try {
