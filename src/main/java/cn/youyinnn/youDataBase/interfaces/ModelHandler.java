@@ -5,6 +5,8 @@ import java.util.HashMap;
 
 public interface ModelHandler<T> {
 
+    ArrayList<T> getList(Class<T> modelClass,String sql);
+
     /**
      * 获取这个model类的所有记录
      *
@@ -53,4 +55,6 @@ public interface ModelHandler<T> {
      * @return the list where like or like
      */
     ArrayList<T> getListWhereLikeOrLike(Class<T> modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+
+    int saveModel(T model);
 }

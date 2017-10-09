@@ -110,7 +110,7 @@ public interface SqlExecuteHandler<T> {
      * @throws SQLException the sql exception
      */
     ResultSet executePreparedStatementQuery(String sql, ArrayList conditionValues) throws SQLException;
-    
+
     /**
      * 使用PreparedStatement执行query操作
      *

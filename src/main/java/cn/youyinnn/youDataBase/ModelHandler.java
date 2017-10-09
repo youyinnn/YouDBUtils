@@ -1,5 +1,6 @@
 package cn.youyinnn.youDataBase;
 
+import cn.youyinnn.youDataBase.utils.ReflectionUtils;
 import cn.youyinnn.youDataBase.utils.SqlStringUtils;
 
 import java.sql.ResultSet;
@@ -33,6 +34,12 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
             ConnectionContainer.release(statement,resultSet);
         }
         return resultModelList;
+    }
+
+    @Override
+    public ArrayList<T> getList(Class<T> modelClass,String sql) {
+
+        return getStatementResultModelList(modelClass,sql);
     }
 
     public ArrayList<T> getListForAll(Class<T> modelClass, ArrayList<String> queryFieldList){
@@ -93,6 +100,21 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"OR",queryFieldList);
 
         return getStatementResultModelList(modelClass,sql);
+    }
+
+    @Override
+    public int saveModel(T model) {
+
+        Class<?> aClass = model.getClass();
+
+        HashMap<String, Object> newFieldValuesMap = new HashMap<>();
+
+        for (String field : ModelMessage.getFieldList(aClass.getSimpleName())) {
+            Object fieldValue = ReflectionUtils.getFieldValue(model, field);
+            newFieldValuesMap.put(field,fieldValue);
+        }
+
+        return sqlExecuteHandler.executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
 
 }
