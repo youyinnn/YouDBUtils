@@ -19,7 +19,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
     private ModelResultFactory<T> modelResultFactory = new ModelResultFactory<>();
 
-    private ArrayList<T> getStatementResultModelList(Class modelClass,String sql){
+    private ArrayList<T> getStatementResultModelList(Class<T> modelClass,String sql){
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
@@ -35,7 +35,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
         return resultModelList;
     }
 
-    public ArrayList<T> getListForAll(Class modelClass, ArrayList<String> queryFieldList){
+    public ArrayList<T> getListForAll(Class<T> modelClass, ArrayList<String> queryFieldList){
 
         String sql = SqlStringUtils.getSelectAllSql(modelClass.getSimpleName(),queryFieldList);
 
@@ -43,7 +43,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
 
     }
 
-    public ArrayList<T> getListWhereAAndB(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereAAndB(Class<T> modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
@@ -61,7 +61,7 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
         return resultModelList;
     }
 
-    public ArrayList<T> getListWhereAOrB(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereAOrB(Class<T> modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"OR",queryFieldList);
 
@@ -81,14 +81,14 @@ public class ModelHandler<T> implements cn.youyinnn.youDataBase.interfaces.Model
         return resultModelList;
     }
 
-    public ArrayList<T> getListWhereLikeAndLike(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereLikeAndLike(Class<T> modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"AND",queryFieldList);
 
         return getStatementResultModelList(modelClass,sql);
     }
 
-    public ArrayList<T> getListWhereLikeOrLike(Class modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereLikeOrLike(Class<T> modelClass, HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"OR",queryFieldList);
 

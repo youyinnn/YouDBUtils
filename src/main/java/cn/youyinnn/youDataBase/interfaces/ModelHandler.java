@@ -12,7 +12,7 @@ public interface ModelHandler<T> {
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
      * @return 查询结果集转化出的Model类列表
      */
-    ArrayList<T> getListForAll(Class modelClass, ArrayList<String> queryFieldList);
+    ArrayList<T> getListForAll(Class<T> modelClass, ArrayList<String> queryFieldList);
 
     /**
      * 获取这个model的符合字段值条件的记录 条件之间使用and连接
@@ -22,7 +22,7 @@ public interface ModelHandler<T> {
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
      * @return the list where a and b
      */
-    ArrayList<T> getListWhereAAndB(Class modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhereAAndB(Class<T> modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
 
     /**
      * 获取这个model的符合字段值条件的记录 条件之间使用or连接
@@ -32,7 +32,7 @@ public interface ModelHandler<T> {
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
      * @return the list where a or b
      */
-    ArrayList<T> getListWhereAOrB(Class modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhereAOrB(Class<T> modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
 
     /**
      * 获取这个model的模糊符合字段值条件的记录 条件之间使用and连接
@@ -42,7 +42,7 @@ public interface ModelHandler<T> {
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
      * @return the list where like and like
      */
-    ArrayList<T> getListWhereLikeAndLike(Class modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhereLikeAndLike(Class<T> modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
 
     /**
      * 获取这个model的模糊符合字段值条件的记录 条件之间使用or连接
@@ -52,5 +52,5 @@ public interface ModelHandler<T> {
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
      * @return the list where like or like
      */
-    ArrayList<T> getListWhereLikeOrLike(Class modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhereLikeOrLike(Class<T> modelClass, HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
 }
