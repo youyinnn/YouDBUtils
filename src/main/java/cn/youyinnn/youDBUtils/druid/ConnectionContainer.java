@@ -1,7 +1,6 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.druid;
 
-import cn.youyinnn.youDBUtils.druid.YouDruid;
-import cn.youyinnn.youDBUtils.druid.exception.NoDataSourceInitException;
+import cn.youyinnn.youDBUtils.druid.exceptions.NoDataSourceInitException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -44,7 +43,7 @@ public class ConnectionContainer {
 
     public void removeConn() {connectionThreadLocal.remove();}
 
-    static void release(Statement statement, ResultSet resultSet) {
+    public static void release(Statement statement, ResultSet resultSet) {
         try {
             if (resultSet != null) {
                 resultSet.close();

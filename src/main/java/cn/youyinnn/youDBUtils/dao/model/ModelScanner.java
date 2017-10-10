@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.dao.model;
 
 import cn.youyinnn.youDBUtils.utils.ClassUtils;
 

@@ -1,7 +1,7 @@
 package cn.youyinnn.youDBUtils.druid;
 
-import cn.youyinnn.youDBUtils.AnnotationScanner;
-import cn.youyinnn.youDBUtils.druid.exception.NoDataSourceInitException;
+import cn.youyinnn.youDBUtils.ioc.AnnotationScanner;
+import cn.youyinnn.youDBUtils.druid.exceptions.NoDataSourceInitException;
 import cn.youyinnn.youDBUtils.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youDBUtils.druid.filter.YouStatFilter;
 import com.alibaba.druid.filter.Filter;
@@ -244,7 +244,7 @@ public class YouDruid {
      * Gets conn.
      *
      * @return the conn
-     * @throws SQLException the sql exception
+     * @throws SQLException the sql exceptions
      */
     public static DruidPooledConnection getConn() throws SQLException {
         return currentDataSource.getConnection();

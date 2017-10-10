@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.dao.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

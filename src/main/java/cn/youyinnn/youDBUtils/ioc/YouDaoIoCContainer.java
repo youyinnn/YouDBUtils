@@ -1,7 +1,7 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.ioc;
 
 import cn.youyinnn.youDBUtils.interfaces.YouDao;
-import cn.youyinnn.youDBUtils.proxy.TransactionProxyGenerator;
+import cn.youyinnn.youDBUtils.ioc.proxy.TransactionProxyGenerator;
 
 import java.util.HashMap;
 import java.util.Map;

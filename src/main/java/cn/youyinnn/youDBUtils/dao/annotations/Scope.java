@@ -1,6 +1,6 @@
-package cn.youyinnn.youDBUtils.annotations;
+package cn.youyinnn.youDBUtils.dao.annotations;
 
-import cn.youyinnn.youDBUtils.IocBean;
+import cn.youyinnn.youDBUtils.ioc.IocBean;
 
 import java.lang.annotation.*;
 

@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils.proxy;
+package cn.youyinnn.youDBUtils.ioc.proxy;
 
 import net.sf.cglib.proxy.CallbackFilter;
 

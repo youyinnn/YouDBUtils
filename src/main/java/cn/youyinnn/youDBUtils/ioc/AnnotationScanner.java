@@ -1,6 +1,6 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.ioc;
 
-import cn.youyinnn.youDBUtils.annotations.Scope;
+import cn.youyinnn.youDBUtils.dao.annotations.Scope;
 import cn.youyinnn.youDBUtils.interfaces.YouDao;
 import cn.youyinnn.youDBUtils.utils.ClassUtils;
 

@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils.proxy;
+package cn.youyinnn.youDBUtils.ioc.proxy;
 
 import cn.youyinnn.youDBUtils.interfaces.YouDao;
 import net.sf.cglib.proxy.Callback;
@@ -21,7 +21,7 @@ public class TransactionProxyGenerator {
         boolean isAll = false;
 
         for (Annotation annotation : annotations) {
-            if (annotation.annotationType().getName().equals("cn.youyinnn.youDBUtils.annotations.Transaction")){
+            if (annotation.annotationType().getName().equals("cn.youyinnn.youDBUtils.dao.annotations.Transaction")){
                 isAll = true;
                 break;
             }

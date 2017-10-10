@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils.proxy;
+package cn.youyinnn.youDBUtils.ioc.proxy;
 
 import net.sf.cglib.proxy.CallbackFilter;
 
@@ -36,7 +36,7 @@ public class TransactionMethodCallbackFilter implements CallbackFilter{
 
                 if (annotations.length > 0) {
                     for (Annotation annotation : annotations) {
-                        if(annotation.toString().contains("cn.youyinnn.youDBUtils.annotations.Transaction")) {
+                        if(annotation.toString().contains("cn.youyinnn.youDBUtils.dao.annotations.Transaction")) {
                             return 1;
                         }
                     }

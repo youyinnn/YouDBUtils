@@ -1,7 +1,7 @@
-package cn.youyinnn.youDBUtils.proxy;
+package cn.youyinnn.youDBUtils.ioc.proxy;
 
-import cn.youyinnn.youDBUtils.ConnectionContainer;
-import cn.youyinnn.youDBUtils.SqlExecuteHandler;
+import cn.youyinnn.youDBUtils.druid.ConnectionContainer;
+import cn.youyinnn.youDBUtils.dao.SqlExecuteHandler;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 

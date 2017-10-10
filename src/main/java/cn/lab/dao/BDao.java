@@ -1,9 +1,9 @@
 package cn.lab.dao;
 
 import cn.lab.model.Company;
-import cn.youyinnn.youDBUtils.ModelResultFactory;
-import cn.youyinnn.youDBUtils.SqlExecuteHandler;
-import cn.youyinnn.youDBUtils.annotations.Transaction;
+import cn.youyinnn.youDBUtils.dao.model.ModelResultFactory;
+import cn.youyinnn.youDBUtils.dao.SqlExecuteHandler;
+import cn.youyinnn.youDBUtils.dao.annotations.Transaction;
 import cn.youyinnn.youDBUtils.interfaces.YouDao;
 
 import java.sql.ResultSet;

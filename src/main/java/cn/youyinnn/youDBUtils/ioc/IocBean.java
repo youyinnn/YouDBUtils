@@ -1,4 +1,4 @@
-package cn.youyinnn.youDBUtils;
+package cn.youyinnn.youDBUtils.ioc;
 
 import cn.youyinnn.youDBUtils.interfaces.YouDao;
 
