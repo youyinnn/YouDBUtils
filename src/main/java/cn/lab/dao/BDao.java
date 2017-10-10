@@ -1,10 +1,10 @@
 package cn.lab.dao;
 
 import cn.lab.model.Company;
-import cn.youyinnn.youDataBase.ModelResultFactory;
-import cn.youyinnn.youDataBase.SqlExecuteHandler;
-import cn.youyinnn.youDataBase.annotations.Transaction;
-import cn.youyinnn.youDataBase.interfaces.YouDao;
+import cn.youyinnn.youDBUtils.ModelResultFactory;
+import cn.youyinnn.youDBUtils.SqlExecuteHandler;
+import cn.youyinnn.youDBUtils.annotations.Transaction;
+import cn.youyinnn.youDBUtils.interfaces.YouDao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
