@@ -1,9 +1,0 @@
-2017-09-18 08:35:04.432 TRACE [main][Main.java:17] - trace level
-2017-09-18 08:35:04.435 DEBUG [main][Main.java:18] - debug level
-2017-09-18 08:35:04.435 INFO [main][Main.java:19] - info level
-2017-09-18 08:35:12.869 TRACE [main][Main.java:17] - trace level
-2017-09-18 08:35:12.871 DEBUG [main][Main.java:18] - debug level
-2017-09-18 08:35:12.871 INFO [main][Main.java:19] - info level
-2017-09-18 08:39:33.142 INFO [main][Main.java:19] - info level
-2017-09-18 08:42:50.705 INFO [main][Main.java:19] - info level
-2017-09-18 08:44:23.273 INFO [main][Main.java:19] - info level
