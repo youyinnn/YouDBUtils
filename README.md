@@ -157,7 +157,7 @@
       - `class` TransactionInterceptor
       - `class` TransactionMethodCallBackFilter
       - `class` TransactionProxyGenerator
-    - `class` AnnotationScanner
+    - `class` DaoScanner
     - `class` IocBean
     - `class` YouDaoIocContainer
   - `package` utils

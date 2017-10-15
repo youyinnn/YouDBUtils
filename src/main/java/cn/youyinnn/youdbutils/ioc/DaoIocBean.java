@@ -7,7 +7,7 @@ import cn.youyinnn.youdbutils.interfaces.YouDao;
  * @author: youyinnn
  * @date: 2017/9/27
  */
-public class IocBean {
+public class DaoIocBean {
 
     public static final String                  SINGLETON                   = "singleton";
 
@@ -29,7 +29,7 @@ public class IocBean {
         this.singleton = singleton;
     }
 
-    public IocBean(Class<YouDao> daoClass, String scope) {
+    public DaoIocBean(Class<YouDao> daoClass, String scope) {
         this.daoClass = daoClass;
         this.scope = scope;
         this.className = daoClass.getName();
@@ -49,7 +49,7 @@ public class IocBean {
 
     @Override
     public String toString() {
-        return "IocBean{" +
+        return "DaoIocBean{" +
                 "daoClass=" + daoClass +
                 ", scope='" + scope + '\'' +
                 ", className='" + className + '\'' +

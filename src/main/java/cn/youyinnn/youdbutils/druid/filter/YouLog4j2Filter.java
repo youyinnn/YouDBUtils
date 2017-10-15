@@ -49,16 +49,14 @@ public class YouLog4j2Filter {
     public static final String      RESULTSET_LOG_ENABLE                        = "resultSetLogEnabled";
     public static final String      RESULTSET_LOG_ERROR_ENABLE                  = "resultSetLogErrorEnabled";
 
-    private static Log4j2Filter      log4j2Filter                                = new Log4j2Filter();
-
-    private YouLog4j2Filter(){}
+    private Log4j2Filter            log4j2Filter                                = new Log4j2Filter();
 
     /**
      * 获取一个正常的Log4j2Filter 即开关值取默认值
      *
      * @return the log 4 j 2 filter
      */
-    public static Log4j2Filter getLog4j2Filter() {
+    public Log4j2Filter getLog4j2Filter() {
         return log4j2Filter;
     }
 
@@ -69,11 +67,10 @@ public class YouLog4j2Filter {
      *
      * @return the log 4 j 2 filter with all off
      */
-    public static Log4j2Filter getLog4j2FilterWithAllOff() {
+    public void setLog4j2FilterWithAllOff() {
 
         setAllEnableSwitch(false);
 
-        return log4j2Filter ;
     }
 
     /**
@@ -83,17 +80,16 @@ public class YouLog4j2Filter {
      *
      * @return the log 4 j 2 filter
      */
-    public static Log4j2Filter getLog4j2FilterWithAllOn(){
+    public void setLog4j2FilterWithAllOn(){
 
         setAllEnableSwitch(true);
 
-        return log4j2Filter;
     }
 
     /**
      * 一键设置所有开关
      * */
-    private static void setAllEnableSwitch(boolean boo) {
+    private void setAllEnableSwitch(boolean boo) {
 
         setAllConnectionEnableSwitch(boo);
 
@@ -115,7 +111,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setDatasourceLogEnable(boolean boo) {
+    public void setDatasourceLogEnable(boolean boo) {
         log4j2Filter.setDataSourceLogEnabled(boo);
     }
 
@@ -124,7 +120,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setConnectionLogEnabled(boolean boo) {
+    public void setConnectionLogEnabled(boolean boo) {
         log4j2Filter.setConnectionLogEnabled(boo);
     }
 
@@ -133,7 +129,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setConnectionLogErrorEnabled(boolean boo) {
+    public void setConnectionLogErrorEnabled(boolean boo) {
         log4j2Filter.setConnectionLogErrorEnabled(boo);
     }
 
@@ -142,7 +138,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setStatementLogEnabled(boolean boo) {
+    public void setStatementLogEnabled(boolean boo) {
         log4j2Filter.setStatementLogEnabled(boo);
     }
 
@@ -151,7 +147,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setStatementLogErrorEnabled(boolean boo) {
+    public void setStatementLogErrorEnabled(boolean boo) {
         log4j2Filter.setStatementLogErrorEnabled(boo);
     }
 
@@ -160,7 +156,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setResultSetLogEnabled(boolean boo) {
+    public void setResultSetLogEnabled(boolean boo) {
         log4j2Filter.setResultSetLogEnabled(boo);
     }
 
@@ -169,7 +165,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setResultSetLogErrorEnabled(boolean boo) {
+    public void setResultSetLogErrorEnabled(boolean boo) {
         log4j2Filter.setResultSetLogErrorEnabled(boo);
     }
 
@@ -178,7 +174,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setAllConnectionEnableSwitch(boolean boo){
+    public void setAllConnectionEnableSwitch(boolean boo){
         log4j2Filter.setConnectionConnectBeforeLogEnabled(boo);
         log4j2Filter.setConnectionConnectAfterLogEnabled(boo);
         log4j2Filter.setConnectionCommitAfterLogEnabled(boo);
@@ -191,7 +187,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setAllStatementEnableSwitch(boolean boo){
+    public void setAllStatementEnableSwitch(boolean boo){
         log4j2Filter.setStatementCreateAfterLogEnabled(boo);
         log4j2Filter.setStatementPrepareAfterLogEnabled(boo);
         log4j2Filter.setStatementPrepareCallAfterLogEnabled(boo);
@@ -214,7 +210,7 @@ public class YouLog4j2Filter {
      *
      * @param boo the boo
      */
-    public static void setAllResultSetEnableSwitch(boolean boo){
+    public void setAllResultSetEnableSwitch(boolean boo){
         log4j2Filter.setResultSetNextAfterLogEnabled(boo);
         log4j2Filter.setResultSetOpenAfterLogEnabled(boo);
         log4j2Filter.setResultSetCloseAfterLogEnabled(boo);
@@ -228,7 +224,7 @@ public class YouLog4j2Filter {
      * @param enableSwitchName the enable switch name
      * @param boo              the boo
      */
-    public static void setEnableSwitch(String enableSwitchName,boolean boo){
+    public void setEnableSwitch(String enableSwitchName,boolean boo){
         Class<? extends Log4j2Filter> aClass = log4j2Filter.getClass();
 
         String firstLetter = String.valueOf(enableSwitchName.charAt(0));

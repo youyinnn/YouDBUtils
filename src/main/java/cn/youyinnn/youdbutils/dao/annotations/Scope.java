@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.dao.annotations;
 
-import cn.youyinnn.youdbutils.ioc.IocBean;
+import cn.youyinnn.youdbutils.ioc.DaoIocBean;
 
 import java.lang.annotation.*;
 
@@ -9,5 +9,5 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scope {
 
-    String value() default IocBean.SINGLETON;
+    String value() default DaoIocBean.SINGLETON;
 }

@@ -1,5 +1,6 @@
 package cn.youyinnn.youdbutils.druid;
 
+import cn.youyinnn.youdbutils.YouDbManager;
 import cn.youyinnn.youdbutils.druid.exceptions.NoDataSourceInitException;
 
 import java.sql.Connection;
@@ -30,7 +31,7 @@ public class ConnectionContainer {
 
         if (connection == null) {
             try {
-                connection = YouDruid.getCurrentDataSourceConn();
+                connection = YouDbManager.youDruid.getCurrentDataSourceConn();
                 System.out.println("Bind conn :"+connection);
                 bindConn(connection);
             } catch (SQLException | NoDataSourceInitException e) {

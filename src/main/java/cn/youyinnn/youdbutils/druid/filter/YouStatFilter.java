@@ -11,23 +11,21 @@ import com.alibaba.druid.filter.stat.StatFilter;
  */
 public class YouStatFilter {
 
-    private static StatFilter               statFilter                  = new StatFilter();
-
-    private YouStatFilter(){}
+    private StatFilter               statFilter                  = new StatFilter();
 
     /**
      * Gets stat filter.
      *
      * @return the stat filter
      */
-    public static StatFilter getStatFilter() { return statFilter; }
+    public StatFilter getStatFilter() { return statFilter; }
 
     /**
      * 慢sql记录 传入时间为毫秒
      *
      * @param slowSqlMillis the slow sql millis
      */
-    public static void openLogSlowSql(long slowSqlMillis) {
+    public void openLogSlowSql(long slowSqlMillis) {
         statFilter.setLogSlowSql(true);
         statFilter.setSlowSqlMillis(slowSqlMillis);
     }
@@ -35,7 +33,7 @@ public class YouStatFilter {
     /**
      * 合并没有参数化的sql
      */
-    public static void openMergeSql(){
+    public void openMergeSql(){
         statFilter.setMergeSql(true);
     }
 }

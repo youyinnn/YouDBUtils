@@ -13,19 +13,19 @@ import java.util.Map;
  */
 public class YouDaoIocContainer {
 
-    private static HashMap<String,IocBean>              prototypeDaoMap             = new HashMap<>();
-    private static HashMap<String,IocBean>              singletonDaoMap             = new HashMap<>();
+    private static HashMap<String,DaoIocBean>              prototypeDaoMap             = new HashMap<>();
+    private static HashMap<String,DaoIocBean>              singletonDaoMap             = new HashMap<>();
 
     private YouDaoIocContainer() {}
 
-    public static void addSingletonYouDao(IocBean daoBean) {
+    public static void addSingletonYouDao(DaoIocBean daoBean) {
 
         String className = daoBean.getClassName();
         daoBean.setSingleton(TransactionProxyGenerator.getProxyObject(daoBean.getDaoClass()));
         singletonDaoMap.put(className,daoBean);
     }
 
-    public static void addPrototypeYouDao(IocBean daoBean) {
+    public static void addPrototypeYouDao(DaoIocBean daoBean) {
 
         String className = daoBean.getClassName();
         prototypeDaoMap.put(className,daoBean);
@@ -33,23 +33,23 @@ public class YouDaoIocContainer {
 
     public static YouDao getYouDao(String className){
 
-        IocBean iocBean = singletonDaoMap.get(className);
+        DaoIocBean daoIocBean = singletonDaoMap.get(className);
 
-        if (iocBean == null) {
-            iocBean = prototypeDaoMap.get(className);
-            return TransactionProxyGenerator.getProxyObject(iocBean.getDaoClass());
+        if (daoIocBean == null) {
+            daoIocBean = prototypeDaoMap.get(className);
+            return TransactionProxyGenerator.getProxyObject(daoIocBean.getDaoClass());
         } else {
-            return iocBean.getSingleton();
+            return daoIocBean.getSingleton();
         }
     }
 
     public static void showDaoMap(){
-        for (Map.Entry<String, IocBean> stringIocBeanEntry : prototypeDaoMap.entrySet()) {
+        for (Map.Entry<String, DaoIocBean> stringIocBeanEntry : prototypeDaoMap.entrySet()) {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());
         }
         System.out.println("------------------------------");
 
-        for (Map.Entry<String, IocBean> stringIocBeanEntry : singletonDaoMap.entrySet()) {
+        for (Map.Entry<String, DaoIocBean> stringIocBeanEntry : singletonDaoMap.entrySet()) {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());
         }
     }

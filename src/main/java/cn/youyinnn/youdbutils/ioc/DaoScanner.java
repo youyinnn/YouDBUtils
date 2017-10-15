@@ -15,16 +15,16 @@ import java.util.Vector;
  * @author: youyinnn
  * @date: 2017 /9/12
  */
-public class AnnotationScanner {
+public class DaoScanner {
 
-    private AnnotationScanner() {}
+    private DaoScanner() {}
 
     /**
      * 扫描给定包名的包下所有的类 把实现了cn.youyinnn.youdbutils.interfaces.YouDao接口的类放进YouDaoIocContainer容器中
      *
      * @param daoPackageNamePrefix the dao package name prefix
      */
-    public static void scanPackage(String daoPackageNamePrefix)  {
+    public static void scanPackageForYouDao(String daoPackageNamePrefix)  {
 
         Set<Class<?>> daoClassSet = ClassUtils.findFileClass(daoPackageNamePrefix);
 
@@ -36,10 +36,10 @@ public class AnnotationScanner {
                     Scope scope = aClass.getAnnotation(Scope.class);
 
                     // 单例dao
-                    if (scope == null || scope.value().equals(IocBean.SINGLETON)){
-                        YouDaoIocContainer.addSingletonYouDao(new IocBean((Class<YouDao>) aClass,IocBean.SINGLETON));
+                    if (scope == null || scope.value().equals(DaoIocBean.SINGLETON)){
+                        YouDaoIocContainer.addSingletonYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.SINGLETON));
                     } else {
-                        YouDaoIocContainer.addPrototypeYouDao(new IocBean((Class<YouDao>) aClass,IocBean.PROTOTYPE));
+                        YouDaoIocContainer.addPrototypeYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.PROTOTYPE));
                     }
                 }
             }
