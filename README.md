@@ -120,7 +120,7 @@
       ```
       提供对指定包下的类进行扫描的方法 并把其中所有的Model类的信息记录到ModelMassage类中
       ```
-    - `class` SqlExecuteHandler
+    - `class` SqlExecutor
     ```
     执行基本的CRUD的SQL的工具类
     ```
@@ -149,7 +149,7 @@
     ```
   - `package` interfaces
     - `@interface` ModelHandler
-    - `@interface` SqlExecuteHandler
+    - `@interface` SqlExecutor
     - `@interface` YouDao
   - `package` ioc
     - `package` proxy
@@ -158,12 +158,13 @@
       - `class` TransactionMethodCallBackFilter
       - `class` TransactionProxyGenerator
     - `class` DaoScanner
-    - `class` IocBean
+    - `class` DaoIocBean
     - `class` YouDaoIocContainer
   - `package` utils
     - `class` ClassUtils
     - `class` ReflectionUtils
     - `class` SqlStringUtils
+  - `class` YouDbManager
 
 核心类说明：
 

@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.dao.model;
 
-import cn.youyinnn.youdbutils.dao.SqlExecuteHandler;
+import cn.youyinnn.youdbutils.dao.SqlExecutor;
 import cn.youyinnn.youdbutils.druid.ConnectionContainer;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
@@ -18,7 +18,7 @@ import java.util.HashMap;
  */
 public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelHandler<T>{
 
-    private SqlExecuteHandler sqlExecuteHandler = new SqlExecuteHandler();
+    private SqlExecutor sqlExecuteHandler = new SqlExecutor();
 
     private ModelResultFactory<T> modelResultFactory = new ModelResultFactory<>();
 

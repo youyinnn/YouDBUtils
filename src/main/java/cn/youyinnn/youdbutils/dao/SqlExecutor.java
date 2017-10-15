@@ -13,7 +13,7 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/9/19
  */
-public class SqlExecuteHandler implements cn.youyinnn.youdbutils.interfaces.SqlExecuteHandler {
+public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecutor {
 
     public static boolean isRollback = false;
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
  *
  * @author youyinnn
  */
-public interface SqlExecuteHandler {
+public interface SqlExecutor {
 
     /**
      * 使用statement执行正常的update操作

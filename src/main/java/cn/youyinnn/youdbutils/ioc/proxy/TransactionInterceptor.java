@@ -1,7 +1,7 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
 import cn.youyinnn.youdbutils.druid.ConnectionContainer;
-import cn.youyinnn.youdbutils.dao.SqlExecuteHandler;
+import cn.youyinnn.youdbutils.dao.SqlExecutor;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -22,8 +22,8 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.setAutoCommit(false);
         Object result = methodProxy.invokeSuper(o,objects);
 
-        if (SqlExecuteHandler.isRollback) {
-            SqlExecuteHandler.isRollback = false;
+        if (SqlExecutor.isRollback) {
+            SqlExecutor.isRollback = false;
             conn.rollback();
         }
 
