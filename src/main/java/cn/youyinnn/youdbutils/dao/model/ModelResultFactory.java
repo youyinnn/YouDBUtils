@@ -14,7 +14,17 @@ import java.util.ArrayList;
  */
 public class ModelResultFactory<T> {
 
-    public ArrayList<T> getResultModelList(ResultSet result, Class<T> modelClass) {
+    private Class<T> modelClass;
+
+    public Class<T> getModelClass() {
+        return modelClass;
+    }
+
+    public ModelResultFactory(Class<T> modelClass) {
+        this.modelClass = modelClass;
+    }
+
+    public ArrayList<T> getResultModelList(ResultSet result) {
 
         ArrayList<T> resultModelList = new ArrayList<>();
         ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());

@@ -149,22 +149,64 @@
     ```
   - `package` interfaces
     - `@interface` ModelHandler
+    ```
+    Model处理器方法接口
+    ```
     - `@interface` SqlExecutor
+    ```
+    SQL执行器方法接口
+    ```
     - `@interface` YouDao
+    ```
+    用于标识DAO类 所有需要代理的类 都需要实现这个接口
+    ```
   - `package` ioc
     - `package` proxy
       - `class` TransactionClassCallBackFilter
+      ```
+      类级别的事务代理过滤器
+      ```
       - `class` TransactionInterceptor
+      ```
+      事务代理过程
+      ```
       - `class` TransactionMethodCallBackFilter
+      ```
+      方法级别的事务代理过滤器
+      ```
       - `class` TransactionProxyGenerator
-    - `class` DaoScanner
+      ```
+      代理对象的生成器
+      ```
     - `class` DaoIocBean
+    ```
+    Dao的Ioc类的信息
+    ```
+    - `class` DaoScanner
+    ```
+    Dao类的扫描器
+    ```
     - `class` YouDaoIocContainer
+    ```
+    存储代理Dao类的Ioc容器
+    ```
   - `package` utils
     - `class` ClassUtils
+    ```
+    提供指定路径下的类的迭代扫描工具类
+    ```
     - `class` ReflectionUtils
+    ```
+    提供反射所需方法的工具类
+    ```
     - `class` SqlStringUtils
+    ```
+    生成Sql语句的工具类
+    ```
   - `class` YouDbManager
+  ```
+  集合整个工具类所有对外核心功能的出口方法
+  ```
 
 核心类说明：
 
