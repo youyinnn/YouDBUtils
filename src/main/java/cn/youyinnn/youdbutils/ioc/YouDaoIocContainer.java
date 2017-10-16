@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.ioc;
 
-import cn.youyinnn.youdbutils.interfaces.YouDao;
+import cn.youyinnn.youdbutils.dao.YouDao;
 import cn.youyinnn.youdbutils.ioc.proxy.TransactionProxyGenerator;
 
 import java.util.HashMap;
@@ -31,23 +31,28 @@ public class YouDaoIocContainer {
         prototypeDaoMap.put(className,daoBean);
     }
 
-    public static YouDao getYouDao(String className){
+    public static YouDao getYouDao(Class daoClass){
 
-        DaoIocBean daoIocBean = singletonDaoMap.get(className);
+        DaoIocBean daoIocBean = singletonDaoMap.get(daoClass.getName());
 
         if (daoIocBean == null) {
-            daoIocBean = prototypeDaoMap.get(className);
-            return TransactionProxyGenerator.getProxyObject(daoIocBean.getDaoClass());
+            daoIocBean = prototypeDaoMap.get(daoClass.getName());
+            if (daoIocBean == null) {
+                return null;
+            } else {
+                return TransactionProxyGenerator.getProxyObject(daoIocBean.getDaoClass());
+            }
         } else {
             return daoIocBean.getSingleton();
         }
     }
 
     public static void showDaoMap(){
+        System.out.println("[ prototype dao ]:");
         for (Map.Entry<String, DaoIocBean> stringIocBeanEntry : prototypeDaoMap.entrySet()) {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());
         }
-        System.out.println("------------------------------");
+        System.out.println("[ singleton dao ]:");
 
         for (Map.Entry<String, DaoIocBean> stringIocBeanEntry : singletonDaoMap.entrySet()) {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());

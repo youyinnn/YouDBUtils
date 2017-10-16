@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.ioc;
 
-import cn.youyinnn.youdbutils.interfaces.YouDao;
+import cn.youyinnn.youdbutils.dao.YouDao;
 
 /**
  * @description:

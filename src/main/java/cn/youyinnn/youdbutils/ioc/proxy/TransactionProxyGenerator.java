@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
-import cn.youyinnn.youdbutils.interfaces.YouDao;
+import cn.youyinnn.youdbutils.dao.YouDao;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;

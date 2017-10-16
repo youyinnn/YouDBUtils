@@ -1,7 +1,7 @@
 package cn.youyinnn.youdbutils.ioc;
 
 import cn.youyinnn.youdbutils.dao.annotations.Scope;
-import cn.youyinnn.youdbutils.interfaces.YouDao;
+import cn.youyinnn.youdbutils.dao.YouDao;
 import cn.youyinnn.youdbutils.utils.ClassUtils;
 
 import java.lang.reflect.Field;
@@ -19,33 +19,24 @@ public class DaoScanner {
 
     private DaoScanner() {}
 
-    /**
-     * 扫描给定包名的包下所有的类 把实现了cn.youyinnn.youdbutils.interfaces.YouDao接口的类放进YouDaoIocContainer容器中
-     *
-     * @param daoPackageNamePrefix the dao package name prefix
-     */
     public static void scanPackageForYouDao(String daoPackageNamePrefix)  {
 
         Set<Class<?>> daoClassSet = ClassUtils.findFileClass(daoPackageNamePrefix);
 
         for (Class<?> aClass : daoClassSet) {
-            Class<?>[] interfaces = aClass.getInterfaces();
-            for (Class<?> anInterface : interfaces) {
-                if ("cn.youyinnn.youdbutils.interfaces.YouDao".equals(anInterface.getName())) {
+            Class<?> superclass = aClass.getSuperclass();
+            if ("YouDao".equals(superclass.getSimpleName())){
+                Scope scope = aClass.getAnnotation(Scope.class);
 
-                    Scope scope = aClass.getAnnotation(Scope.class);
-
-                    // 单例dao
-                    if (scope == null || scope.value().equals(DaoIocBean.SINGLETON)){
-                        YouDaoIocContainer.addSingletonYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.SINGLETON));
-                    } else {
-                        YouDaoIocContainer.addPrototypeYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.PROTOTYPE));
-                    }
+                // 单例dao
+                if (scope == null || scope.value().equals(DaoIocBean.SINGLETON)){
+                    YouDaoIocContainer.addSingletonYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.SINGLETON));
+                } else {
+                    YouDaoIocContainer.addPrototypeYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.PROTOTYPE));
                 }
             }
         }
     }
-
 
     /**
      * Show current project loaded class.

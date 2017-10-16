@@ -5,6 +5,7 @@ import cn.youyinnn.youdbutils.druid.YouDruid;
 import cn.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youdbutils.druid.filter.YouStatFilter;
 import cn.youyinnn.youdbutils.ioc.DaoScanner;
+import cn.youyinnn.youdbutils.ioc.YouDaoIocContainer;
 
 /**
  * @description:
@@ -64,5 +65,9 @@ public class YouDbManager {
 
     public static void scanPackageForModel(String packageName) {
         ModelScanner.scanPackage(packageName);
+    }
+
+    public static void showDao() {
+        YouDaoIocContainer.showDaoMap();
     }
 }
