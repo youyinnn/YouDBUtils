@@ -11,9 +11,9 @@ import java.lang.reflect.ParameterizedType;
  */
 public class YouDao<T> {
 
-    public SqlExecutor sqlExecutor = new SqlExecutor();
+    protected SqlExecutor sqlExecutor = new SqlExecutor();
 
-    public ModelResultFactory<T> modelResultFactory;
+    protected ModelResultFactory<T> modelResultFactory;
 
     private Class<T> modelClass;
 

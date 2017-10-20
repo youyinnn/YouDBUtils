@@ -36,7 +36,7 @@ public class TransactionMethodCallbackFilter implements CallbackFilter{
 
                 if (annotations.length > 0) {
                     for (Annotation annotation : annotations) {
-                        if(annotation.toString().contains("cn.youyinnn.youdbutils.dao.annotations.Transaction")) {
+                        if(annotation.toString().contains("cn.youyinnn.youdbutils.ioc.annotations.Transaction")) {
                             return 1;
                         }
                     }

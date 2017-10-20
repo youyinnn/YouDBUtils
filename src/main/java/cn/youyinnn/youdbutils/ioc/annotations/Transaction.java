@@ -1,4 +1,4 @@
-package cn.youyinnn.youdbutils.dao.annotations;
+package cn.youyinnn.youdbutils.ioc.annotations;
 
 import java.lang.annotation.*;
 

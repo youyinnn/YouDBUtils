@@ -1,6 +1,5 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
-import cn.youyinnn.youdbutils.dao.YouDao;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
@@ -14,14 +13,14 @@ import java.lang.annotation.Annotation;
  */
 public class TransactionProxyGenerator {
 
-    public static YouDao getProxyObject(Class youDaoClass){
+    public static Object getProxyObject(Class youDaoClass){
 
         Annotation[] annotations = youDaoClass.getAnnotations();
 
         boolean isAll = false;
 
         for (Annotation annotation : annotations) {
-            if ("cn.youyinnn.youdbutils.dao.annotations.Transaction".equals(annotation.annotationType().getName())){
+            if ("cn.youyinnn.youdbutils.ioc.annotations.Transaction".equals(annotation.annotationType().getName())){
                 isAll = true;
                 break;
             }
@@ -42,7 +41,7 @@ public class TransactionProxyGenerator {
             enhancer.setCallbackFilter(new TransactionMethodCallbackFilter());
         }
 
-        return (YouDao) enhancer.create();
+        return enhancer.create();
 
     }
 

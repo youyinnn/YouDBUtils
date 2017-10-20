@@ -1,7 +1,7 @@
 package cn.youyinnn.youdbutils.ioc;
 
-import cn.youyinnn.youdbutils.dao.annotations.Scope;
-import cn.youyinnn.youdbutils.dao.YouDao;
+import cn.youyinnn.youdbutils.ioc.annotations.Scope;
+import cn.youyinnn.youdbutils.ioc.annotations.YouService;
 import cn.youyinnn.youdbutils.utils.ClassUtils;
 
 import java.lang.reflect.Field;
@@ -15,24 +15,24 @@ import java.util.Vector;
  * @author: youyinnn
  * @date: 2017 /9/12
  */
-public class DaoScanner {
+public class ServiceScanner {
 
-    private DaoScanner() {}
+    private ServiceScanner() {}
 
-    public static void scanPackageForYouDao(String daoPackageNamePrefix)  {
+    public static void scanPackage(String servicePackageNamePrefix)  {
 
-        Set<Class<?>> daoClassSet = ClassUtils.findFileClass(daoPackageNamePrefix);
+        Set<Class<?>> serviceClassSet = ClassUtils.findFileClass(servicePackageNamePrefix);
 
-        for (Class<?> aClass : daoClassSet) {
-            Class<?> superclass = aClass.getSuperclass();
-            if ("YouDao".equals(superclass.getSimpleName())){
+        for (Class<?> aClass : serviceClassSet) {
+            YouService annotation = aClass.getAnnotation(YouService.class);
+            if (annotation != null){
                 Scope scope = aClass.getAnnotation(Scope.class);
 
-                // 单例dao
-                if (scope == null || scope.value().equals(DaoIocBean.SINGLETON)){
-                    YouDaoIocContainer.addSingletonYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.SINGLETON));
+                // 单例service
+                if (scope == null || scope.value().equals(ServiceIocBean.SINGLETON)){
+                    YouServiceIocContainer.addSingletonYouService(new ServiceIocBean(aClass, ServiceIocBean.SINGLETON));
                 } else {
-                    YouDaoIocContainer.addPrototypeYouDao(new DaoIocBean((Class<YouDao>) aClass, DaoIocBean.PROTOTYPE));
+                    YouServiceIocContainer.addPrototypeYouService(new ServiceIocBean(aClass, ServiceIocBean.PROTOTYPE));
                 }
             }
         }

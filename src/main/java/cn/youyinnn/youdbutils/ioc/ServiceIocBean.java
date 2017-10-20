@@ -1,42 +1,40 @@
 package cn.youyinnn.youdbutils.ioc;
 
-import cn.youyinnn.youdbutils.dao.YouDao;
-
 /**
  * @description:
  * @author: youyinnn
  * @date: 2017/9/27
  */
-public class DaoIocBean {
+public class ServiceIocBean {
 
     public static final String                  SINGLETON                   = "singleton";
 
     public static final String                  PROTOTYPE                   = "prototype";
 
-    private Class<YouDao>                       daoClass;
+    private Class                               serviceClass;
 
     private String                              scope;
 
     private String                              className;
 
-    private YouDao                              singleton;
+    private Object                              singleton;
 
-    public YouDao getSingleton() {
+    public Object getSingleton() {
         return singleton;
     }
 
-    public void setSingleton(YouDao singleton) {
+    public void setSingleton(Object singleton) {
         this.singleton = singleton;
     }
 
-    public DaoIocBean(Class<YouDao> daoClass, String scope) {
-        this.daoClass = daoClass;
+    public ServiceIocBean(Class daoClass, String scope) {
+        this.serviceClass = daoClass;
         this.scope = scope;
         this.className = daoClass.getName();
     }
 
-    public Class<YouDao> getDaoClass() {
-        return daoClass;
+    public Class getServiceClass() {
+        return serviceClass;
     }
 
     public String getScope() {
@@ -49,8 +47,8 @@ public class DaoIocBean {
 
     @Override
     public String toString() {
-        return "DaoIocBean{" +
-                "daoClass=" + daoClass +
+        return "ServiceIocBean{" +
+                "serviceClass=" + serviceClass +
                 ", scope='" + scope + '\'' +
                 ", className='" + className + '\'' +
                 '}';

@@ -94,15 +94,6 @@
 
 - `package` cn.youyinnn.youdbutils
   - `package` dao
-    - `package` annotations
-      - `@interface` Scope
-      ```
-      描述代理的DAO类是单例还是多例的注解
-      ```
-      - `@interface` Transaction
-      ```
-      描述代理的DAO类在方法级别或者类级别上是否需要事物管理的注解
-      ```
     - `package` model
       - `class` ModelHandler
       ```
@@ -161,6 +152,19 @@
     用于标识DAO类 所有需要代理的类 都需要实现这个接口
     ```
   - `package` ioc
+    - `package` annotations
+      - `@interface` Scope
+      ```
+      描述代理的DAO类是单例还是多例的注解
+      ```
+      - `@interface` Transaction
+      ```
+      描述代理的Service类在方法级别或者类级别上是否需要事物管理的注解
+      ```
+      - `@interface` YouService
+      ```
+      描述Service类
+      ```
     - `package` proxy
       - `class` TransactionClassCallBackFilter
       ```
@@ -178,7 +182,7 @@
       ```
       代理对象的生成器
       ```
-    - `class` DaoIocBean
+    - `class` ServiceIocBean
     ```
     Dao的Ioc类的信息
     ```

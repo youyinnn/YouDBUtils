@@ -4,8 +4,8 @@ import cn.youyinnn.youdbutils.dao.model.ModelScanner;
 import cn.youyinnn.youdbutils.druid.YouDruid;
 import cn.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youdbutils.druid.filter.YouStatFilter;
-import cn.youyinnn.youdbutils.ioc.DaoScanner;
-import cn.youyinnn.youdbutils.ioc.YouDaoIocContainer;
+import cn.youyinnn.youdbutils.ioc.ServiceScanner;
+import cn.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 
 /**
  * @description:
@@ -53,14 +53,14 @@ public class YouDbManager {
     }
 
     /**
-     * 扫描指定包下的类 生成代理Dao 可以在cn.youyinnn.youdbutils.YouDaoIocContainer类中取出
+     * 扫描指定包下的类 生成代理Service 可以在cn.youyinnn.youdbutils.YouServiceIocContainer类中取出
      *
      * 同spring的Ioc容器
      *
      * @param packageName the package name
      */
-    public static void scanPackageForYouDao(String packageName){
-        DaoScanner.scanPackageForYouDao(packageName);
+    public static void scanPackageForService(String packageName){
+        ServiceScanner.scanPackage(packageName);
     }
 
     public static void scanPackageForModel(String packageName) {
@@ -68,6 +68,6 @@ public class YouDbManager {
     }
 
     public static void showDao() {
-        YouDaoIocContainer.showDaoMap();
+        YouServiceIocContainer.showServiceMap();
     }
 }
