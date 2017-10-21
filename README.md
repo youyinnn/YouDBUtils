@@ -119,6 +119,10 @@
     ```
     所有dao类都需要继承的父类 继承的同时指定Model类泛型 提供默认的针对泛型的ModelResultFactory 减少对于Model类性相关的类的创建的考虑
     ```
+    - `class` YouDaoContainer
+    ```
+    YouDao的容器 这保证了当前程序里 所有的YouDao对象都是单例的 并且从任何地方都可以获取
+    ```
   - `package` druid
     - `package` exceptions
       - `class` NoDataSourceInitException
@@ -136,7 +140,7 @@
       ```
     - `class` ThreadLocalPropContainer
     ```
-    保证每条Connection都和当前线程绑定的工具类
+    保证每条Connection都和当前线程绑定的工具类 同时保证线程上的唯一的事务都使用同一个flag值来判断回滚操作
     ```
     - `class` YouDruid
     ```
@@ -153,6 +157,10 @@
     ```
   - `package` ioc
     - `package` annotations
+      - `@interface` Autowired
+      ```
+      描述Service中的属性需要自动装配的注解
+      ```
       - `@interface` Scope
       ```
       描述代理的DAO类是单例还是多例的注解
@@ -184,15 +192,15 @@
       ```
     - `class` ServiceIocBean
     ```
-    Dao的Ioc类的信息
+    Service的Ioc类的信息
     ```
-    - `class` DaoScanner
+    - `class` ServiceScanner
     ```
-    Dao类的扫描器
+    Service类的扫描器
     ```
-    - `class` YouDaoIocContainer
+    - `class` YouServiceIocContainer
     ```
-    存储代理Dao类的Ioc容器
+    存储代理Service类的Ioc容器
     ```
   - `package` utils
     - `class` ClassUtils

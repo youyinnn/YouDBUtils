@@ -67,7 +67,7 @@ public class YouDbManager {
         ModelScanner.scanPackage(packageName);
     }
 
-    public static void showDao() {
+    public static void showService() {
         YouServiceIocContainer.showServiceMap();
     }
 }
