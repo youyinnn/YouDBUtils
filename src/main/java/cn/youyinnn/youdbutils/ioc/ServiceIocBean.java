@@ -11,6 +11,10 @@ public class ServiceIocBean {
 
     public static final String                  PROTOTYPE                   = "prototype";
 
+    public static final String                  PROPAGATION_REQUIRED        = "propagation_required";
+
+    public static final String                  PROPAGATION_REQUIRED_NEW    = "propagation_required_new";
+
     private Class                               serviceClass;
 
     private String                              scope;

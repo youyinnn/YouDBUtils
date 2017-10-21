@@ -1,5 +1,6 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
+import cn.youyinnn.youdbutils.ioc.annotations.Transaction;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
@@ -13,21 +14,18 @@ import java.lang.annotation.Annotation;
  */
 public class TransactionProxyGenerator {
 
-    public static Object getProxyObject(Class youDaoClass){
-
-        Annotation[] annotations = youDaoClass.getAnnotations();
+    public static Object getProxyObject(Class youServiceClass){
 
         boolean isAll = false;
 
-        for (Annotation annotation : annotations) {
-            if ("cn.youyinnn.youdbutils.ioc.annotations.Transaction".equals(annotation.annotationType().getName())){
-                isAll = true;
-                break;
-            }
+        Annotation annotation = youServiceClass.getAnnotation(Transaction.class);
+
+        if (annotation != null) {
+            isAll = true;
         }
 
         Enhancer enhancer = new Enhancer();
-        enhancer.setSuperclass(youDaoClass);
+        enhancer.setSuperclass(youServiceClass);
 
         Callback doNothing = NoOp.INSTANCE;
         Callback transaction = new TransactionInterceptor();
