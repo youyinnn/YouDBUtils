@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.dao;
 
-import cn.youyinnn.youdbutils.druid.ConnectionContainer;
+import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
 
 import java.sql.*;
@@ -14,8 +14,6 @@ import java.util.HashMap;
  * @date: 2017/9/19
  */
 public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecutor {
-
-    public static boolean isRollback = false;
 
     private ResultSet statementQuery(Connection conn, String sql) throws SQLException {
         ResultSet resultSet;
@@ -62,10 +60,10 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             }
             result = ps.executeUpdate();
         } catch (SQLException e) {
-            isRollback = true;
+            ThreadLocalPropContainer.getInstance().setFlagTrue();
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(ps,null);
+            ThreadLocalPropContainer.release(ps,null);
         }
         return result;
     }
@@ -74,16 +72,16 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
     public int executeStatementUpdate(String sql)  {
 
         int result = 0;
-        Connection conn = ConnectionContainer.getInstance().getConn();
+        Connection conn = ThreadLocalPropContainer.getInstance().getConn();
         Statement statement = null;
         try {
             statement = conn.createStatement();
             result = statement.executeUpdate(sql);
         } catch (SQLException e) {
-            isRollback = true;
+            ThreadLocalPropContainer.getInstance().setFlagTrue();
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(statement,null);
+            ThreadLocalPropContainer.release(statement,null);
         }
 
         return result;
@@ -94,13 +92,13 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
 
         String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
     }
 
     @Override
     public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) {
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValues, conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValues, conditionValues);
     }
 
     @Override
@@ -112,7 +110,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
     @Override
     public int executePreparedStatementInsert(String sql, ArrayList newFieldValues) {
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValues,null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValues,null);
     }
 
     @Override
@@ -120,7 +118,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
 
         String sql = SqlStringUtils.getInsertSql(modelName,newFieldValuesMap.keySet());
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,newFieldValuesMap.values(),null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValuesMap.values(),null);
     }
 
     @Override
@@ -132,7 +130,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
     @Override
     public int executePreparedStatementDelete(String sql, ArrayList conditionValues) {
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,null,conditionValues);
     }
 
     @Override
@@ -140,19 +138,19 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
 
         String sql = SqlStringUtils.getDeleteSql(modelName,"AND",conditionsMap.keySet());
 
-        return preparedStatementUpdate(ConnectionContainer.getInstance().getConn(),sql,null,conditionsMap.values());
+        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,null,conditionsMap.values());
     }
 
     @Override
     public ResultSet executeStatementQuery(String sql) throws SQLException {
 
-        return statementQuery(ConnectionContainer.getInstance().getConn(),sql);
+        return statementQuery(ThreadLocalPropContainer.getInstance().getConn(),sql);
     }
 
     @Override
     public ResultSet executePreparedStatementQuery(String sql, ArrayList values) throws SQLException {
 
-        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql,values);
+        return preparedStatementQuery(ThreadLocalPropContainer.getInstance().getConn(),sql,values);
     }
 
     @Override
@@ -160,6 +158,6 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),"AND",queryFieldList);
 
-        return preparedStatementQuery(ConnectionContainer.getInstance().getConn(),sql, conditionMap.values());
+        return preparedStatementQuery(ThreadLocalPropContainer.getInstance().getConn(),sql, conditionMap.values());
     }
 }

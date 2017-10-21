@@ -1,7 +1,6 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
-import cn.youyinnn.youdbutils.druid.ConnectionContainer;
-import cn.youyinnn.youdbutils.dao.SqlExecutor;
+import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -18,12 +17,12 @@ public class TransactionInterceptor implements MethodInterceptor{
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
-        Connection conn = ConnectionContainer.getInstance().getConn();
+        Connection conn = ThreadLocalPropContainer.getInstance().getConn();
         conn.setAutoCommit(false);
         Object result = methodProxy.invokeSuper(o,objects);
 
-        if (SqlExecutor.isRollback) {
-            SqlExecutor.isRollback = false;
+        if (ThreadLocalPropContainer.getInstance().getFlag()) {
+            ThreadLocalPropContainer.getInstance().setFlagFalse();
             conn.rollback();
         }
 
@@ -31,7 +30,8 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.close();
         {
             System.out.println("remove conn："+conn);
-            ConnectionContainer.getInstance().removeConn();
+            ThreadLocalPropContainer.getInstance().removeFlag();
+            ThreadLocalPropContainer.getInstance().removeConn();
         }
 
         return result;

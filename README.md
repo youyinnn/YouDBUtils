@@ -115,6 +115,10 @@
     ```
     执行基本的CRUD的SQL的工具类
     ```
+    - `class` YouDao
+    ```
+    所有dao类都需要继承的父类 继承的同时指定Model类泛型 提供默认的针对泛型的ModelResultFactory 减少对于Model类性相关的类的创建的考虑
+    ```
   - `package` druid
     - `package` exceptions
       - `class` NoDataSourceInitException
@@ -130,7 +134,7 @@
       ```
       对druid里StatFilter的封装，代码控制功能开关
       ```
-    - `class` ConnectionContainer
+    - `class` ThreadLocalPropContainer
     ```
     保证每条Connection都和当前线程绑定的工具类
     ```
@@ -146,10 +150,6 @@
     - `@interface` SqlExecutor
     ```
     SQL执行器方法接口
-    ```
-    - `@interface` YouDao
-    ```
-    用于标识DAO类 所有需要代理的类 都需要实现这个接口
     ```
   - `package` ioc
     - `package` annotations

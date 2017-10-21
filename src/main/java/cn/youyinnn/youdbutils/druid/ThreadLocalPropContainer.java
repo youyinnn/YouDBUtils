@@ -13,17 +13,29 @@ import java.sql.Statement;
  * @author: youyinnn
  * @date: 2017/9/20
  */
-public class ConnectionContainer {
+public class ThreadLocalPropContainer {
 
-    private static ConnectionContainer          instance                    = new ConnectionContainer();
+    private static ThreadLocalPropContainer         instance                    = new ThreadLocalPropContainer();
 
-    private ThreadLocal<Connection>             connectionThreadLocal       = new ThreadLocal<>();
+    private ThreadLocal<Connection>                 connectionThreadLocal       = new ThreadLocal<>();
 
-    private ConnectionContainer(){}
+    private ThreadLocal<Boolean>                    rollbackFlagThreadLocal     = new ThreadLocal<>();
 
-    public static ConnectionContainer getInstance() { return instance ; }
+    private ThreadLocalPropContainer(){
+        rollbackFlagThreadLocal.set(false);
+    }
+
+    public static ThreadLocalPropContainer getInstance() { return instance ; }
 
     private void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
+
+    public void setFlagTrue() {
+        rollbackFlagThreadLocal.set(true);
+    }
+
+    public void setFlagFalse() {
+        rollbackFlagThreadLocal.set(false);
+    }
 
     public Connection getConn() {
 
@@ -41,6 +53,12 @@ public class ConnectionContainer {
 
         return connection;
     }
+
+    public Boolean getFlag() {
+        return rollbackFlagThreadLocal.get();
+    }
+
+    public void removeFlag() {rollbackFlagThreadLocal.remove();}
 
     public void removeConn() {connectionThreadLocal.remove();}
 

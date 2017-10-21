@@ -1,7 +1,7 @@
 package cn.youyinnn.youdbutils.dao.model;
 
 import cn.youyinnn.youdbutils.dao.SqlExecutor;
-import cn.youyinnn.youdbutils.druid.ConnectionContainer;
+import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
 
@@ -40,7 +40,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(statement,resultSet);
         }
         return resultModelList;
     }
@@ -73,7 +73,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(statement,resultSet);
         }
 
         return resultModelList;
@@ -94,7 +94,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(statement,resultSet);
         }
 
         return resultModelList;
