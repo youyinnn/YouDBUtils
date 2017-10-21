@@ -1,5 +1,6 @@
 package cn.youyinnn.youdbutils.dao;
 
+import cn.youyinnn.youdbutils.dao.model.ModelHandler;
 import cn.youyinnn.youdbutils.dao.model.ModelResultFactory;
 
 import java.lang.reflect.ParameterizedType;
@@ -11,9 +12,11 @@ import java.lang.reflect.ParameterizedType;
  */
 public class YouDao<T> {
 
-    protected SqlExecutor sqlExecutor = new SqlExecutor();
+    protected SqlExecutor sqlExecutor;
 
     protected ModelResultFactory<T> modelResultFactory;
+
+    protected ModelHandler<T> modelHandler;
 
     private Class<T> modelClass;
 
@@ -32,7 +35,9 @@ public class YouDao<T> {
 
     public YouDao() {
         setModelClass();
-        modelResultFactory = new ModelResultFactory<>(modelClass);
+        modelHandler = new ModelHandler<>(modelClass);
+        sqlExecutor = modelHandler.getSqlExecuteHandler();
+        modelResultFactory = modelHandler.getModelResultFactory();
     }
 
 }

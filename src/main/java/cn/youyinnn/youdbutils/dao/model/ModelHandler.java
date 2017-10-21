@@ -24,9 +24,17 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
     private Class<T> modelClass;
 
+    public ModelResultFactory<T> getModelResultFactory() {
+        return modelResultFactory;
+    }
+
+    public SqlExecutor getSqlExecuteHandler() {
+        return sqlExecuteHandler;
+    }
+
     public ModelHandler(Class<T> modelClass) {
         this.modelResultFactory = new ModelResultFactory<>(modelClass);
-        this.modelClass = modelResultFactory.getModelClass();
+        this.modelClass = modelClass;
     }
 
     private ArrayList<T> getStatementResultModelList(String sql){
