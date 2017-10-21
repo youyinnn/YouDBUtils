@@ -1,7 +1,9 @@
 package cn.youyinnn.youdbutils.utils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
 /**
  * The type Reflection utils.
@@ -17,7 +19,7 @@ public class ReflectionUtils {
      *
      * @param field the field
      */
-    public static void fieldAccessible(Field field){
+    private static void fieldAccessible(Field field){
         if (!Modifier.isPublic(field.getModifiers())) {
             field.setAccessible(true);
         }
@@ -30,7 +32,7 @@ public class ReflectionUtils {
      * @param fieldName the field name
      * @return the declared field
      */
-    public static Field getDeclaredField(Object o , String fieldName) {
+    private static Field getDeclaredField(Object o, String fieldName) {
         for (
                 Class<?> superclass = o.getClass() ;
                 superclass != Object.class ;
@@ -43,6 +45,29 @@ public class ReflectionUtils {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Field> getDeclaredFields(Object o, Class annotation) {
+
+        ArrayList<Field> fieldList = new ArrayList<>();
+
+        for (
+                Class<?> superClass = o.getClass();
+                superClass != Object.class;
+                superClass = superClass.getSuperclass()
+                ) {
+            Field[] declaredFields = superClass.getDeclaredFields();
+
+            for (Field declaredField : declaredFields) {
+                Annotation annotation1 = declaredField.getAnnotation(annotation);
+
+                if (annotation1 != null) {
+                    fieldList.add(declaredField);
+                }
+            }
+        }
+
+        return fieldList;
     }
 
     /**
