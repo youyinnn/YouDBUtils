@@ -18,6 +18,8 @@ public class YouDao<T> {
 
     protected ModelHandler<T> modelHandler;
 
+    protected String modelName;
+
     private Class<T> modelClass;
 
     private void setModelClass() {
@@ -38,6 +40,7 @@ public class YouDao<T> {
         modelHandler = new ModelHandler<>(modelClass);
         sqlExecutor = modelHandler.getSqlExecuteHandler();
         modelResultFactory = modelHandler.getModelResultFactory();
+        modelName = modelClass.getSimpleName();
     }
 
 }
