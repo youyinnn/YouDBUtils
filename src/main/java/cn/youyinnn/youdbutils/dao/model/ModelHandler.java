@@ -18,23 +18,30 @@ import java.util.HashMap;
  */
 public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelHandler<T>{
 
-    private SqlExecutor sqlExecuteHandler = new SqlExecutor();
+    private SqlExecutor sqlExecutor = new SqlExecutor();
 
     private ModelResultFactory<T> modelResultFactory;
 
     private Class<T> modelClass;
+
+    private String modelName;
+
+    public ModelHandler(Class<T> modelClass) {
+        this.modelResultFactory = new ModelResultFactory<>(modelClass);
+        this.modelClass = modelClass;
+        this.modelName = modelClass.getSimpleName();
+    }
+
+    public Class<T> getModelClass() {
+        return modelClass;
+    }
 
     public ModelResultFactory<T> getModelResultFactory() {
         return modelResultFactory;
     }
 
     public SqlExecutor getSqlExecuteHandler() {
-        return sqlExecuteHandler;
-    }
-
-    public ModelHandler(Class<T> modelClass) {
-        this.modelResultFactory = new ModelResultFactory<>(modelClass);
-        this.modelClass = modelClass;
+        return sqlExecutor;
     }
 
     private ArrayList<T> getStatementResultModelList(String sql){
@@ -42,7 +49,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecuteHandler.executeStatementQuery(sql);
+            resultSet = sqlExecutor.executeStatementQuery(sql);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -62,7 +69,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListForAll(ArrayList<String> queryFieldList){
 
-        String sql = SqlStringUtils.getSelectAllSql(modelClass.getSimpleName(),queryFieldList);
+        String sql = SqlStringUtils.getSelectAllSql(modelName,queryFieldList);
 
         return getStatementResultModelList(sql);
 
@@ -75,7 +82,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecuteHandler.executePreparedStatementQuery(modelClass.getSimpleName(),queryFieldList,conditionsMap);
+            resultSet = sqlExecutor.executePreparedStatementQuery(modelName,queryFieldList,conditionsMap);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -90,13 +97,13 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListWhereAOrB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getSelectFromWhereSql(modelClass.getSimpleName(),conditionsMap.keySet(),"OR",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecuteHandler.executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
+            resultSet = sqlExecutor.executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -111,7 +118,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListWhereLikeAndLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"AND",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"AND",queryFieldList);
 
         return getStatementResultModelList(sql);
     }
@@ -119,7 +126,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListWhereLikeOrLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelClass.getSimpleName(),conditionsMap,"OR",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"OR",queryFieldList);
 
         return getStatementResultModelList(sql);
     }
@@ -136,7 +143,18 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
             newFieldValuesMap.put(field,fieldValue);
         }
 
-        return sqlExecuteHandler.executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
+        return sqlExecutor.executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
 
+    @Override
+    public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
+
+        return sqlExecutor.executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
+    }
+
+    @Override
+    public int deleteModel(HashMap<String, Object> conditionsMap) {
+
+        return sqlExecutor.executePreparedStatementDelete(modelName,conditionsMap);
+    }
 }

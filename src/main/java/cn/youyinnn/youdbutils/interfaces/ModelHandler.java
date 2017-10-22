@@ -6,15 +6,15 @@ import java.util.HashMap;
 /**
  * The interface Model handler.
  *
- * @author youyinnn
  * @param <T> the type parameter
+ * @author youyinnn
  */
 public interface ModelHandler<T> {
 
     /**
      * Gets list.
      *
-     * @param sql        the sql
+     * @param sql the sql
      * @return the list
      */
     ArrayList<T> getList(String sql);
@@ -70,4 +70,21 @@ public interface ModelHandler<T> {
      * @return the int
      */
     int saveModel(T model);
+
+    /**
+     * Update model int.
+     *
+     * @param newFieldValuesMap the new field values map
+     * @param conditionsMap     the conditions map
+     * @return the int
+     */
+    int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap);
+
+    /**
+     * Delete model int.
+     *
+     * @param conditionsMap the conditions map
+     * @return the int
+     */
+    int deleteModel(HashMap<String, Object> conditionsMap);
 }
