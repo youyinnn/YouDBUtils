@@ -107,6 +107,12 @@ public class YouDruid {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else {
+            try {
+                throw new NoDataSourceInitException("路径["+propertiesFile+"]下没有数据源配置文件可加载！");
+            } catch (NoDataSourceInitException e) {
+                e.printStackTrace();
+            }
         }
     }
 
