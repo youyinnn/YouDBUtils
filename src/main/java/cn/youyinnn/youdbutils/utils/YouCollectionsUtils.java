@@ -13,7 +13,7 @@ import java.util.HashMap;
  */
 public class YouCollectionsUtils {
 
-    public static HashMap<String, Object> getYouMap(Object ... objects) {
+    public static HashMap<String, Object> getYouHashMap(Object ... objects) {
         HashMap<String, Object> youMap = new HashMap<>(10);
         int length = objects.length;
         if (length % 2 != 0) {
