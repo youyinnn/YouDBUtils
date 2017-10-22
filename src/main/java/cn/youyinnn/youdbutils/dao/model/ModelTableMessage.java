@@ -15,12 +15,21 @@ public class ModelTableMessage {
 
     private static HashMap<String,ArrayList<String>> tableFieldMap = new HashMap<>();
 
+    private static HashMap<String,FieldMap> fieldMapping = new HashMap<>();
+
     public static void addModelFieldMap(String modelClassName, ArrayList<String> fieldList) {
         modelFieldMap.put(modelClassName,fieldList);
     }
 
     public static void addTableFieldMap(String tableName, ArrayList<String> fieldList) {
         tableFieldMap.put(tableName,fieldList);
+    }
+
+    public static void setFieldMapping() {
+        for (String modelName : modelFieldMap.keySet()) {
+            fieldMapping.put(modelName,
+                    new FieldMap(modelName,modelFieldMap.get(modelName),tableFieldMap.get(modelName)));
+        }
     }
 
     public static HashMap<String, ArrayList<String>> getModelFieldMap() {
@@ -41,5 +50,9 @@ public class ModelTableMessage {
 
     public static ArrayList<String> getTableFieldList(String modelClassName) {
         return tableFieldMap.get(modelClassName);
+    }
+
+    public static HashMap<String, FieldMap> getFieldMapping() {
+        return fieldMapping;
     }
 }

@@ -76,6 +76,7 @@ public class YouDbManager {
         } catch (SQLException | NoDataSourceInitException e) {
             e.printStackTrace();
         }
+        ModelTableMessage.setFieldMapping();
     }
 
     public static void showService() {
@@ -88,5 +89,9 @@ public class YouDbManager {
 
     public static void printTableFieldMap() {
         System.out.println(ModelTableMessage.getTableFieldMap());
+    }
+
+    public static void printModelTableFieldMapping() {
+        System.out.println(ModelTableMessage.getFieldMapping());
     }
 }
