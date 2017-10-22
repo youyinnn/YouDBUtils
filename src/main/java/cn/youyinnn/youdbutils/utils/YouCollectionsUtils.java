@@ -2,6 +2,8 @@ package cn.youyinnn.youdbutils.utils;
 
 import cn.youyinnn.youdbutils.exceptions.YouMapException;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -9,9 +11,9 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/10/22
  */
-public class YouMapUtils {
+public class YouCollectionsUtils {
 
-    public static HashMap<String, Object> getYouMap(Object ...objects) {
+    public static HashMap<String, Object> getYouMap(Object ... objects) {
         HashMap<String, Object> youMap = new HashMap<>(10);
         int length = objects.length;
         if (length % 2 != 0) {
@@ -34,6 +36,11 @@ public class YouMapUtils {
             }
         }
         return youMap;
+    }
+
+    public static ArrayList<String> getYouArrayList(String ... queryFieldList){
+
+        return new ArrayList<>(Arrays.asList(queryFieldList));
     }
 
 }
