@@ -1,7 +1,7 @@
 package cn.youyinnn.youdbutils.druid;
 
 import cn.youyinnn.youdbutils.YouDbManager;
-import cn.youyinnn.youdbutils.druid.exceptions.NoDataSourceInitException;
+import cn.youyinnn.youdbutils.exceptions.NoDataSourceInitException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

@@ -1,4 +1,4 @@
-package cn.youyinnn.youdbutils.druid.exceptions;
+package cn.youyinnn.youdbutils.exceptions;
 
 /**
  * @description:

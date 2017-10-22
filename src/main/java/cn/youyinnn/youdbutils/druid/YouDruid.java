@@ -1,6 +1,6 @@
 package cn.youyinnn.youdbutils.druid;
 
-import cn.youyinnn.youdbutils.druid.exceptions.NoDataSourceInitException;
+import cn.youyinnn.youdbutils.exceptions.NoDataSourceInitException;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
