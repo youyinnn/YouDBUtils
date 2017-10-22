@@ -19,7 +19,7 @@ public class ServiceScanner {
 
     private ServiceScanner() {}
 
-    public static void scanPackage(String servicePackageNamePrefix)  {
+    public static void scanPackageForService(String servicePackageNamePrefix)  {
 
         Set<Class<?>> serviceClassSet = ClassUtils.findFileClass(servicePackageNamePrefix);
 

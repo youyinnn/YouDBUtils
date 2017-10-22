@@ -55,7 +55,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(resultSet,statement,null);
         }
         return resultModelList;
     }
@@ -88,7 +88,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(resultSet,statement,null);
         }
 
         return resultModelList;
@@ -109,7 +109,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(statement,resultSet);
+            ThreadLocalPropContainer.release(resultSet,statement,null);
         }
 
         return resultModelList;
@@ -138,7 +138,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
         HashMap<String, Object> newFieldValuesMap = new HashMap<>(10);
 
-        for (String field : ModelMessage.getFieldList(aClass.getSimpleName())) {
+        for (String field : ModelTableMessage.getModelFieldList(aClass.getSimpleName())) {
             Object fieldValue = ReflectionUtils.getFieldValue(model, field);
             newFieldValuesMap.put(field,fieldValue);
         }

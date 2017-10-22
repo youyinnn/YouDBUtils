@@ -99,7 +99,7 @@
       ```
       主要是对查询的结果集使用反射去生成对应的Model列表，以及把Model类转为记录存入数据库
       ```
-      - `class` ModelMessage
+      - `class` ModelTableMessage
       ```
       静态记录了Model类的一些基本信息，可以全局获取，暂时只记录Model类的field名字列表
       ```
@@ -107,7 +107,7 @@
       ```
       提供把结果集转换为Model列表的方法
       ```
-      - `class` ModelScanner
+      - `class` ModelTableScanner
       ```
       提供对指定包下的类进行扫描的方法 并把其中所有的Model类的信息记录到ModelMassage类中
       ```

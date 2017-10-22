@@ -1,11 +1,16 @@
 package cn.youyinnn.youdbutils;
 
-import cn.youyinnn.youdbutils.dao.model.ModelScanner;
+import cn.youyinnn.youdbutils.dao.model.ModelTableScanner;
+import cn.youyinnn.youdbutils.dao.model.ModelTableMessage;
 import cn.youyinnn.youdbutils.druid.YouDruid;
 import cn.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
 import cn.youyinnn.youdbutils.druid.filter.YouStatFilter;
+import cn.youyinnn.youdbutils.exceptions.NoDataSourceInitException;
 import cn.youyinnn.youdbutils.ioc.ServiceScanner;
 import cn.youyinnn.youdbutils.ioc.YouServiceIocContainer;
+
+import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * @description:
@@ -60,14 +65,28 @@ public class YouDbManager {
      * @param packageName the package name
      */
     public static void scanPackageForService(String packageName){
-        ServiceScanner.scanPackage(packageName);
+        ServiceScanner.scanPackageForService(packageName);
     }
 
     public static void scanPackageForModel(String packageName) {
-        ModelScanner.scanPackage(packageName);
+        ModelTableScanner.scanPackageForModel(packageName);
+        Set<String> modelNameSet = ModelTableMessage.getModelNameSet();
+        try {
+            ModelTableScanner.scanDataBaseForTable(modelNameSet,youDruid.getCurrentDataSourceConn());
+        } catch (SQLException | NoDataSourceInitException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void showService() {
         YouServiceIocContainer.showServiceMap();
+    }
+
+    public static void printModelFieldMap() {
+        System.out.println(ModelTableMessage.getModelFieldMap());
+    }
+
+    public static void printTableFieldMap() {
+        System.out.println(ModelTableMessage.getTableFieldMap());
     }
 }

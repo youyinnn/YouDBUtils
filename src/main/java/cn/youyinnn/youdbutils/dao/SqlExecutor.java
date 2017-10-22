@@ -63,7 +63,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             ThreadLocalPropContainer.getInstance().setFlagTrue();
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(ps,null);
+            ThreadLocalPropContainer.release(null, ps,null);
         }
         return result;
     }
@@ -81,7 +81,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             ThreadLocalPropContainer.getInstance().setFlagTrue();
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(statement,null);
+            ThreadLocalPropContainer.release(null, statement,null);
         }
 
         return result;

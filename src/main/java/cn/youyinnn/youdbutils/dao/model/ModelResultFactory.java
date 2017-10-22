@@ -27,7 +27,7 @@ public class ModelResultFactory<T> {
     public ArrayList<T> getResultModelList(ResultSet result) {
 
         ArrayList<T> resultModelList = new ArrayList<>();
-        ArrayList<String> fieldList = ModelMessage.getFieldList(modelClass.getSimpleName());
+        ArrayList<String> fieldList = ModelTableMessage.getModelFieldList(modelClass.getSimpleName());
 
         try {
             while (result.next()) {

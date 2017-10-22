@@ -62,13 +62,16 @@ public class ThreadLocalPropContainer {
 
     public void removeConn() {connectionThreadLocal.remove();}
 
-    public static void release(Statement statement, ResultSet resultSet) {
+    public static void release(ResultSet resultSet,Statement statement, Connection connection) {
         try {
             if (resultSet != null) {
                 resultSet.close();
             }
             if (statement != null) {
                 statement.close();
+            }
+            if (connection != null) {
+                connection.close();
             }
         } catch (SQLException e) {
             e.printStackTrace();
