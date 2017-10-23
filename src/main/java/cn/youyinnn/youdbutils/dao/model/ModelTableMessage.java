@@ -25,6 +25,10 @@ public class ModelTableMessage {
         tableFieldMap.put(tableName,fieldList);
     }
 
+    public static FieldMap getFieldMap(String modelName) {
+        return fieldMapping.get(modelName);
+    }
+
     public static void setFieldMapping() {
         for (String modelName : modelFieldMap.keySet()) {
             fieldMapping.put(modelName,

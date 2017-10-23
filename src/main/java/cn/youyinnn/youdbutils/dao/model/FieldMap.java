@@ -12,24 +12,34 @@ public class FieldMap {
 
     private String modelName;
 
-    private HashMap<String,String> fieldMap = new HashMap<>();
+    private HashMap<String,String> lowerCaseFieldMap = new HashMap<>();
+
+    private HashMap<String,Boolean> fieldMapCheck = new HashMap<>();
 
     public FieldMap(String modelName, ArrayList<String> modelFieldList, ArrayList<String> tableFieldList) {
         this.modelName = modelName;
         for (int i = 0 ; i < modelFieldList.size() ; ++i) {
-            fieldMap.put(modelFieldList.get(i), tableFieldList.get(i));
+            String modelField = modelFieldList.get(i).toLowerCase();
+            String tableField = tableFieldList.get(i).toLowerCase();
+            fieldMapCheck.put(modelField,!modelField.equals(tableField));
+            lowerCaseFieldMap.put(modelField, tableField);
         }
     }
 
     public String getTableField(String modelField) {
-        return fieldMap.get(modelField);
+        return lowerCaseFieldMap.get(modelField.toLowerCase());
+    }
+
+    public boolean needToReplace(String modelField) {
+        return fieldMapCheck.get(modelField.toLowerCase());
     }
 
     @Override
     public String toString() {
         return "FieldMap{" +
                 "modelName='" + modelName + '\'' +
-                ", fieldMap=" + fieldMap +
+                ", lowerCaseFieldMap=" + lowerCaseFieldMap +
+                ", fieldMapCheck=" + fieldMapCheck +
                 '}';
     }
 }

@@ -4,6 +4,7 @@ import cn.youyinnn.youdbutils.dao.SqlExecutor;
 import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
+import cn.youyinnn.youdbutils.utils.YouCollectionsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,6 +70,8 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListForAll(ArrayList<String> queryFieldList){
 
+        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+
         String sql = SqlStringUtils.getSelectAllSql(modelName,queryFieldList);
 
         return getStatementResultModelList(sql);
@@ -77,6 +80,9 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
     @Override
     public ArrayList<T> getListWhereAAndB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+
+        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
@@ -96,6 +102,9 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
     @Override
     public ArrayList<T> getListWhereAOrB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+
+        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
 
@@ -118,6 +127,9 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
     @Override
     public ArrayList<T> getListWhereLikeAndLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
+        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"AND",queryFieldList);
 
         return getStatementResultModelList(sql);
@@ -125,6 +137,9 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
     @Override
     public ArrayList<T> getListWhereLikeOrLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+
+        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"OR",queryFieldList);
 
@@ -143,17 +158,24 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
             newFieldValuesMap.put(field,fieldValue);
         }
 
+        newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
+
         return sqlExecutor.executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
 
     @Override
     public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
 
+        newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+
         return sqlExecutor.executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
     }
 
     @Override
     public int deleteModel(HashMap<String, Object> conditionsMap) {
+
+        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
         return sqlExecutor.executePreparedStatementDelete(modelName,conditionsMap);
     }
