@@ -17,9 +17,7 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/10/7
  */
-public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelHandler<T>{
-
-    private SqlExecutor sqlExecutor = new SqlExecutor();
+public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbutils.interfaces.ModelHandler<T>{
 
     private ModelResultFactory<T> modelResultFactory;
 
@@ -41,16 +39,12 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         return modelResultFactory;
     }
 
-    public SqlExecutor getSqlExecuteHandler() {
-        return sqlExecutor;
-    }
-
     private ArrayList<T> getStatementResultModelList(String sql){
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecutor.executeStatementQuery(sql);
+            resultSet = executeStatementQuery(sql);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -88,7 +82,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecutor.executePreparedStatementQuery(modelName,queryFieldList,conditionsMap);
+            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -112,7 +106,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
-            resultSet = sqlExecutor.executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
+            resultSet = executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (SQLException e) {
@@ -160,7 +154,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
         newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
 
-        return sqlExecutor.executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
+        return executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
 
     @Override
@@ -169,7 +163,7 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
         newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
         conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
-        return sqlExecutor.executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
+        return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
     }
 
     @Override
@@ -177,6 +171,29 @@ public class ModelHandler<T> implements cn.youyinnn.youdbutils.interfaces.ModelH
 
         conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
 
-        return sqlExecutor.executePreparedStatementDelete(modelName,conditionsMap);
+        return executePreparedStatementDelete(modelName,conditionsMap);
+    }
+
+    @Override
+    public int addition(String fieldName, double b) {
+
+        String sql = "UPDATE "+modelName+" SET "+fieldName+" += ? ";
+
+        return 0;
+    }
+
+    @Override
+    public int subtraction(String fieldName, double b) {
+        return 0;
+    }
+
+    @Override
+    public int multiplication(String fieldName, double b) {
+        return 0;
+    }
+
+    @Override
+    public int division(String fieldName, double b) {
+        return 0;
     }
 }

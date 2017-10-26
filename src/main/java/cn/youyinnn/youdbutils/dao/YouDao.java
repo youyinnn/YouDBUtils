@@ -12,8 +12,6 @@ import java.lang.reflect.ParameterizedType;
  */
 public class YouDao<T> {
 
-    protected SqlExecutor sqlExecutor;
-
     protected ModelResultFactory<T> modelResultFactory;
 
     protected ModelHandler<T> modelHandler;
@@ -38,7 +36,6 @@ public class YouDao<T> {
     public YouDao() {
         setModelClass();
         modelHandler = new ModelHandler<>(modelClass);
-        sqlExecutor = modelHandler.getSqlExecuteHandler();
         modelResultFactory = modelHandler.getModelResultFactory();
         modelName = modelClass.getSimpleName();
     }

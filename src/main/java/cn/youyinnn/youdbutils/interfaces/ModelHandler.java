@@ -87,4 +87,12 @@ public interface ModelHandler<T> {
      * @return the int
      */
     int deleteModel(HashMap<String, Object> conditionsMap);
+
+    int addition(String fieldName, double b);
+
+    int subtraction(String fieldName, double b);
+
+    int multiplication(String fieldName, double b);
+
+    int division(String fieldName, double b);
 }
