@@ -181,7 +181,7 @@ public class SqlStringUtils {
      * @param sb
      * @param queryFieldList
      */
-    private static void getSelectFromSubStr(StringBuffer sb, ArrayList<String> queryFieldList) {
+    public static void getSelectFromSubStr(StringBuffer sb, ArrayList<String> queryFieldList) {
         if (queryFieldList == null) {
             sb.append(SELECT_ALL_FROM);
         } else {
@@ -202,7 +202,7 @@ public class SqlStringUtils {
      * @param separateMark
      * @return
      */
-    private static String getWhereSubStr(Set<String> conditionKeySet, String separateMark) {
+    public static String getWhereSubStr(Set<String> conditionKeySet, String separateMark) {
 
         StringBuffer sb = new StringBuffer(" WHERE ");
 
@@ -222,7 +222,7 @@ public class SqlStringUtils {
      * @param separateMark
      * @return
      */
-    private static String getWhereLikeSubStr(HashMap<String,Object> conditionsMap, String separateMark) {
+    public static String getWhereLikeSubStr(HashMap<String,Object> conditionsMap, String separateMark) {
 
         StringBuffer sb = new StringBuffer(" WHERE ");
 

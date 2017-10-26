@@ -64,7 +64,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListForAll(ArrayList<String> queryFieldList){
 
-        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
 
         String sql = SqlStringUtils.getSelectAllSql(modelName,queryFieldList);
 
@@ -75,8 +75,8 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereAAndB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
@@ -97,8 +97,8 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereAOrB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
 
@@ -121,8 +121,8 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereLikeAndLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"AND",queryFieldList);
 
@@ -132,8 +132,8 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereLikeOrLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = YouCollectionsUtils.mappingHandle(modelName,queryFieldList);
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"OR",queryFieldList);
 
@@ -152,7 +152,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             newFieldValuesMap.put(field,fieldValue);
         }
 
-        newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
+        newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
 
         return executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
@@ -160,8 +160,8 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
 
-        newFieldValuesMap = YouCollectionsUtils.mappingHandle(modelName,newFieldValuesMap);
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
     }
@@ -169,31 +169,50 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public int deleteModel(HashMap<String, Object> conditionsMap) {
 
-        conditionsMap = YouCollectionsUtils.mappingHandle(modelName,conditionsMap);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         return executePreparedStatementDelete(modelName,conditionsMap);
     }
 
     @Override
-    public int addition(String fieldName, double b) {
+    public int addition(String modelField, double b, HashMap<String, Object> conditionsMap) {
 
-        String sql = "UPDATE "+modelName+" SET "+fieldName+" += ? ";
-
-        return 0;
+        return basicArithmetic(modelField,b,conditionsMap,"+");
     }
 
     @Override
-    public int subtraction(String fieldName, double b) {
-        return 0;
+    public int subtraction(String modelField, double b, HashMap<String, Object> conditionsMap) {
+        return basicArithmetic(modelField,b,conditionsMap, "-");
     }
 
     @Override
-    public int multiplication(String fieldName, double b) {
-        return 0;
+    public int multiplication(String modelField, double b, HashMap<String, Object> conditionsMap) {
+        return basicArithmetic(modelField,b,conditionsMap, "*");
     }
 
     @Override
-    public int division(String fieldName, double b) {
-        return 0;
+    public int division(String modelField, double b, HashMap<String, Object> conditionsMap) {
+        return basicArithmetic(modelField,b,conditionsMap, "/");
+    }
+
+    private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) {
+
+        String tableField = MappingHandler.mappingHandle(modelName, modelField);
+
+        StringBuffer sql = new StringBuffer("UPDATE ")
+                .append(modelName)
+                .append(" SET ")
+                .append(tableField)
+                .append(" = ")
+                .append(tableField)
+                .append(op)
+                .append(" ?")
+                .append(SqlStringUtils.getWhereSubStr(conditionsMap.keySet(),"AND"));
+
+        ArrayList conditionValues = new ArrayList();
+
+        conditionValues.addAll(conditionsMap.values());
+
+        return executePreparedStatementUpdate(sql.toString(), YouCollectionsUtils.getYouArrayList(b+""), conditionValues);
     }
 }

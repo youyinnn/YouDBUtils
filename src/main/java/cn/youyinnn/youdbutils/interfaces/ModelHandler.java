@@ -88,11 +88,43 @@ public interface ModelHandler<T> {
      */
     int deleteModel(HashMap<String, Object> conditionsMap);
 
-    int addition(String fieldName, double b);
+    /**
+     * 对同一个值简单的做加法运算
+     *
+     * @param fieldName     the field name
+     * @param b             the b
+     * @param conditionsMap the conditions map
+     * @return the int
+     */
+    int addition(String fieldName, double b, HashMap<String, Object> conditionsMap);
 
-    int subtraction(String fieldName, double b);
+    /**
+     * 对同一个值简单的做减法运算
+     *
+     * @param fieldName     the field name
+     * @param b             the b
+     * @param conditionsMap the conditions map
+     * @return the int
+     */
+    int subtraction(String fieldName, double b, HashMap<String, Object> conditionsMap);
 
-    int multiplication(String fieldName, double b);
+    /**
+     * 对同一个值简单的做乘法运算
+     *
+     * @param fieldName     the field name
+     * @param b             the b
+     * @param conditionsMap the conditions map
+     * @return the int
+     */
+    int multiplication(String fieldName, double b, HashMap<String, Object> conditionsMap);
 
-    int division(String fieldName, double b);
+    /**
+     * 对同一个值简单的做除法运算
+     *
+     * @param fieldName     the field name
+     * @param b             the b
+     * @param conditionsMap the conditions map
+     * @return the int
+     */
+    int division(String fieldName, double b, HashMap<String, Object> conditionsMap);
 }
