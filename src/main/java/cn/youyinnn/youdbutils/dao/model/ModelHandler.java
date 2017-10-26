@@ -198,6 +198,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) {
 
         String tableField = MappingHandler.mappingHandle(modelName, modelField);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         StringBuffer sql = new StringBuffer("UPDATE ")
                 .append(modelName)
