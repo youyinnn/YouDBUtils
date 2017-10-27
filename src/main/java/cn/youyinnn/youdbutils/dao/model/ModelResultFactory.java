@@ -29,20 +29,19 @@ public class ModelResultFactory<T> {
         ArrayList<T> resultModelList = new ArrayList<>();
         ArrayList<String> fieldList = ModelTableMessage.getModelFieldList(modelClass.getSimpleName());
 
+        FieldMap fieldMap = ModelTableMessage.getFieldMap(modelClass.getSimpleName());
+
         try {
             while (result.next()) {
                 T instance = modelClass.newInstance();
                 for (String field : fieldList) {
-                    boolean hasColumn = true;
-                    // TODO: 在select * 的时候的映射问题
-                    try {
-                        result.findColumn(field);
-                    } catch (SQLException ignore){
-                        hasColumn = false;
+                    Object value;
+                    if (fieldMap.needToReplace(field)) {
+                        value = result.getObject(fieldMap.getTableField(field));
+                    } else {
+                        value = result.getObject(field);
                     }
-                    if (hasColumn){
-                        ReflectionUtils.setFieldValue(instance,field,result.getObject(field));
-                    }
+                    ReflectionUtils.setFieldValue(instance,field,value);
                 }
                 resultModelList.add(instance);
             }
