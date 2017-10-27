@@ -11,18 +11,18 @@ import java.util.Set;
  */
 public class ModelTableMessage {
 
-    private static HashMap<String,ArrayList<String>> modelFieldMap = new HashMap<>();
+    private static HashMap<String,ArrayList<String>> modelField = new HashMap<>();
 
-    private static HashMap<String,ArrayList<String>> tableFieldMap = new HashMap<>();
+    private static HashMap<String,ArrayList<String>> tableField = new HashMap<>();
 
     private static HashMap<String,FieldMap> fieldMapping = new HashMap<>();
 
-    public static void addModelFieldMap(String modelClassName, ArrayList<String> fieldList) {
-        modelFieldMap.put(modelClassName,fieldList);
+    public static void addModelField(String modelClassName, ArrayList<String> fieldList) {
+        modelField.put(modelClassName,fieldList);
     }
 
-    public static void addTableFieldMap(String tableName, ArrayList<String> fieldList) {
-        tableFieldMap.put(tableName,fieldList);
+    public static void addTableField(String tableName, ArrayList<String> fieldList) {
+        tableField.put(tableName,fieldList);
     }
 
     public static FieldMap getFieldMap(String modelName) {
@@ -30,30 +30,30 @@ public class ModelTableMessage {
     }
 
     public static void setFieldMapping() {
-        for (String modelName : modelFieldMap.keySet()) {
+        for (String modelName : modelField.keySet()) {
             fieldMapping.put(modelName,
-                    new FieldMap(modelName,modelFieldMap.get(modelName),tableFieldMap.get(modelName)));
+                    new FieldMap(modelName,modelField.get(modelName),tableField.get(modelName)));
         }
     }
 
-    public static HashMap<String, ArrayList<String>> getModelFieldMap() {
-        return modelFieldMap;
+    public static HashMap<String, ArrayList<String>> getModelField() {
+        return modelField;
     }
 
-    public static HashMap<String, ArrayList<String>> getTableFieldMap() {
-        return tableFieldMap;
+    public static HashMap<String, ArrayList<String>> getTableField() {
+        return tableField;
     }
 
     public static ArrayList<String> getModelFieldList(String modelClassName) {
-        return modelFieldMap.get(modelClassName);
+        return modelField.get(modelClassName);
     }
 
-    public static Set<String> getModelNameSet() {
-        return modelFieldMap.keySet();
+    public static Set<String> getModelFieldSet() {
+        return modelField.keySet();
     }
 
     public static ArrayList<String> getTableFieldList(String modelClassName) {
-        return tableFieldMap.get(modelClassName);
+        return tableField.get(modelClassName);
     }
 
     public static HashMap<String, FieldMap> getFieldMapping() {

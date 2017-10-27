@@ -34,6 +34,7 @@ public class ModelResultFactory<T> {
                 T instance = modelClass.newInstance();
                 for (String field : fieldList) {
                     boolean hasColumn = true;
+                    // TODO: 在select * 的时候的映射问题
                     try {
                         result.findColumn(field);
                     } catch (SQLException ignore){

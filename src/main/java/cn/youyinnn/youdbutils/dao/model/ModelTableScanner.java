@@ -33,7 +33,7 @@ public class ModelTableScanner {
                 fieldList.add(declaredField.getName());
             }
 
-            ModelTableMessage.addModelFieldMap(aClass.getSimpleName(),fieldList);
+            ModelTableMessage.addModelField(aClass.getSimpleName(),fieldList);
         }
     }
 
@@ -50,7 +50,7 @@ public class ModelTableScanner {
                     String columnName = tableColumn.getString("COLUMN_NAME");
                     fieldList.add(columnName);
                 }
-                ModelTableMessage.addTableFieldMap(modelName,fieldList);
+                ModelTableMessage.addTableField(modelName,fieldList);
             }
         } catch (SQLException e) {
             e.printStackTrace();

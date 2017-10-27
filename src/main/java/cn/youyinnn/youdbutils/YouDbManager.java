@@ -70,7 +70,7 @@ public class YouDbManager {
 
     public static void scanPackageForModel(String packageName) {
         ModelTableScanner.scanPackageForModel(packageName);
-        Set<String> modelNameSet = ModelTableMessage.getModelNameSet();
+        Set<String> modelNameSet = ModelTableMessage.getModelFieldSet();
         try {
             ModelTableScanner.scanDataBaseForTable(modelNameSet,youDruid.getCurrentDataSourceConn());
         } catch (SQLException | NoDataSourceInitException e) {
@@ -84,11 +84,11 @@ public class YouDbManager {
     }
 
     public static void printModelFieldMap() {
-        System.out.println(ModelTableMessage.getModelFieldMap());
+        System.out.println(ModelTableMessage.getModelField());
     }
 
     public static void printTableFieldMap() {
-        System.out.println(ModelTableMessage.getTableFieldMap());
+        System.out.println(ModelTableMessage.getTableField());
     }
 
     public static void printModelTableFieldMapping() {
