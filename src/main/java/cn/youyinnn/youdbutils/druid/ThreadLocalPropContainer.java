@@ -44,7 +44,7 @@ public class ThreadLocalPropContainer {
         if (connection == null) {
             try {
                 connection = YouDbManager.youDruid.getCurrentDataSourceConn();
-                System.out.println("Bind conn :"+connection);
+                //System.out.println("Bind conn :"+connection);
                 bindConn(connection);
             } catch (SQLException | NoDataSourceInitException e) {
                 e.printStackTrace();

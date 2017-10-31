@@ -32,7 +32,6 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
 
         ps = conn.prepareStatement(sql);
 
-        System.out.println(ps);
         int i = 1;
         for (Object value : conditionValues) {
             ps.setObject(i++,value);
