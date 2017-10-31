@@ -158,6 +158,31 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
+    public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+
+        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+
+        try {
+            ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
+    public Object getModelFieldValue(String fieldName, HashMap<String, Object> conditionsMap) {
+        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+
+
+        return null;
+    }
+
+    @Override
     public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
 
         newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);

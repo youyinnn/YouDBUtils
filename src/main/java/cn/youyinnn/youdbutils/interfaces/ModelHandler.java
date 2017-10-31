@@ -71,6 +71,10 @@ public interface ModelHandler<T> {
      */
     int saveModel(T model);
 
+    T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList);
+
+    Object getModelFieldValue(String fieldName,HashMap<String, Object> conditionsMap);
+
     /**
      * Update model int.
      *

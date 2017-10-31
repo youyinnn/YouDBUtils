@@ -4,7 +4,6 @@ package cn.youyinnn.youdbutils.dao.model;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -16,40 +15,49 @@ public class ModelResultFactory<T> {
 
     private Class<T> modelClass;
 
-    public Class<T> getModelClass() {
-        return modelClass;
-    }
+    private ArrayList<String> fieldList;
+
+    private FieldMap fieldMap;
 
     public ModelResultFactory(Class<T> modelClass) {
         this.modelClass = modelClass;
+        this.fieldList = ModelTableMessage.getModelFieldList(modelClass.getSimpleName());
+        this.fieldMap = ModelTableMessage.getFieldMap(modelClass.getSimpleName());
     }
 
-    public ArrayList<T> getResultModelList(ResultSet result) {
-
+    public ArrayList<T> getResultModelList(ResultSet resultSet) {
         ArrayList<T> resultModelList = new ArrayList<>();
-        ArrayList<String> fieldList = ModelTableMessage.getModelFieldList(modelClass.getSimpleName());
-
-        FieldMap fieldMap = ModelTableMessage.getFieldMap(modelClass.getSimpleName());
-
         try {
-            while (result.next()) {
-                T instance = modelClass.newInstance();
-                for (String field : fieldList) {
-                    Object value;
-                    if (fieldMap.needToReplace(field)) {
-                        value = result.getObject(fieldMap.getTableField(field));
-                    } else {
-                        value = result.getObject(field);
-                    }
-                    ReflectionUtils.setFieldValue(instance,field,value);
-                }
+            while (resultSet.next()) {
+                T instance = getResultModel(resultSet);
                 resultModelList.add(instance);
             }
-        } catch (SQLException | IllegalAccessException | InstantiationException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultModelList;
+    }
+
+
+    public T getResultModel(ResultSet resultSet){
+
+        T instance = null;
+        try {
+            instance = modelClass.newInstance();
+            for (String field : fieldList) {
+                Object value;
+                if (fieldMap.needToReplace(field)) {
+                    value = resultSet.getObject(fieldMap.getTableField(field));
+                } else {
+                    value = resultSet.getObject(field);
+                }
+                ReflectionUtils.setFieldValue(instance,field,value);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return resultModelList;
+        return instance;
     }
 
 }
