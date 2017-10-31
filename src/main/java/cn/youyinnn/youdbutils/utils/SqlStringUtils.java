@@ -135,6 +135,13 @@ public class SqlStringUtils {
         return sb.toString();
     }
 
+    /**
+     * 获取一个用于插入记录的语句 只接收要更新的字段名 其中insertFieldSet不能为空
+     *
+     * @param tableName      the table name
+     * @param insertFieldSet the insert field set
+     * @return the insert sql
+     */
     public static String getInsertSql(String tableName, Set<String> insertFieldSet) {
         StringBuffer sb = new StringBuffer();
 
@@ -164,6 +171,14 @@ public class SqlStringUtils {
         return sb.toString();
     }
 
+    /**
+     * 获取一个用于删除的语句 只接收条件set 条件使用指定的separateMark连接
+     *
+     * @param tableName       the table name
+     * @param separateMark    the separate mark
+     * @param conditionKeySet the condition key set
+     * @return the delete sql
+     */
     public static String getDeleteSql(String tableName,String separateMark, Set<String> conditionKeySet) {
         StringBuffer sb = new StringBuffer();
 

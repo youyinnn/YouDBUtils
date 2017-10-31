@@ -7,12 +7,22 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
+ * The type You collections utils.
+ *
  * @description:
  * @author: youyinnn
- * @date: 2017/10/22
+ * @date: 2017 /10/22
  */
 public class YouCollectionsUtils {
 
+    /**
+     * 快速构建一个用于查询的条件和条件之组成的map
+     *
+     * 使用限制在方法中的错误提示已经写得很清楚了
+     *
+     * @param objects the objects
+     * @return the you hash map
+     */
     public static HashMap<String, Object> getYouHashMap(Object ... objects) {
         HashMap<String, Object> youMap = new HashMap<>(10);
         int length = objects.length;
@@ -38,6 +48,12 @@ public class YouCollectionsUtils {
         return youMap;
     }
 
+    /**
+     * 快速构建一个用于选择查询列的list
+     *
+     * @param queryFieldList the query field list
+     * @return the array list
+     */
     public static ArrayList<String> getYouArrayList(String ... queryFieldList){
 
         return new ArrayList<>(Arrays.asList(queryFieldList));

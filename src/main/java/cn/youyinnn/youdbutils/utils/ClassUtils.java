@@ -25,10 +25,12 @@ public class ClassUtils {
             while(dirs.hasMoreElements()){
                 URL url = dirs.nextElement();
                 String protocol = url.getProtocol();
-                if("file".equals(protocol)){//扫描file包中的类
+                //扫描file包中的类
+                if("file".equals(protocol)){
                     String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
                     getFileClass(packName,filePath,classes);
-                }else if("jar".equals(protocol)){//扫描jar包中的类
+                    //扫描jar包中的类
+                }else if("jar".equals(protocol)){
                     JarFile jarFile = ((JarURLConnection) url.openConnection()).getJarFile();
                     getJarClass(jarFile,packageDirName,classes);
                 }
@@ -46,8 +48,10 @@ public class ClassUtils {
             return;
         }
         File[] dirFiles = dir.listFiles(file -> {
-            boolean acceptDir = file.isDirectory();// 接受dir目录
-            boolean acceptClass = file.getName().endsWith(".class");// 接受class文件
+            // 接受dir目录
+            boolean acceptDir = file.isDirectory();
+            // 接受class文件
+            boolean acceptClass = file.getName().endsWith(".class");
             return acceptDir || acceptClass;
         });
         for (File file : dirFiles) {
