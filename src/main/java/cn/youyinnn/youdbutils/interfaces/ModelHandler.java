@@ -70,11 +70,26 @@ public interface ModelHandler<T> {
      *
      * @param model 需要保持的Model类
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int saveModel(T model) throws NoneffectiveUpdateExecuteException;
 
+    /**
+     * 获取单个Model对象
+     *
+     * @param conditionsMap  the conditions map
+     * @param queryFieldList the query field list
+     * @return the model
+     */
     T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList);
 
+    /**
+     * 获取单个记录的某个值
+     *
+     * @param fieldName     the field name
+     * @param conditionsMap the conditions map
+     * @return the model field value
+     */
     Object getModelFieldValue(String fieldName,HashMap<String, Object> conditionsMap);
 
     /**
@@ -83,6 +98,7 @@ public interface ModelHandler<T> {
      * @param newFieldValuesMap the new field values map
      * @param conditionsMap     the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -91,6 +107,7 @@ public interface ModelHandler<T> {
      *
      * @param conditionsMap the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int deleteModel(HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -101,6 +118,7 @@ public interface ModelHandler<T> {
      * @param b             the b
      * @param conditionsMap the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int addition(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -111,6 +129,7 @@ public interface ModelHandler<T> {
      * @param b             the b
      * @param conditionsMap the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int subtraction(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -121,6 +140,7 @@ public interface ModelHandler<T> {
      * @param b             the b
      * @param conditionsMap the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int multiplication(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -131,6 +151,7 @@ public interface ModelHandler<T> {
      * @param b             the b
      * @param conditionsMap the conditions map
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int division(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 }
