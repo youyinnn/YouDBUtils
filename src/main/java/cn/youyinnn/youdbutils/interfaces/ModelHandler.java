@@ -1,5 +1,7 @@
 package cn.youyinnn.youdbutils.interfaces;
 
+import cn.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,7 +71,7 @@ public interface ModelHandler<T> {
      * @param model 需要保持的Model类
      * @return the int
      */
-    int saveModel(T model);
+    int saveModel(T model) throws NoneffectiveUpdateExecuteException;
 
     T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList);
 
@@ -82,7 +84,7 @@ public interface ModelHandler<T> {
      * @param conditionsMap     the conditions map
      * @return the int
      */
-    int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap);
+    int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * Delete model int.
@@ -90,7 +92,7 @@ public interface ModelHandler<T> {
      * @param conditionsMap the conditions map
      * @return the int
      */
-    int deleteModel(HashMap<String, Object> conditionsMap);
+    int deleteModel(HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 对同一个值简单的做加法运算
@@ -100,7 +102,7 @@ public interface ModelHandler<T> {
      * @param conditionsMap the conditions map
      * @return the int
      */
-    int addition(String fieldName, double b, HashMap<String, Object> conditionsMap);
+    int addition(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 对同一个值简单的做减法运算
@@ -110,7 +112,7 @@ public interface ModelHandler<T> {
      * @param conditionsMap the conditions map
      * @return the int
      */
-    int subtraction(String fieldName, double b, HashMap<String, Object> conditionsMap);
+    int subtraction(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 对同一个值简单的做乘法运算
@@ -120,7 +122,7 @@ public interface ModelHandler<T> {
      * @param conditionsMap the conditions map
      * @return the int
      */
-    int multiplication(String fieldName, double b, HashMap<String, Object> conditionsMap);
+    int multiplication(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 对同一个值简单的做除法运算
@@ -130,5 +132,5 @@ public interface ModelHandler<T> {
      * @param conditionsMap the conditions map
      * @return the int
      */
-    int division(String fieldName, double b, HashMap<String, Object> conditionsMap);
+    int division(String fieldName, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 }

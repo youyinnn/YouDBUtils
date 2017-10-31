@@ -2,6 +2,7 @@ package cn.youyinnn.youdbutils.dao.model;
 
 import cn.youyinnn.youdbutils.dao.SqlExecutor;
 import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
+import cn.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
 import cn.youyinnn.youdbutils.utils.YouCollectionsUtils;
@@ -154,7 +155,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public int saveModel(T model) {
+    public int saveModel(T model) throws NoneffectiveUpdateExecuteException {
 
         Class<?> aClass = model.getClass();
 
@@ -210,7 +211,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
+    public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
 
         try {
             newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
@@ -223,7 +224,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public int deleteModel(HashMap<String, Object> conditionsMap) {
+    public int deleteModel(HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
 
         try {
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
@@ -235,27 +236,27 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public int addition(String modelField, double b, HashMap<String, Object> conditionsMap) {
+    public int addition(String modelField, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
 
         return basicArithmetic(modelField,b,conditionsMap,"+");
     }
 
     @Override
-    public int subtraction(String modelField, double b, HashMap<String, Object> conditionsMap) {
+    public int subtraction(String modelField, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
         return basicArithmetic(modelField,b,conditionsMap, "-");
     }
 
     @Override
-    public int multiplication(String modelField, double b, HashMap<String, Object> conditionsMap) {
+    public int multiplication(String modelField, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
         return basicArithmetic(modelField,b,conditionsMap, "*");
     }
 
     @Override
-    public int division(String modelField, double b, HashMap<String, Object> conditionsMap) {
+    public int division(String modelField, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
         return basicArithmetic(modelField,b,conditionsMap, "/");
     }
 
-    private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) {
+    private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) throws NoneffectiveUpdateExecuteException {
 
         String tableField = null;
         try {

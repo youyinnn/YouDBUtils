@@ -1,6 +1,7 @@
 package cn.youyinnn.youdbutils.dao;
 
 import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
+import cn.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
 import cn.youyinnn.youdbutils.utils.SqlStringUtils;
 
 import java.sql.*;
@@ -41,7 +42,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
         return resultSet;
     }
 
-    private int preparedStatementUpdate(Connection conn, String sql, Collection newFieldValues, Collection conditionValues){
+    private int preparedStatementUpdate(Connection conn, String sql, Collection newFieldValues, Collection conditionValues) throws NoneffectiveUpdateExecuteException {
         int result = 0;
         PreparedStatement ps = null;
         try {
@@ -64,11 +65,17 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
         } finally {
             ThreadLocalPropContainer.release(null, ps,null);
         }
+
+        if (result == 0) {
+            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            throw new NoneffectiveUpdateExecuteException("无效的更新操作");
+        }
+
         return result;
     }
 
     @Override
-    public int executeStatementUpdate(String sql)  {
+    public int executeStatementUpdate(String sql) throws NoneffectiveUpdateExecuteException {
 
         int result = 0;
         Connection conn = ThreadLocalPropContainer.getInstance().getConn();
@@ -83,11 +90,16 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             ThreadLocalPropContainer.release(null, statement,null);
         }
 
+        if (result == 0) {
+            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            throw new NoneffectiveUpdateExecuteException("无效的更新操作");
+        }
+
         return result;
     }
 
     @Override
-    public int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
+    public int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
 
         String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
 
@@ -95,25 +107,25 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
     }
 
     @Override
-    public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) {
+    public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
         return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValues, conditionValues);
     }
 
     @Override
-    public int executeStatementInsert(String sql) {
+    public int executeStatementInsert(String sql) throws NoneffectiveUpdateExecuteException {
 
         return executeStatementUpdate(sql);
     }
 
     @Override
-    public int executePreparedStatementInsert(String sql, ArrayList newFieldValues) {
+    public int executePreparedStatementInsert(String sql, ArrayList newFieldValues) throws NoneffectiveUpdateExecuteException {
 
         return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,newFieldValues,null);
     }
 
     @Override
-    public int executePreparedStatementInsert(String modelName, HashMap<String, Object> newFieldValuesMap) {
+    public int executePreparedStatementInsert(String modelName, HashMap<String, Object> newFieldValuesMap) throws NoneffectiveUpdateExecuteException {
 
         String sql = SqlStringUtils.getInsertSql(modelName,newFieldValuesMap.keySet());
 
@@ -121,19 +133,19 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
     }
 
     @Override
-    public int executeStatementDelete(String sql) {
+    public int executeStatementDelete(String sql) throws NoneffectiveUpdateExecuteException {
 
         return executeStatementUpdate(sql);
     }
 
     @Override
-    public int executePreparedStatementDelete(String sql, ArrayList conditionValues) {
+    public int executePreparedStatementDelete(String sql, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
         return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getConn(),sql,null,conditionValues);
     }
 
     @Override
-    public int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) {
+    public int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
 
         String sql = SqlStringUtils.getDeleteSql(modelName,"AND",conditionsMap.keySet());
 
