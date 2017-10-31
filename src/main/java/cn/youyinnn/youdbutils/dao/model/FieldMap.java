@@ -30,8 +30,13 @@ public class FieldMap {
         return lowerCaseFieldMap.get(modelField.toLowerCase());
     }
 
-    public boolean needToReplace(String modelField) {
-        return fieldMapCheck.get(modelField.toLowerCase());
+    public boolean needToReplace(String modelField) throws NoSuchFieldException {
+        Boolean check = fieldMapCheck.get(modelField.toLowerCase());
+        if (check != null) {
+            return check;
+        } else {
+            throw new NoSuchFieldException("No such field "+modelField+" in ["+modelName+"]");
+        }
     }
 
     @Override

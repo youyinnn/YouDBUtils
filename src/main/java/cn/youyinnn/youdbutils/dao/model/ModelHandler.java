@@ -64,7 +64,11 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListForAll(ArrayList<String> queryFieldList){
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         String sql = SqlStringUtils.getSelectAllSql(modelName,queryFieldList);
 
@@ -75,17 +79,17 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereAAndB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
             resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(resultSet,statement,null);
@@ -97,19 +101,20 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereAOrB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
-        String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
 
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+            String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
+
             resultSet = executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(resultSet,statement,null);
@@ -121,8 +126,12 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereLikeAndLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"AND",queryFieldList);
 
@@ -132,8 +141,12 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public ArrayList<T> getListWhereLikeOrLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"OR",queryFieldList);
 
@@ -152,7 +165,11 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             newFieldValuesMap.put(field,fieldValue);
         }
 
-        newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
+        try {
+            newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         return executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
     }
@@ -160,33 +177,47 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
 
-        queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
+        T resultModel = null;
         try {
+            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+
             ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap);
-
-
-        } catch (SQLException e) {
+            resultModel = modelResultFactory.getResultModel(resultSet);
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        return resultModel;
     }
 
     @Override
     public Object getModelFieldValue(String fieldName, HashMap<String, Object> conditionsMap) {
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
+        Object value = null;
+        try {
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+            fieldName = MappingHandler.mappingHandle(modelName,fieldName);
 
-        return null;
+            ResultSet resultSet = executePreparedStatementQuery(modelName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap);
+            value = resultSet.getObject(fieldName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return value;
     }
 
     @Override
     public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) {
 
-        newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        try {
+            newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
     }
@@ -194,7 +225,11 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     @Override
     public int deleteModel(HashMap<String, Object> conditionsMap) {
 
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        try {
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         return executePreparedStatementDelete(modelName,conditionsMap);
     }
@@ -222,8 +257,13 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
 
     private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) {
 
-        String tableField = MappingHandler.mappingHandle(modelName, modelField);
-        conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        String tableField = null;
+        try {
+            tableField = MappingHandler.mappingHandle(modelName, modelField);
+            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
 
         StringBuffer sql = new StringBuffer("UPDATE ")
                 .append(modelName)

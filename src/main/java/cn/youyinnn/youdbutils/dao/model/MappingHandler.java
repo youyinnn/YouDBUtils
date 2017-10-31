@@ -20,7 +20,7 @@ public class MappingHandler {
      * @param modelField the model field
      * @return the array list
      */
-    public static ArrayList<String> mappingHandle(String modelName, ArrayList<String> modelField) {
+    public static ArrayList<String> mappingHandle(String modelName, ArrayList<String> modelField) throws NoSuchFieldException {
 
         if (modelField == null) {
             return null;
@@ -52,7 +52,7 @@ public class MappingHandler {
      * @param modelField the model field
      * @return the array list
      */
-    public static ArrayList<String> mappingHandle(String modelName, Set<String> modelField) {
+    public static ArrayList<String> mappingHandle(String modelName, Set<String> modelField) throws NoSuchFieldException {
         return mappingHandle(modelName,new ArrayList<>(modelField));
     }
 
@@ -63,13 +63,13 @@ public class MappingHandler {
      * @param modelField the model field
      * @return the hash map
      */
-    public static HashMap<String, Object> mappingHandle(String modelName, HashMap<String, Object> modelField){
+    public static HashMap<String, Object> mappingHandle(String modelName, HashMap<String, Object> modelField) throws NoSuchFieldException {
 
         if (modelField == null) {
             return null;
         }
 
-        HashMap<String, Object> tableField = new HashMap<>();
+        HashMap<String, Object> tableField = new HashMap<>(10);
 
         FieldMap fieldMap = ModelTableMessage.getFieldMap(modelName);
 
@@ -95,12 +95,15 @@ public class MappingHandler {
      * @param modelField the model field
      * @return the string
      */
-    public static String mappingHandle(String modelName, String modelField) {
+    public static String mappingHandle(String modelName, String modelField) throws NoSuchFieldException {
 
         FieldMap fieldMap = ModelTableMessage.getFieldMap(modelName);
 
-        return fieldMap.getTableField(modelField);
+        if (fieldMap.needToReplace(modelField)) {
+            return fieldMap.getTableField(modelField);
+        }
 
+        return modelField;
     }
 
 }
