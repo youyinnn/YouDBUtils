@@ -7,6 +7,7 @@ package cn.youyinnn.youdbutils.exceptions;
  */
 public class NoneffectiveUpdateExecuteException extends Throwable {
 
+    // TODO: 现在的做法是每个无效执行操作都抛出异常 但这个不能灵活适应大部分场景 需要想办法解决
     public NoneffectiveUpdateExecuteException(String msg){
         super(msg);
     }
