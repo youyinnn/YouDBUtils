@@ -17,29 +17,35 @@ public class ThreadLocalPropContainer {
 
     private static ThreadLocalPropContainer         instance                        = new ThreadLocalPropContainer();
 
-    private ThreadLocal<Connection>                 connectionThreadLocal           = new ThreadLocal<>();
+    private ThreadLocal<Connection>                 threadConnection                = new ThreadLocal<>();
 
-    private ThreadLocal<Boolean>                    rollbackFlagThreadLocal         = new ThreadLocal<>();
+    private ThreadLocal<Boolean>                    threadNeedToRollback            = new ThreadLocal<>();
+
+    private ThreadLocal<Boolean>                    threadAllowNoneffectiveUpdate   = new ThreadLocal<>();
 
     private ThreadLocalPropContainer(){
-        rollbackFlagThreadLocal.set(false);
+        threadNeedToRollback.set(false);
     }
 
     public static ThreadLocalPropContainer getInstance() { return instance ; }
 
-    private void bindConn(Connection connection) { connectionThreadLocal.set(connection);}
+    private void bindConn(Connection connection) { threadConnection.set(connection);}
 
     public void setRollbackFlagTrue() {
-        rollbackFlagThreadLocal.set(true);
+        threadNeedToRollback.set(true);
     }
 
     public void setRollbackFlagFalse() {
-        rollbackFlagThreadLocal.set(false);
+        threadNeedToRollback.set(false);
     }
 
-    public Connection getConn() {
+    public void setNoneffectiveUpdateFlag(boolean flag) {
+        threadAllowNoneffectiveUpdate.set(flag);
+    }
 
-        Connection connection = connectionThreadLocal.get();
+    public Connection getThreadConnection() {
+
+        Connection connection = threadConnection.get();
 
         if (connection == null) {
             try {
@@ -54,13 +60,18 @@ public class ThreadLocalPropContainer {
         return connection;
     }
 
-    public Boolean getFlag() {
-        return rollbackFlagThreadLocal.get();
+    public Boolean getRollbackFlag() {
+        return threadNeedToRollback.get();
     }
 
-    public void removeRollbackFlag() {rollbackFlagThreadLocal.remove();}
+    public Boolean getNoneffectiveUpdateFlag() {
+        return threadAllowNoneffectiveUpdate.get();
+    }
+    public void removeRollbackFlag() {threadNeedToRollback.remove();}
 
-    public void removeConn() {connectionThreadLocal.remove();}
+    public void removeThreadConnection() {threadConnection.remove();}
+
+    public void removeNoneffectiveUpdateFlag() {threadAllowNoneffectiveUpdate.remove();}
 
     public static void release(ResultSet resultSet,Statement statement, Connection connection) {
         try {

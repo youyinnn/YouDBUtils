@@ -11,5 +11,5 @@ public @interface Transaction {
 
     String transactionSpread() default ServiceIocBean.PROPAGATION_REQUIRED;
 
-    boolean allowNoneffectUpdate() default true;
+    boolean allowNoneffectiveUpdate() default true;
 }

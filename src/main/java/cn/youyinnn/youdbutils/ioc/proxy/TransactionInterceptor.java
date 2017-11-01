@@ -1,6 +1,7 @@
 package cn.youyinnn.youdbutils.ioc.proxy;
 
 import cn.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
+import cn.youyinnn.youdbutils.ioc.annotations.Transaction;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -17,11 +18,20 @@ public class TransactionInterceptor implements MethodInterceptor{
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
-        Connection conn = ThreadLocalPropContainer.getInstance().getConn();
+        Connection conn = ThreadLocalPropContainer.getInstance().getThreadConnection();
         conn.setAutoCommit(false);
+
+        Transaction transactionA = method.getAnnotation(Transaction.class);
+        if (transactionA == null) {
+            Class<?> declaringClass = method.getDeclaringClass();
+            transactionA = declaringClass.getAnnotation(Transaction.class);
+        }
+
+        ThreadLocalPropContainer.getInstance().setNoneffectiveUpdateFlag(transactionA.allowNoneffectiveUpdate());
+
         Object result = methodProxy.invokeSuper(o,objects);
 
-        if (ThreadLocalPropContainer.getInstance().getFlag()) {
+        if (ThreadLocalPropContainer.getInstance().getRollbackFlag()) {
             ThreadLocalPropContainer.getInstance().setRollbackFlagFalse();
             conn.rollback();
         }
@@ -29,9 +39,10 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.commit();
         conn.close();
         {
-            System.out.println("remove conn："+conn);
+            //System.out.println("remove conn："+conn);
+            ThreadLocalPropContainer.getInstance().removeNoneffectiveUpdateFlag();
             ThreadLocalPropContainer.getInstance().removeRollbackFlag();
-            ThreadLocalPropContainer.getInstance().removeConn();
+            ThreadLocalPropContainer.getInstance().removeThreadConnection();
         }
 
         return result;
