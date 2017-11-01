@@ -9,5 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transaction {
 
-    String value() default ServiceIocBean.PROPAGATION_REQUIRED;
+    String transactionSpread() default ServiceIocBean.PROPAGATION_REQUIRED;
+
+    boolean allowNoneffectUpdate() default true;
 }

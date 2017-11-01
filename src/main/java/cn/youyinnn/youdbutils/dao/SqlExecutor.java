@@ -60,14 +60,14 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             }
             result = ps.executeUpdate();
         } catch (SQLException e) {
-            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(null, ps,null);
         }
 
         if (result == 0) {
-            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
             throw new NoneffectiveUpdateExecuteException("无效的更新操作");
         }
 
@@ -84,14 +84,14 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecuto
             statement = conn.createStatement();
             result = statement.executeUpdate(sql);
         } catch (SQLException e) {
-            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(null, statement,null);
         }
 
         if (result == 0) {
-            ThreadLocalPropContainer.getInstance().setFlagTrue();
+            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
             throw new NoneffectiveUpdateExecuteException("无效的更新操作");
         }
 

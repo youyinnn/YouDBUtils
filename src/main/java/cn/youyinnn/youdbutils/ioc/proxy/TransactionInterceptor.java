@@ -22,7 +22,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         Object result = methodProxy.invokeSuper(o,objects);
 
         if (ThreadLocalPropContainer.getInstance().getFlag()) {
-            ThreadLocalPropContainer.getInstance().setFlagFalse();
+            ThreadLocalPropContainer.getInstance().setRollbackFlagFalse();
             conn.rollback();
         }
 
@@ -30,7 +30,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.close();
         {
             System.out.println("remove conn："+conn);
-            ThreadLocalPropContainer.getInstance().removeFlag();
+            ThreadLocalPropContainer.getInstance().removeRollbackFlag();
             ThreadLocalPropContainer.getInstance().removeConn();
         }
 
