@@ -14,7 +14,7 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/9/19
  */
-public class SqlExecutor implements cn.youyinnn.youdbutils.interfaces.SqlExecutor {
+public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExecutor {
 
     private ResultSet statementQuery(Connection conn, String sql) throws SQLException {
         ResultSet resultSet;

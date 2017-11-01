@@ -18,7 +18,7 @@ import java.util.HashMap;
  * @author: youyinnn
  * @date: 2017/10/7
  */
-public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbutils.interfaces.ModelHandler<T>{
+public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.ModelHandler<T>{
 
     private ModelResultFactory<T> modelResultFactory;
 

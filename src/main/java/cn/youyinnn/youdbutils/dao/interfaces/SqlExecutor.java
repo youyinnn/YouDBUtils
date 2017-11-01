@@ -1,4 +1,4 @@
-package cn.youyinnn.youdbutils.interfaces;
+package cn.youyinnn.youdbutils.dao.interfaces;
 
 import cn.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
 
