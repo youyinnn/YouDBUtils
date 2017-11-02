@@ -47,6 +47,13 @@ public class ReflectionUtils {
         return null;
     }
 
+    /**
+     * 获取对象中有对应注解的所有field
+     *
+     * @param o          the o
+     * @param annotation the annotation
+     * @return the declared fields
+     */
     public static ArrayList<Field> getDeclaredFields(Object o, Class annotation) {
 
         ArrayList<Field> fieldList = new ArrayList<>();
@@ -98,7 +105,7 @@ public class ReflectionUtils {
      *
      * @param o         the o
      * @param fieldName the field name
-     * @return object
+     * @return object object
      */
     public static Object getFieldValue(Object o, String fieldName){
         Field field = getDeclaredField(o, fieldName);

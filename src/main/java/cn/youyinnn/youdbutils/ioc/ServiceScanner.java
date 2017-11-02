@@ -1,6 +1,5 @@
 package cn.youyinnn.youdbutils.ioc;
 
-import cn.youyinnn.youdbutils.ioc.annotations.Scope;
 import cn.youyinnn.youdbutils.ioc.annotations.YouService;
 import cn.youyinnn.youdbutils.utils.ClassUtils;
 
@@ -26,14 +25,7 @@ public class ServiceScanner {
         for (Class<?> aClass : serviceClassSet) {
             YouService annotation = aClass.getAnnotation(YouService.class);
             if (annotation != null){
-                Scope scope = aClass.getAnnotation(Scope.class);
-
-                // 单例service
-                if (scope == null || scope.value().equals(ServiceIocBean.SINGLETON)){
-                    YouServiceIocContainer.addSingletonYouService(new ServiceIocBean(aClass, ServiceIocBean.SINGLETON));
-                } else {
-                    YouServiceIocContainer.addPrototypeYouService(new ServiceIocBean(aClass, ServiceIocBean.PROTOTYPE));
-                }
+                YouServiceIocContainer.setYouService(aClass);
             }
         }
     }

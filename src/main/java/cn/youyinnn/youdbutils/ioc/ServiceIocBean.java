@@ -55,6 +55,7 @@ public class ServiceIocBean {
                 "serviceClass=" + serviceClass +
                 ", scope='" + scope + '\'' +
                 ", className='" + className + '\'' +
+                ", singleton=" + singleton +
                 '}';
     }
 }
