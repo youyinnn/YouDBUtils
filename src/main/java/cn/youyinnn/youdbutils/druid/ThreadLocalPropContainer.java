@@ -65,7 +65,13 @@ public class ThreadLocalPropContainer {
     }
 
     public Boolean getNoneffectiveUpdateFlag() {
-        return threadAllowNoneffectiveUpdate.get();
+        Boolean noneffectiveUpdateFlag = threadAllowNoneffectiveUpdate.get();
+        if (noneffectiveUpdateFlag == null) {
+            setNoneffectiveUpdateFlag(true);
+            return true;
+        } else {
+            return noneffectiveUpdateFlag;
+        }
     }
     public void removeRollbackFlag() {threadNeedToRollback.remove();}
 
