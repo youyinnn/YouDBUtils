@@ -70,7 +70,7 @@ public class YouDbManager {
 
     public static void scanPackageForModel(String packageName) {
         ModelTableScanner.scanPackageForModel(packageName);
-        Set<String> modelNameSet = ModelTableMessage.getModelFieldSet();
+        Set<String> modelNameSet = ModelTableMessage.getAllModelNameSet();
         try {
             ModelTableScanner.scanDataBaseForTable(modelNameSet,youDruid.getCurrentDataSourceConn());
         } catch (SQLException | NoDataSourceInitException e) {
@@ -83,15 +83,15 @@ public class YouDbManager {
         YouServiceIocContainer.showServiceMap();
     }
 
-    public static void printModelFieldMap() {
-        System.out.println(ModelTableMessage.getModelField());
+    public static void printAllModelFieldMap() {
+        System.out.println(ModelTableMessage.getAllModelField());
     }
 
-    public static void printTableFieldMap() {
-        System.out.println(ModelTableMessage.getTableField());
+    public static void printAllTableFieldMap() {
+        System.out.println(ModelTableMessage.getAllTableField());
     }
 
-    public static void printModelTableFieldMapping() {
-        System.out.println(ModelTableMessage.getFieldMapping());
+    public static void printAllModelTableFieldMapping() {
+        System.out.println(ModelTableMessage.getAllModelTableFieldMapping());
     }
 }
