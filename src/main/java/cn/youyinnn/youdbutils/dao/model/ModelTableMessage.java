@@ -113,4 +113,8 @@ public class ModelTableMessage {
     public static HashMap<String, FieldMap> getAllModelTableFieldMapping() {
         return allModelTableFieldMapping;
     }
+
+    public static boolean isModelTableMapping(Class modelClass) {
+        return allModelTableFieldMapping.containsKey(modelClass.getSimpleName());
+    }
 }
