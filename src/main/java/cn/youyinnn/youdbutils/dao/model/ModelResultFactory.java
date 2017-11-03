@@ -1,6 +1,7 @@
 package cn.youyinnn.youdbutils.dao.model;
 
 
+import cn.youyinnn.youdbutils.exceptions.ModelResultTransferException;
 import cn.youyinnn.youdbutils.utils.ReflectionUtils;
 
 import java.sql.ResultSet;
@@ -39,10 +40,16 @@ public class ModelResultFactory<T> {
     }
 
 
-    public T getResultModel(ResultSet resultSet){
+    public T getResultModel(ResultSet resultSet) {
 
         T instance = null;
         try {
+            if (fieldList == null || fieldMap == null) {
+                throw new ModelResultTransferException("Model：["+modelClass.getSimpleName()+"] " +
+                        "没有在ModelTableMessage中注册，无法使用ModelHandler去处理结果集，如果在单独使用YouDao的时候，" +
+                        "需要同时支持ModelHandler的服务，请在实例化YouDao对象之前使用YouDbManager.scanPackageForModel(packagePath)" +
+                        "方法注册所有的Model信息。");
+            }
             instance = modelClass.newInstance();
             for (String field : fieldList) {
                 boolean rsHasThisField = true;

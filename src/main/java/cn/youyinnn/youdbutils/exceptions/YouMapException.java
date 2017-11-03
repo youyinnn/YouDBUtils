@@ -5,7 +5,7 @@ package cn.youyinnn.youdbutils.exceptions;
  * @author: youyinnn
  * @date: 2017/10/22
  */
-public class YouMapException extends Throwable {
+public class YouMapException extends Exception {
 
     public YouMapException(String msg) {
         super(msg);
