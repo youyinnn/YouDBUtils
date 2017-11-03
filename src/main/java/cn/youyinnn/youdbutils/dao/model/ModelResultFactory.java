@@ -45,13 +45,21 @@ public class ModelResultFactory<T> {
         try {
             instance = modelClass.newInstance();
             for (String field : fieldList) {
-                Object value;
-                if (fieldMap.needToReplace(field)) {
-                    value = resultSet.getObject(fieldMap.getTableField(field));
-                } else {
-                    value = resultSet.getObject(field);
+                boolean rsHasThisField = true;
+                try {
+                    resultSet.findColumn(field);
+                } catch (Exception ignore) {
+                    rsHasThisField = false;
                 }
-                ReflectionUtils.setFieldValue(instance,field,value);
+                if (rsHasThisField) {
+                    Object value;
+                    if (fieldMap.needToReplace(field)) {
+                        value = resultSet.getObject(fieldMap.getTableField(field));
+                    } else {
+                        value = resultSet.getObject(field);
+                    }
+                    ReflectionUtils.setFieldValue(instance,field,value);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
