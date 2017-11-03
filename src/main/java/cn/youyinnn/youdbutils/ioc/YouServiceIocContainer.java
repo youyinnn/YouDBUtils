@@ -17,9 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * The type You service ioc container.
+ *
  * @description:
  * @author: youyinnn
- * @date: 2017/9/10
+ * @date: 2017 /9/10
  */
 public class YouServiceIocContainer {
 
@@ -51,6 +53,13 @@ public class YouServiceIocContainer {
         prototypeServiceMap.put(className,serviceBean);
     }
 
+    /**
+     * Gets you service.
+     *
+     * @param serviceClass the service class
+     * @return the you service
+     * @throws AutowiredLimitedException the autowired limited exception
+     */
     public static Object getYouService(Class serviceClass) throws AutowiredLimitedException {
 
         ServiceIocBean serviceIocBean = singletonServiceMap.get(serviceClass.getName());
@@ -77,6 +86,9 @@ public class YouServiceIocContainer {
         return null;
     }
 
+    /**
+     * Show service map.
+     */
     public static void showServiceMap(){
         System.out.println("[ prototype service ]:");
         for (Map.Entry<String, ServiceIocBean> stringIocBeanEntry : prototypeServiceMap.entrySet()) {
@@ -89,6 +101,11 @@ public class YouServiceIocContainer {
         }
     }
 
+    /**
+     * 检查该YouService是否在类上或者方法中拥有Transaction注释 也即这个方法决定是否生成代理bean还是原生bean
+     * @param youService
+     * @return
+     */
     private static boolean hasTransactionAnnotation(Class youService) {
 
         if (youService.getAnnotation(Transaction.class) == null) {
@@ -104,10 +121,21 @@ public class YouServiceIocContainer {
         }
     }
 
+    /**
+     * 这个方法检查当前ioc容器中是否已经存在该YouService
+     * @param youService
+     * @return
+     */
     private static boolean hasYouService(Class youService) {
         return singletonServiceMap.containsKey(youService.getName()) | prototypeServiceMap.containsKey(youService.getName());
     }
 
+    /**
+     * 对于youService对象的自动装配方法 只装配Dao和YouService
+     * @param youService
+     * @return
+     * @throws AutowiredLimitedException
+     */
     private static Object autowired(Object youService) throws AutowiredLimitedException {
         // Autowired实现 只接受YouDao和YouService的自动装配
         ArrayList<Field> declaredFields = ReflectionUtils.getDeclaredFields(youService, Autowired.class);
@@ -123,13 +151,18 @@ public class YouServiceIocContainer {
                     throw new AutowiredLimitedException("不支持的自动装配类型：["+type.getSimpleName()+" "+declaredField.getName()+"].");
                 }
             } else {
-                Object autowiredDaoYouService = YouServiceIocContainer.getYouService(type);
+                Object autowiredDaoYouService = getYouService(type);
                 ReflectionUtils.setFieldValue(youService,declaredField.getName(),autowiredDaoYouService);
             }
         }
         return youService;
     }
 
+    /**
+     * Sets you service.
+     *
+     * @param aClass the a class
+     */
     static void setYouService(Class<?> aClass) {
         Scope scope = aClass.getAnnotation(Scope.class);
 
