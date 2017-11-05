@@ -14,6 +14,10 @@ import java.util.Set;
  */
 public class SqlStringUtils {
 
+    public static final String AND = "AND";
+
+    public static final String OR = "OR";
+
     private static final String SELECT_ALL_FROM = "SELECT * FROM ";
 
     /**

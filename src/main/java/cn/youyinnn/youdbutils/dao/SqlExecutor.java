@@ -99,9 +99,9 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     }
 
     @Override
-    public int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
+    public int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
 
-        String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),"AND",conditionsMap != null ? conditionsMap.keySet() : null);
+        String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),separateMark,conditionsMap != null ? conditionsMap.keySet() : null);
 
         return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
     }
@@ -145,9 +145,9 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     }
 
     @Override
-    public int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
+    public int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
 
-        String sql = SqlStringUtils.getDeleteSql(modelName,"AND",conditionsMap.keySet());
+        String sql = SqlStringUtils.getDeleteSql(modelName,separateMark,conditionsMap.keySet());
 
         return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,null,conditionsMap.values());
     }
@@ -165,9 +165,9 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     }
 
     @Override
-    public ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String, Object> conditionMap) throws SQLException {
+    public ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String, Object> conditionMap,String separateMark) throws SQLException {
 
-        String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),"AND",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),separateMark,queryFieldList);
 
         return preparedStatementQuery(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql, conditionMap.values());
     }

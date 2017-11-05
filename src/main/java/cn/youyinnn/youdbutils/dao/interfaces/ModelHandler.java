@@ -79,37 +79,41 @@ public interface ModelHandler<T> {
      *
      * @param conditionsMap  the conditions map
      * @param queryFieldList the query field list
+     * @param separateMark   the separate mark
      * @return the model
      */
-    T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList);
+    T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
 
     /**
      * 获取单个记录的某个值
      *
      * @param fieldName     the field name
      * @param conditionsMap the conditions map
+     * @param separateMark  the separate mark
      * @return the model field value
      */
-    Object getModelFieldValue(String fieldName,HashMap<String, Object> conditionsMap);
+    Object getModelFieldValue(String fieldName,HashMap<String, Object> conditionsMap,String separateMark);
 
     /**
      * Update model int.
      *
      * @param newFieldValuesMap the new field values map
      * @param conditionsMap     the conditions map
+     * @param separateMark      the separate mark
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
+    int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * Delete model int.
      *
      * @param conditionsMap the conditions map
+     * @param separateMark  the separate mark
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int deleteModel(HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
+    int deleteModel(HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 对同一个值简单的做加法运算

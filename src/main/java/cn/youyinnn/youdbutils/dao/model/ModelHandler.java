@@ -87,7 +87,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap);
+            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap,SqlStringUtils.AND);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (Exception e) {
@@ -176,7 +176,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
 
 
         T resultModel = null;
@@ -184,7 +184,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
-            ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap);
+            ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap,separateMark);
             resultModel = modelResultFactory.getResultModel(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -194,14 +194,14 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public Object getModelFieldValue(String fieldName, HashMap<String, Object> conditionsMap) {
+    public Object getModelFieldValue(String fieldName, HashMap<String, Object> conditionsMap,String separateMark) {
 
         Object value = null;
         try {
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
             fieldName = MappingHandler.mappingHandle(modelName,fieldName);
 
-            ResultSet resultSet = executePreparedStatementQuery(modelName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap);
+            ResultSet resultSet = executePreparedStatementQuery(modelName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap,separateMark);
             value = resultSet.getObject(fieldName);
         } catch (Exception e) {
             e.printStackTrace();
@@ -211,7 +211,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
+    public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
 
         try {
             newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
@@ -220,11 +220,11 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             e.printStackTrace();
         }
 
-        return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap);
+        return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap,separateMark);
     }
 
     @Override
-    public int deleteModel(HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
+    public int deleteModel(HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
 
         try {
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
@@ -232,7 +232,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             e.printStackTrace();
         }
 
-        return executePreparedStatementDelete(modelName,conditionsMap);
+        return executePreparedStatementDelete(modelName,conditionsMap,separateMark);
     }
 
     @Override

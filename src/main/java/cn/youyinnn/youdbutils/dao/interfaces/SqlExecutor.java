@@ -43,7 +43,7 @@ public interface SqlExecutor {
      * @return 更新操作影响到的记录数 int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
+    int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 使用Statement执行insert操作
@@ -101,7 +101,7 @@ public interface SqlExecutor {
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
+    int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 使用Statement执行query操作
@@ -131,7 +131,7 @@ public interface SqlExecutor {
      * @return the result set
      * @throws SQLException the sql exceptions
      */
-    ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String,Object> conditionMap) throws SQLException;
+    ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String,Object> conditionMap,String separateMark) throws SQLException;
 
 
 }
