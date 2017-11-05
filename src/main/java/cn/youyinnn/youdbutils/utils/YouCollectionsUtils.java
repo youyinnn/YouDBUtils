@@ -49,14 +49,14 @@ public class YouCollectionsUtils {
     }
 
     /**
-     * 快速构建一个用于选择查询列的list
+     * 快速构建一个用于选择查询列的list或者用于填充占位符的List
      *
-     * @param queryFieldList the query field list
+     * @param field the query field list
      * @return the array list
      */
-    public static ArrayList<String> getYouArrayList(String ... queryFieldList){
+    public static ArrayList getYouArrayList(Object ... field){
 
-        return new ArrayList<>(Arrays.asList(queryFieldList));
+        return new ArrayList(Arrays.asList(field));
     }
 
 }
