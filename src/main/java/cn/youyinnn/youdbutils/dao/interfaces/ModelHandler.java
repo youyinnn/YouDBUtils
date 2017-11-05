@@ -30,40 +30,25 @@ public interface ModelHandler<T> {
     ArrayList<T> getListForAll(ArrayList<String> queryFieldList);
 
     /**
-     * 获取这个model的符合字段值条件的记录 条件之间使用and连接
+     * 获取这个model的符合字段值条件的记录 条件之间使用separateMark连接
      *
      * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
+     * @param separateMark   the separate mark
      * @return the list where a and b
      */
-    ArrayList<T> getListWhereAAndB(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhere(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
 
     /**
-     * 获取这个model的符合字段值条件的记录 条件之间使用or连接
+     * 获取这个model的模糊符合字段值条件的记录 条件之间使用separateMark连接
      *
      * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
-     * @return the list where a or b
-     */
-    ArrayList<T> getListWhereAOrB(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
-
-    /**
-     * 获取这个model的模糊符合字段值条件的记录 条件之间使用and连接
-     *
-     * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
-     * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
+     * @param separateMark   the separate mark
      * @return the list where like and like
      */
-    ArrayList<T> getListWhereLikeAndLike(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
+    ArrayList<T> getListWhereLike(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
 
-    /**
-     * 获取这个model的模糊符合字段值条件的记录 条件之间使用or连接
-     *
-     * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
-     * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
-     * @return the list where like or like
-     */
-    ArrayList<T> getListWhereLikeOrLike(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList);
 
     /**
      * 传入Model类，保存到数据库记录中

@@ -78,7 +78,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public ArrayList<T> getListWhereAAndB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhere(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
 
 
         ResultSet resultSet = null;
@@ -87,7 +87,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap,SqlStringUtils.AND);
+            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap,separateMark);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (Exception e) {
@@ -100,32 +100,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
-    public ArrayList<T> getListWhereAOrB(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
-
-
-
-        ResultSet resultSet = null;
-        ArrayList<T> resultModelList = null;
-        Statement statement = null;
-        try {
-            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-            String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionsMap.keySet(),"OR",queryFieldList);
-
-            resultSet = executePreparedStatementQuery(sql, new ArrayList<>(conditionsMap.values()));
-            statement = resultSet.getStatement();
-            resultModelList = modelResultFactory.getResultModelList(resultSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            ThreadLocalPropContainer.release(resultSet,statement,null);
-        }
-
-        return resultModelList;
-    }
-
-    @Override
-    public ArrayList<T> getListWhereLikeAndLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
+    public ArrayList<T> getListWhereLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
 
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
@@ -134,22 +109,7 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
             e.printStackTrace();
         }
 
-        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"AND",queryFieldList);
-
-        return getStatementResultModelList(sql);
-    }
-
-    @Override
-    public ArrayList<T> getListWhereLikeOrLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList) {
-
-        try {
-            queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
-            conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,"OR",queryFieldList);
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,separateMark,queryFieldList);
 
         return getStatementResultModelList(sql);
     }
