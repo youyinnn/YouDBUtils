@@ -136,6 +136,32 @@ public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbuti
     }
 
     @Override
+    public T getModel(String sql) {
+        T resultModel = null;
+        try {
+            ResultSet resultSet = executeStatementQuery(sql);
+
+            resultModel = modelResultFactory.getResultModel(resultSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultModel;
+    }
+
+    @Override
+    public T getModel(String sql, ArrayList<String> conditionValues) {
+        T resultModel = null;
+        try {
+            ResultSet resultSet = executePreparedStatementQuery(sql,conditionValues);
+
+            resultModel = modelResultFactory.getResultModel(resultSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resultModel;
+    }
+
+    @Override
     public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
 
 

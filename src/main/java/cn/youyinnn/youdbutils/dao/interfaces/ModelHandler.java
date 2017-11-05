@@ -60,6 +60,23 @@ public interface ModelHandler<T> {
     int saveModel(T model) throws NoneffectiveUpdateExecuteException;
 
     /**
+     * Gets model.
+     *
+     * @param sql the sql
+     * @return the model
+     */
+    T getModel(String sql);
+
+    /**
+     * Gets model.
+     *
+     * @param sql             the sql
+     * @param conditionValues the condition values
+     * @return the model
+     */
+    T getModel(String sql, ArrayList<String> conditionValues);
+
+    /**
      * 获取单个Model对象
      *
      * @param conditionsMap  the conditions map

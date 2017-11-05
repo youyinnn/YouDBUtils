@@ -40,6 +40,7 @@ public interface SqlExecutor {
      * @param modelName         需要更新的model类名 我们使用这个来对应数据表
      * @param newFieldValuesMap 需要更新的字段以及新值组成的键值对
      * @param conditionsMap     需要定位更新记录的条件字段以及条件值组成的键值对
+     * @param separateMark      the separate mark
      * @return 更新操作影响到的记录数 int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
@@ -98,6 +99,7 @@ public interface SqlExecutor {
      *
      * @param modelName     需要删除的model类名 我们使用这个来对应数据表
      * @param conditionsMap 需要定位删除记录的条件字段以及条件值组成的键值对
+     * @param separateMark  the separate mark
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
@@ -128,6 +130,7 @@ public interface SqlExecutor {
      * @param modelName      需要查询的model类名 我们使用这个来对应数据表
      * @param queryFieldList 需要查询的字段列名
      * @param conditionMap   需要定位查询记录的条件字段以及条件值组成的键值对
+     * @param separateMark   the separate mark
      * @return the result set
      * @throws SQLException the sql exceptions
      */
