@@ -19,6 +19,7 @@ public interface SqlExecutor {
      *
      * @param sql 一个完整的update类型的sql语句
      * @return 更新操作影响到的记录数 int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executeStatementUpdate(String sql) throws NoneffectiveUpdateExecuteException;
 
@@ -29,6 +30,7 @@ public interface SqlExecutor {
      * @param newFieldValues  更新值的填充列表
      * @param conditionValues 条件值的填充列表 允许为空
      * @return 更新操作影响到的记录数 int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException;
 
@@ -39,6 +41,7 @@ public interface SqlExecutor {
      * @param newFieldValuesMap 需要更新的字段以及新值组成的键值对
      * @param conditionsMap     需要定位更新记录的条件字段以及条件值组成的键值对
      * @return 更新操作影响到的记录数 int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
@@ -47,6 +50,7 @@ public interface SqlExecutor {
      *
      * @param sql the sql
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executeStatementInsert(String sql) throws NoneffectiveUpdateExecuteException;
 
@@ -56,6 +60,7 @@ public interface SqlExecutor {
      * @param sql            the sql
      * @param newFieldValues 填充的新值列表
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementInsert(String sql, ArrayList newFieldValues) throws NoneffectiveUpdateExecuteException;
 
@@ -65,6 +70,7 @@ public interface SqlExecutor {
      * @param modelName         需要插入的model类名 我们使用这个来对应数据表
      * @param newFieldValuesMap 填充的新值列表
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementInsert(String modelName, HashMap<String, Object> newFieldValuesMap) throws NoneffectiveUpdateExecuteException;
 
@@ -73,6 +79,7 @@ public interface SqlExecutor {
      *
      * @param sql the sql
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executeStatementDelete(String sql) throws NoneffectiveUpdateExecuteException;
 
@@ -82,6 +89,7 @@ public interface SqlExecutor {
      * @param sql             the sql
      * @param conditionValues 要填充的条件值列表
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementDelete(String sql, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException;
 
@@ -91,6 +99,7 @@ public interface SqlExecutor {
      * @param modelName     需要删除的model类名 我们使用这个来对应数据表
      * @param conditionsMap 需要定位删除记录的条件字段以及条件值组成的键值对
      * @return the int
+     * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
     int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException;
 
