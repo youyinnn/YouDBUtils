@@ -60,14 +60,14 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
             }
             result = ps.executeUpdate();
         } catch (SQLException e) {
-            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
+            ThreadLocalPropContainer.setRollbackFlagTrue();
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(null, ps,null);
         }
 
-        if (result == 0 & !ThreadLocalPropContainer.getInstance().getNoneffectiveUpdateFlag()) {
-            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
+        if (result == 0 & !ThreadLocalPropContainer.getNoneffectiveUpdateFlag()) {
+            ThreadLocalPropContainer.setRollbackFlagTrue();
             throw new NoneffectiveUpdateExecuteException("不允许存在无效的更新操作");
         }
 
@@ -78,20 +78,20 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     public int executeStatementUpdate(String sql) throws NoneffectiveUpdateExecuteException {
 
         int result = 0;
-        Connection conn = ThreadLocalPropContainer.getInstance().getThreadConnection();
+        Connection conn = ThreadLocalPropContainer.getThreadConnection();
         Statement statement = null;
         try {
             statement = conn.createStatement();
             result = statement.executeUpdate(sql);
         } catch (SQLException e) {
-            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
+            ThreadLocalPropContainer.setRollbackFlagTrue();
             e.printStackTrace();
         } finally {
             ThreadLocalPropContainer.release(null, statement,null);
         }
 
-        if (result == 0 & !ThreadLocalPropContainer.getInstance().getNoneffectiveUpdateFlag()) {
-            ThreadLocalPropContainer.getInstance().setRollbackFlagTrue();
+        if (result == 0 & !ThreadLocalPropContainer.getNoneffectiveUpdateFlag()) {
+            ThreadLocalPropContainer.setRollbackFlagTrue();
             throw new NoneffectiveUpdateExecuteException("不允许存在无效的更新操作");
         }
 
@@ -103,13 +103,13 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
 
         String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),separateMark,conditionsMap != null ? conditionsMap.keySet() : null);
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
     }
 
     @Override
     public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,newFieldValues, conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValues, conditionValues);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     @Override
     public int executePreparedStatementInsert(String sql, ArrayList newFieldValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,newFieldValues,null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValues,null);
     }
 
     @Override
@@ -129,7 +129,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
 
         String sql = SqlStringUtils.getInsertSql(modelName,newFieldValuesMap.keySet());
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,newFieldValuesMap.values(),null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValuesMap.values(),null);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
     @Override
     public int executePreparedStatementDelete(String sql, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,null,conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,null,conditionValues);
     }
 
     @Override
@@ -149,19 +149,19 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
 
         String sql = SqlStringUtils.getDeleteSql(modelName,separateMark,conditionsMap.keySet());
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,null,conditionsMap.values());
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,null,conditionsMap.values());
     }
 
     @Override
     public ResultSet executeStatementQuery(String sql) throws SQLException {
 
-        return statementQuery(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql);
+        return statementQuery(ThreadLocalPropContainer.getThreadConnection(),sql);
     }
 
     @Override
     public ResultSet executePreparedStatementQuery(String sql, ArrayList values) throws SQLException {
 
-        return preparedStatementQuery(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql,values);
+        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(),sql,values);
     }
 
     @Override
@@ -169,6 +169,6 @@ public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExe
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),separateMark,queryFieldList);
 
-        return preparedStatementQuery(ThreadLocalPropContainer.getInstance().getThreadConnection(),sql, conditionMap.values());
+        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(),sql, conditionMap.values());
     }
 }

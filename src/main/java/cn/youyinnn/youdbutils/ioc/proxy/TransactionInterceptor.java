@@ -18,7 +18,7 @@ public class TransactionInterceptor implements MethodInterceptor{
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
-        Connection conn = ThreadLocalPropContainer.getInstance().getThreadConnection();
+        Connection conn = ThreadLocalPropContainer.getThreadConnection();
         conn.setAutoCommit(false);
 
         Transaction transactionA = method.getAnnotation(Transaction.class);
@@ -27,23 +27,21 @@ public class TransactionInterceptor implements MethodInterceptor{
             transactionA = declaringClass.getAnnotation(Transaction.class);
         }
 
-        ThreadLocalPropContainer.getInstance().setNoneffectiveUpdateFlag(transactionA.allowNoneffectiveUpdate());
+        ThreadLocalPropContainer.setNoneffectiveUpdateFlag(transactionA.allowNoneffectiveUpdate());
 
         Object result = methodProxy.invokeSuper(o,objects);
 
-        if (ThreadLocalPropContainer.getInstance().getRollbackFlag()) {
-            ThreadLocalPropContainer.getInstance().setRollbackFlagFalse();
+        if (ThreadLocalPropContainer.getRollbackFlag()) {
+            ThreadLocalPropContainer.setRollbackFlagFalse();
             conn.rollback();
         }
 
         conn.commit();
         conn.close();
-        {
-            //System.out.println("remove conn："+conn);
-            ThreadLocalPropContainer.getInstance().removeNoneffectiveUpdateFlag();
-            ThreadLocalPropContainer.getInstance().removeRollbackFlag();
-            ThreadLocalPropContainer.getInstance().removeThreadConnection();
-        }
+
+        ThreadLocalPropContainer.removeNoneffectiveUpdateFlag();
+        ThreadLocalPropContainer.removeRollbackFlag();
+        ThreadLocalPropContainer.removeThreadConnection();
 
         return result;
     }
