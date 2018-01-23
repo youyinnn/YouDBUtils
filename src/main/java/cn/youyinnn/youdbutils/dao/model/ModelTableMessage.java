@@ -92,7 +92,7 @@ public class ModelTableMessage {
      * @param modelClassName the model class name
      * @return the model field list
      */
-    static ArrayList<String> getModelFieldList(String modelClassName) {
+    public static ArrayList<String> getModelFieldList(String modelClassName) {
         return allModelField.get(modelClassName);
     }
 

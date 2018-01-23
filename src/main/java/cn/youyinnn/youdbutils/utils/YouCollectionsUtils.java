@@ -54,9 +54,9 @@ public class YouCollectionsUtils {
      * @param field the query field list
      * @return the array list
      */
-    public static ArrayList getYouArrayList(Object ... field){
+    public static ArrayList<String> getYouArrayList(String ... field){
 
-        return new ArrayList(Arrays.asList(field));
+        return new ArrayList<>(Arrays.asList(field));
     }
 
 }
