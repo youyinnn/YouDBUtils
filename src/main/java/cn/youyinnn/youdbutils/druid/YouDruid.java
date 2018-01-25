@@ -14,11 +14,15 @@ import java.util.Collections;
 import java.util.Properties;
 
 /**
- * The type My druid.
+ * 在方法级层面上去配置Druid.
+ * 暂只支持两种数据源:MySQL和SQLite.
+ * 提供:
+ *  1.数据源的初始化方法,按照提供路径或者默认路径读取配置文件;
+ *  2.提供数据库连接的获取方法;
+ *  3.提供Druid持有的Log4j2Filter以及StatFilter两个过滤器的配置;
+ *  4.一些相关的零散的信息输出;
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /9/15
+ * @author youyinnn
  */
 public class YouDruid {
 

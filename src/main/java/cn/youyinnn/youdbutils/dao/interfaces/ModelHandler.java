@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * The interface Model handler.
+ * 提供了一系列方法在Model的层面上进行数据库操作.
  *
  * @param <T> the type parameter
  * @author youyinnn
@@ -34,7 +34,7 @@ public interface ModelHandler<T> {
      *
      * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
-     * @param separateMark   the separate mark
+     * @param separateMark   连接条件的连词
      * @return the list where a and b
      */
     ArrayList<T> getListWhere(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
@@ -44,7 +44,7 @@ public interface ModelHandler<T> {
      *
      * @param conditionsMap  需要定位更新记录的条件字段以及条件值组成的键值对
      * @param queryFieldList 为空则是select * 否则就在这指定需要查询的具体字段
-     * @param separateMark   the separate mark
+     * @param separateMark   连接条件的连词
      * @return the list where like and like
      */
     ArrayList<T> getListWhereLike(HashMap<String,Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
@@ -81,7 +81,7 @@ public interface ModelHandler<T> {
      *
      * @param conditionsMap  the conditions map
      * @param queryFieldList the query field list
-     * @param separateMark   the separate mark
+     * @param separateMark   连接条件的连词
      * @return the model
      */
     T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark);
@@ -91,7 +91,7 @@ public interface ModelHandler<T> {
      *
      * @param fieldName     the field name
      * @param conditionsMap the conditions map
-     * @param separateMark  the separate mark
+     * @param separateMark  连接条件的连词
      * @return the model field value
      */
     Object getModelFieldValue(String fieldName,HashMap<String, Object> conditionsMap,String separateMark);
@@ -101,7 +101,7 @@ public interface ModelHandler<T> {
      *
      * @param newFieldValuesMap the new field values map
      * @param conditionsMap     the conditions map
-     * @param separateMark      the separate mark
+     * @param separateMark      连接条件的连词
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
@@ -111,7 +111,7 @@ public interface ModelHandler<T> {
      * Delete model int.
      *
      * @param conditionsMap the conditions map
-     * @param separateMark  the separate mark
+     * @param separateMark  连接条件的连词
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */

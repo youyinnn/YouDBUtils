@@ -6,11 +6,10 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * The type Transaction callback filter.
+ * cglib代理过滤器.
+ * 这是事务的方法级别的过滤器.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /9/22
+ * @author youyinnn
  */
 public class TransactionMethodCallbackFilter implements CallbackFilter{
 

@@ -10,9 +10,9 @@ import java.util.Vector;
 /**
  * The type Annotation scanner.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /9/12
+ *
+ * @author youyinnn
+ *
  */
 public class ServiceScanner {
 
@@ -25,7 +25,7 @@ public class ServiceScanner {
         for (Class<?> aClass : serviceClassSet) {
             YouService annotation = aClass.getAnnotation(YouService.class);
             if (annotation != null){
-                YouServiceIocContainer.setYouService(aClass);
+                YouServiceIocContainer.registerYouService(aClass);
             }
         }
     }

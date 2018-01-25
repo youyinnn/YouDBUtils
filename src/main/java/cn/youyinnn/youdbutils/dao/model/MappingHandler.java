@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.Set;
 
 /**
- * The type Mapping handler.
+ * 处理各种modelField集的映射,返回映射后的集.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /10/26
+ * @author youyinnn
  */
 public class MappingHandler {
 
@@ -26,14 +24,14 @@ public class MappingHandler {
             return null;
         }
 
-        FieldMap fieldMap = ModelTableMessage.getFieldMap(modelName);
+        FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
 
-        if (fieldMap != null) {
+        if (fieldMapping != null) {
             ArrayList<String> result = new ArrayList<>();
 
             for (String mField : modelField) {
-                if (fieldMap.needToReplace(mField)) {
-                    result.add(fieldMap.getTableField(mField));
+                if (fieldMapping.needToReplace(mField)) {
+                    result.add(fieldMapping.getTableField(mField));
                 } else {
                     result.add(mField);
                 }
@@ -71,14 +69,14 @@ public class MappingHandler {
 
         HashMap<String, Object> tableField = new HashMap<>(10);
 
-        FieldMap fieldMap = ModelTableMessage.getFieldMap(modelName);
+        FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
 
         Set<String> mFieldSet = modelField.keySet();
 
         for (String mField : mFieldSet) {
             Object value = modelField.get(mField);
-            if (fieldMap.needToReplace(mField)) {
-                tableField.put(fieldMap.getTableField(mField), value);
+            if (fieldMapping.needToReplace(mField)) {
+                tableField.put(fieldMapping.getTableField(mField), value);
             } else {
                 tableField.put(mField,value);
             }
@@ -97,10 +95,10 @@ public class MappingHandler {
      */
     public static String mappingHandle(String modelName, String modelField) throws NoSuchFieldException {
 
-        FieldMap fieldMap = ModelTableMessage.getFieldMap(modelName);
+        FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
 
-        if (fieldMap.needToReplace(modelField)) {
-            return fieldMap.getTableField(modelField);
+        if (fieldMapping.needToReplace(modelField)) {
+            return fieldMapping.getTableField(modelField);
         }
 
         return modelField;

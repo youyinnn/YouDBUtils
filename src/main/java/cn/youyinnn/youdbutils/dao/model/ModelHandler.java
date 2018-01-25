@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/7
+ * 见接口注释
+ *
+ * @author youyinnn
  */
 public class ModelHandler<T> extends SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.ModelHandler<T>{
 

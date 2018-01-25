@@ -2,9 +2,8 @@ package cn.youyinnn.youdbutils.ioc;
 
 import cn.youyinnn.youdbutils.dao.YouDao;
 import cn.youyinnn.youdbutils.dao.YouDaoContainer;
-import cn.youyinnn.youdbutils.exceptions.AutowiredLimitedException;
+import cn.youyinnn.youdbutils.exceptions.AutowiredException;
 import cn.youyinnn.youdbutils.ioc.annotations.Autowired;
-import cn.youyinnn.youdbutils.ioc.annotations.Scope;
 import cn.youyinnn.youdbutils.ioc.annotations.Transaction;
 import cn.youyinnn.youdbutils.ioc.annotations.YouService;
 import cn.youyinnn.youdbutils.ioc.proxy.TransactionProxyGenerator;
@@ -17,11 +16,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * The type You service ioc container.
+ * YouService的Ioc容器管理.
+ * 分为单例容器和多例容器.
+ * 提供:
+ *  1.注册单例/多例YouService的方法;
+ *  2.获取YouService对象的方法;
+ *  3.查看当前Ioc内注册过的YouService的方法;
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /9/10
+ * @author youyinnn
  */
 public class YouServiceIocContainer {
 
@@ -30,7 +32,7 @@ public class YouServiceIocContainer {
 
     private YouServiceIocContainer() {}
 
-    private static void addSingletonYouService(ServiceIocBean serviceBean) throws AutowiredLimitedException {
+    private static void addSingletonYouService(ServiceIocBean serviceBean) {
 
         String className = serviceBean.getClassName();
         Class serviceClass = serviceBean.getServiceClass();
@@ -58,9 +60,9 @@ public class YouServiceIocContainer {
      *
      * @param serviceClass the service class
      * @return the you service
-     * @throws AutowiredLimitedException the autowired limited exception
+     * @throws AutowiredException the autowired limited exception
      */
-    public static Object getYouService(Class serviceClass) throws AutowiredLimitedException {
+    public static Object getYouService(Class serviceClass) throws AutowiredException {
 
         ServiceIocBean serviceIocBean = singletonServiceMap.get(serviceClass.getName());
 
@@ -76,14 +78,13 @@ public class YouServiceIocContainer {
                         return autowired(serviceClass.newInstance());
                     } catch (InstantiationException | IllegalAccessException e) {
                         e.printStackTrace();
+                        return null;
                     }
                 }
             }
         } else {
             return autowired(serviceIocBean.getSingleton());
         }
-
-        return null;
     }
 
     /**
@@ -134,9 +135,9 @@ public class YouServiceIocContainer {
      * 对于youService对象的自动装配方法 只装配Dao和YouService
      * @param youService
      * @return
-     * @throws AutowiredLimitedException
+     * @throws AutowiredException
      */
-    private static Object autowired(Object youService) throws AutowiredLimitedException {
+    private static Object autowired(Object youService) throws AutowiredException {
         // Autowired实现 只接受YouDao和YouService的自动装配
         ArrayList<Field> declaredFields = ReflectionUtils.getDeclaredFields(youService, Autowired.class);
         for (Field declaredField : declaredFields) {
@@ -148,7 +149,7 @@ public class YouServiceIocContainer {
                     YouDao autowiredDao = YouDaoContainer.getDao(type);
                     ReflectionUtils.setFieldValue(youService,declaredField.getName(),autowiredDao);
                 } else {
-                    throw new AutowiredLimitedException("不支持的自动装配类型：["+type.getSimpleName()+" "+declaredField.getName()+"].");
+                    throw new AutowiredException("不支持的自动装配类型：["+type.getSimpleName()+" "+declaredField.getName()+"].");
                 }
             } else {
                 Object autowiredDaoYouService = getYouService(type);
@@ -159,23 +160,19 @@ public class YouServiceIocContainer {
     }
 
     /**
-     * Sets you service.
+     * 注册YouService到Ioc容器中.
      *
      * @param aClass the a class
      */
-    static void setYouService(Class<?> aClass) {
-        Scope scope = aClass.getAnnotation(Scope.class);
+    static void registerYouService(Class<?> aClass) {
+        YouService youService = aClass.getAnnotation(YouService.class);
 
-        if (!YouServiceIocContainer.hasYouService(aClass)) {
+        if (!hasYouService(aClass)) {
             // 单例service
-            if (scope == null || scope.value().equals(ServiceIocBean.SINGLETON)){
-                try {
-                    YouServiceIocContainer.addSingletonYouService(new ServiceIocBean(aClass, ServiceIocBean.SINGLETON));
-                } catch (AutowiredLimitedException e) {
-                    e.printStackTrace();
-                }
+            if (youService.scope().equals(ServiceIocBean.SINGLETON)){
+                addSingletonYouService(new ServiceIocBean(aClass, ServiceIocBean.SINGLETON));
             } else {
-                YouServiceIocContainer.addPrototypeYouService(new ServiceIocBean(aClass, ServiceIocBean.PROTOTYPE));
+                addPrototypeYouService(new ServiceIocBean(aClass, ServiceIocBean.PROTOTYPE));
             }
         }
     }

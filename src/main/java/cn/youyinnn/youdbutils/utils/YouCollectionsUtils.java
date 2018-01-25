@@ -7,11 +7,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 /**
- * The type You collections utils.
+ * 提供扫描包下类的方法;
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /10/22
+ * @author youyinnn
  */
 public class YouCollectionsUtils {
 

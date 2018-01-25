@@ -10,9 +10,9 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/20
+ * 提供包与类扫描的功能.
+ *
+ * @author youyinnn
  */
 public class ClassUtils {
 

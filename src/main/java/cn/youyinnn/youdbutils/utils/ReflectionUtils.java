@@ -6,11 +6,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
 /**
- * The type Reflection utils.
+ * 提供反射相关方法.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /10/3
+ * @author youyinnn
  */
 public class ReflectionUtils {
 

@@ -3,11 +3,9 @@ package cn.youyinnn.youdbutils.druid.filter;
 import com.alibaba.druid.filter.stat.StatFilter;
 
 /**
- * The type You stat filter.
+ * 提供Druid的StatFilter控制接口.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /9/19
+ * @author youyinnn
  */
 public class YouStatFilter {
 

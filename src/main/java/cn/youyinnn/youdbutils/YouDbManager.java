@@ -13,9 +13,18 @@ import java.sql.SQLException;
 import java.util.Set;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/14
+ * 整合整个YouDBUtils的Feature的类.
+ * 该类持有:
+ *  1.YouDruid类;
+ *  2.两个Druid相关的过滤器;
+ *
+ * 改类提供:
+ *  1.数据源相关操作;
+ *  2.数据源监控相关操作;
+ *  3.Model/Service包下类的扫描方法;
+ *  4.一些相关的信息输出;
+ *
+ * @author youyinnn
  */
 public class YouDbManager {
 
@@ -83,11 +92,11 @@ public class YouDbManager {
         YouServiceIocContainer.showServiceMap();
     }
 
-    public static void printAllModelFieldMap() {
+    public static void printAllModelFieldMapping() {
         System.out.println(ModelTableMessage.getAllModelField());
     }
 
-    public static void printAllTableFieldMap() {
+    public static void printAllTableFieldMapping() {
         System.out.println(ModelTableMessage.getAllTableField());
     }
 

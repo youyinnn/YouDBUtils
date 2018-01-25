@@ -1,9 +1,13 @@
 package cn.youyinnn.youdbutils.ioc;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/27
+ * 每个YouService在Ioc容器中注册之前,需要将一些必要的信息整合起来;
+ * 对于每一个需要Ioc来管理的YouService来说,我们需要保存:
+ *  1.单例还是多例;
+ *  2.YouService的Class对象;
+ *  3.改YouService的单例对象(如果是);
+ *
+ * @author youyinnn
  */
 public class ServiceIocBean {
 
@@ -19,8 +23,6 @@ public class ServiceIocBean {
 
     private String                              scope;
 
-    private String                              className;
-
     private Object                              singleton;
 
     public Object getSingleton() {
@@ -34,7 +36,6 @@ public class ServiceIocBean {
     public ServiceIocBean(Class daoClass, String scope) {
         this.serviceClass = daoClass;
         this.scope = scope;
-        this.className = daoClass.getName();
     }
 
     public Class getServiceClass() {
@@ -46,7 +47,7 @@ public class ServiceIocBean {
     }
 
     public String getClassName() {
-        return className;
+        return serviceClass.getName();
     }
 
     @Override
@@ -54,7 +55,6 @@ public class ServiceIocBean {
         return "ServiceIocBean{" +
                 "serviceClass=" + serviceClass +
                 ", scope='" + scope + '\'' +
-                ", className='" + className + '\'' +
                 ", singleton=" + singleton +
                 '}';
     }

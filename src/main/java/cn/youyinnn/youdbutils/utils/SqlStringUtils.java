@@ -6,11 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The type Sql string utils.
+ * 提供生成基本sql语句的相关方法.
  *
- * @description:
- * @author: youyinnn
- * @date: 2017 /10/3
+ * @author youyinnn
  */
 public class SqlStringUtils {
 
@@ -101,7 +99,7 @@ public class SqlStringUtils {
      *
      * @param tableName       the table name
      * @param updateFieldSet  the update field set
-     * @param separateMark    the separate mark
+     * @param separateMark    连接条件的连词
      * @param conditionKeySet the condition key set
      * @return the update set where sql
      */
@@ -166,7 +164,7 @@ public class SqlStringUtils {
      * 获取一个用于删除的语句 只接收条件set 条件使用指定的separateMark连接
      *
      * @param tableName       the table name
-     * @param separateMark    the separate mark
+     * @param separateMark    连接条件的连词
      * @param conditionKeySet the condition key set
      * @return the delete sql
      */
@@ -205,7 +203,7 @@ public class SqlStringUtils {
      * 生成条件子串 这个子串使用?占位符来配合PreparedStatement查询 条件使用指定的separateMark连接
      *
      * @param conditionKeySet the condition key set
-     * @param separateMark    the separate mark
+     * @param separateMark    连接条件的连词
      * @return where sub str
      */
     public static String getWhereSubStr(Set<String> conditionKeySet, String separateMark) {
@@ -225,7 +223,7 @@ public class SqlStringUtils {
      * 生成模糊条件子串 条件使用指定的separateMark连接
      *
      * @param conditionsMap the conditions map
-     * @param separateMark  the separate mark
+     * @param separateMark  连接条件的连词
      * @return where like sub str
      */
     public static String getWhereLikeSubStr(HashMap<String,Object> conditionsMap, String separateMark) {

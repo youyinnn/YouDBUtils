@@ -5,9 +5,10 @@ import net.sf.cglib.proxy.CallbackFilter;
 import java.lang.reflect.Method;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/23
+ * cglib代理过滤器.
+ * 这是事务的类级别的过滤器.
+ *
+ * @author youyinnn
  */
 public class TransactionClassCallbackFilter implements CallbackFilter {
 

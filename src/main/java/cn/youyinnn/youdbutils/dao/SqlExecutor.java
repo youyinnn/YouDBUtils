@@ -10,9 +10,10 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/19
+ * 见接口
+ *
+ * @author youyinnn
+ *
  */
 public class SqlExecutor implements cn.youyinnn.youdbutils.dao.interfaces.SqlExecutor {
 

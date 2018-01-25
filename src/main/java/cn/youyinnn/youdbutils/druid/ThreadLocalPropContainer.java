@@ -9,9 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/20
+ * 提供线程级变量的保存容器.
+ *
+ * @author youyinnn
  */
 public class ThreadLocalPropContainer {
 
@@ -37,8 +37,7 @@ public class ThreadLocalPropContainer {
      */
     private static ThreadLocal<Boolean>             threadAllowNoneffectiveUpdate   = new ThreadLocal<>();
 
-    static void bindConn(Connection connection) {
-        System.out.println(Thread.currentThread());
+    private static void bindConn(Connection connection) {
         threadConnection.set(connection);
     }
 

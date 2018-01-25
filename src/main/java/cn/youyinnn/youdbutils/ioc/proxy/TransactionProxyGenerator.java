@@ -8,9 +8,13 @@ import net.sf.cglib.proxy.NoOp;
 import java.lang.annotation.Annotation;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/13
+ * 事务代理类的生成器.
+ * 生成过程:
+ *  1.首先获取类上的Transaction注解,如果类上没有该注解,则说明该类并不是所有方法都需要包装事务;
+ *  2.根据1的结果,标识一个布尔值isAll;
+ *  3.根据isAll,选择生成代理对象所使用的过滤器;
+ *
+ * @author youyinnn
  */
 public class TransactionProxyGenerator {
 

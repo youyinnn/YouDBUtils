@@ -3,9 +3,9 @@ package cn.youyinnn.youdbutils.dao;
 import java.util.HashMap;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/21
+ * 装载YouDao类的容器,提供方法获取YouDao.
+ *
+ * @author youyinnn
  */
 public class YouDaoContainer {
 

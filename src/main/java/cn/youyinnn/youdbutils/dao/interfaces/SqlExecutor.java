@@ -8,7 +8,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * The interface Sql execute handler.
+ * SqlExecutor类提供了一系列操作让用户执行基本的sql语句.
+ *
+ * 对于更新操作:
+ *  1.我们可以直接传入原生的sql语句.
+ *  2.我们可以传入带占位符的Update型sql语句,以及包含更新值的填充列表,
+ *  和条件值的填充列表,且条件列表允许为空.
+ *  3.我们可以只传入model的名字,需要更新的字段以及新值组成的键值对,
+ *  需要定位更新记录的条件字段以及条件值组成的键值对,连接条件的连词.
+ *
+ * 对于插入操作:
+ *  1.原生sql.
+ *  2.带占位符的sql,以及包含更新值的填充列表.
+ *  3.只传入model的名字,需要插入的字段名和值组成的键值对.
+ *
+ *  删除/查询操作同理.
  *
  * @author youyinnn
  */
@@ -40,7 +54,7 @@ public interface SqlExecutor {
      * @param modelName         需要更新的model类名 我们使用这个来对应数据表
      * @param newFieldValuesMap 需要更新的字段以及新值组成的键值对
      * @param conditionsMap     需要定位更新记录的条件字段以及条件值组成的键值对
-     * @param separateMark      the separate mark
+     * @param separateMark      连接条件的连词
      * @return 更新操作影响到的记录数 int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
@@ -99,7 +113,7 @@ public interface SqlExecutor {
      *
      * @param modelName     需要删除的model类名 我们使用这个来对应数据表
      * @param conditionsMap 需要定位删除记录的条件字段以及条件值组成的键值对
-     * @param separateMark  the separate mark
+     * @param separateMark  连接条件的连词
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
@@ -130,7 +144,7 @@ public interface SqlExecutor {
      * @param modelName      需要查询的model类名 我们使用这个来对应数据表
      * @param queryFieldList 需要查询的字段列名
      * @param conditionMap   需要定位查询记录的条件字段以及条件值组成的键值对
-     * @param separateMark   the separate mark
+     * @param separateMark   连接条件的连词
      * @return the result set
      * @throws SQLException the sql exceptions
      */

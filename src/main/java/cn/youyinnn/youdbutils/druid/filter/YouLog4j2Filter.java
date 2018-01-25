@@ -5,16 +5,15 @@ import com.alibaba.druid.filter.logging.Log4j2Filter;
 import java.lang.reflect.Method;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/18
+ * 提供Druid的Log4jFilter的控制接口.
+ *
+ * @author youyinnn
  */
 public class YouLog4j2Filter {
 
     /**
      * 下面这些开关常量名 除了STATEMENT_EXECUTABLE_SQL_LOG_ENABLE是false以外 其它默认都是true
      * */
-
     public static final String      CONNECTION_CONNECT_BEFORE_LOG_ENABLE        = "connectionConnectBeforeLogEnabled";
     public static final String      CONNECTION_CONNECT_AFTER_LOG_ENABLE         = "connectionConnectAfterLogEnabled";
     public static final String      CONNECTION_COMMIT_AFTER_LOG_ENABLE          = "connectionCommitAfterLogEnabled";

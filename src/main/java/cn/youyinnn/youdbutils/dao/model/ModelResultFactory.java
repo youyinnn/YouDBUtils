@@ -8,9 +8,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/3
+ * 处理ResultSet为Model类组成的List.
+ *
+ * @author youyinnn
  */
 public class ModelResultFactory<T> {
 
@@ -18,12 +18,12 @@ public class ModelResultFactory<T> {
 
     private ArrayList<String> fieldList;
 
-    private FieldMap fieldMap;
+    private FieldMapping fieldMapping;
 
     public ModelResultFactory(Class<T> modelClass) {
         this.modelClass = modelClass;
         this.fieldList = ModelTableMessage.getModelFieldList(modelClass.getSimpleName());
-        this.fieldMap = ModelTableMessage.getFieldMap(modelClass.getSimpleName());
+        this.fieldMapping = ModelTableMessage.getFieldMapping(modelClass.getSimpleName());
     }
 
     public ArrayList<T> getResultModelList(ResultSet resultSet) {
@@ -44,11 +44,9 @@ public class ModelResultFactory<T> {
 
         T instance = null;
         try {
-            if (fieldList == null || fieldMap == null) {
+            if (fieldList == null | fieldMapping == null) {
                 throw new ModelResultTransferException("Model：["+modelClass.getSimpleName()+"] " +
-                        "没有在ModelTableMessage中注册，无法使用ModelHandler去处理结果集，如果在单独使用YouDao的时候，" +
-                        "需要同时支持ModelHandler的服务，请在实例化YouDao对象之前使用YouDbManager.scanPackageForModel(packagePath)" +
-                        "方法注册所有的Model信息。");
+                        "没有在ModelTableMessage中注册。");
             }
             instance = modelClass.newInstance();
             for (String field : fieldList) {
@@ -60,8 +58,8 @@ public class ModelResultFactory<T> {
                 }
                 if (rsHasThisField) {
                     Object value;
-                    if (fieldMap.needToReplace(field)) {
-                        value = resultSet.getObject(fieldMap.getTableField(field));
+                    if (fieldMapping.needToReplace(field)) {
+                        value = resultSet.getObject(fieldMapping.getTableField(field));
                     } else {
                         value = resultSet.getObject(field);
                     }

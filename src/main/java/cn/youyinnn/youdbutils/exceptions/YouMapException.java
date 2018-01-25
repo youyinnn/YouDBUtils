@@ -1,9 +1,9 @@
 package cn.youyinnn.youdbutils.exceptions;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/22
+ * 构建Map的时候出现的异常,比如奇数个参数,比如键值位不是String类型.
+ *
+ * @author youyinnn
  */
 public class YouMapException extends Exception {
 

@@ -1,9 +1,9 @@
 package cn.youyinnn.youdbutils.exceptions;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/9/20
+ * 数据连接池的数据源没有初始化.
+ *
+ * @author youyinnn
  */
 public class NoDataSourceInitException extends Exception {
 

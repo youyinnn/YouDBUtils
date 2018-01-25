@@ -12,14 +12,22 @@ import java.util.ArrayList;
 import java.util.Set;
 
 /**
- * @description:
- * @author: youyinnn
- * @date: 2017/10/1
+ * 提供Model类和其类名对应的Table的扫描方法.
+ *
+ * 扫描Model类,将其field构成列表,注册进ModelTableMessage类中.
+ * 根据提供的Model名Set,扫描数据库,将对应的Table的列信息构成列表,注册进ModelTableMessage类中.
+ *
+ * @author youyinnn
  */
 public class ModelTableScanner {
 
     private ModelTableScanner(){}
 
+    /**
+     * Scan package for model.
+     *
+     * @param modelPackageNamePrefix the model package name prefix
+     */
     public static void scanPackageForModel(String modelPackageNamePrefix) {
 
         Set<Class<?>> modelClassSet = ClassUtils.findFileClass(modelPackageNamePrefix);
@@ -33,10 +41,16 @@ public class ModelTableScanner {
                 fieldList.add(declaredField.getName());
             }
 
-            ModelTableMessage.addModelField(aClass.getSimpleName(),fieldList);
+            ModelTableMessage.registerModelFieldMessage(aClass.getSimpleName(),fieldList);
         }
     }
 
+    /**
+     * Scan data base for table.
+     *
+     * @param modelNameSet the model name set
+     * @param connection   the connection
+     */
     public static void scanDataBaseForTable(Set<String> modelNameSet,Connection connection) {
         ResultSet tableColumn = null;
         try {
@@ -50,7 +64,7 @@ public class ModelTableScanner {
                     String columnName = tableColumn.getString("COLUMN_NAME");
                     fieldList.add(columnName);
                 }
-                ModelTableMessage.addTableField(modelName,fieldList);
+                ModelTableMessage.registerTableFieldMessage(modelName,fieldList);
             }
         } catch (SQLException e) {
             e.printStackTrace();
