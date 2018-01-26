@@ -62,8 +62,6 @@ public class YouLog4j2Filter {
     /**
      * 获取一个关闭了所有开关的Log4j2Filter
      *
-     * 特别需要注意的是STATEMENT_EXECUTABLE_SQL_LOG_ENABLE开关在这个时候是开着的
-     *
      * @return the log 4 j 2 filter with all off
      */
     public void setLog4j2FilterWithAllOff() {
@@ -73,9 +71,20 @@ public class YouLog4j2Filter {
     }
 
     /**
-     * 获取一个开启了所有开关的Log4j2Filter
+     * 获取一个关闭了所有开关的Log4j2Filter
+     * 但你可以指定sql执行的log是否开启
      *
-     * 特别需要注意的是STATEMENT_EXECUTABLE_SQL_LOG_ENABLE开关在这个时候是关着的
+     * @return the log 4 j 2 filter with all off
+     */
+    public void setLog4j2FilterWithAllOff(boolean sqlExecutor) {
+
+        setAllEnableSwitch(false);
+
+        setEnableSwitch(STATEMENT_EXECUTABLE_SQL_LOG_ENABLE, sqlExecutor);
+    }
+
+    /**
+     * 获取一个开启了所有开关的Log4j2Filter
      *
      * @return the log 4 j 2 filter
      */
@@ -83,6 +92,19 @@ public class YouLog4j2Filter {
 
         setAllEnableSwitch(true);
 
+    }
+
+    /**
+     * 获取一个开启了所有开关的Log4j2Filter
+     * 但你可以指定sql执行的log是否开启
+     *
+     * @return the log 4 j 2 filter
+     */
+    public void setLog4j2FilterWithAllOn(boolean sqlExecutor){
+
+        setAllEnableSwitch(true);
+
+        setEnableSwitch(STATEMENT_EXECUTABLE_SQL_LOG_ENABLE, sqlExecutor);
     }
 
     /**
@@ -196,7 +218,7 @@ public class YouLog4j2Filter {
         log4j2Filter.setStatementExecuteUpdateAfterLogEnabled(boo);
         log4j2Filter.setStatementExecuteBatchAfterLogEnabled(boo);
 
-        log4j2Filter.setStatementExecutableSqlLogEnable(!boo);
+        log4j2Filter.setStatementExecutableSqlLogEnable(boo);
 
         log4j2Filter.setStatementCloseAfterLogEnabled(boo);
 
