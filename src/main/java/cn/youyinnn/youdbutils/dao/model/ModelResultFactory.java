@@ -73,4 +73,12 @@ public class ModelResultFactory<T> {
         return instance;
     }
 
+    @Override
+    public String toString() {
+        return "ModelResultFactory{" +
+                "modelClass=" + modelClass +
+                ", fieldList=" + fieldList +
+                ", fieldMapping=" + fieldMapping +
+                '}';
+    }
 }
