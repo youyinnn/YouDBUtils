@@ -92,11 +92,11 @@ public class YouDbManager {
         YouServiceIocContainer.showServiceMap();
     }
 
-    public static void printAllModelFieldMapping() {
+    public static void printAllModelField() {
         System.out.println(ModelTableMessage.getAllModelField());
     }
 
-    public static void printAllTableFieldMapping() {
+    public static void printAllTableField() {
         System.out.println(ModelTableMessage.getAllTableField());
     }
 
