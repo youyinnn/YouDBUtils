@@ -4,10 +4,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cn.youyinnn</groupId>
-    <artifactId>YouDBUtils</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>com.github.youyinnn</groupId>
+    <artifactId>you-db-utils</artifactId>
+    <version>1.0.1</version>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url> https://github.com/youyinnn/YouDBUtils</url>
+        <connection>https://github.com/youyinnn/YouDBUtils.git</connection>
+        <developerConnection>https://youyinnn.github.io</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>youyinnn</name>
+            <email>youyinnn@gmail.com</email>
+            <url>https://youyinnn.github.io</url>
+        </developer>
+    </developers>
 
     <build>
         <plugins>
@@ -27,7 +54,7 @@
                     <finalName>you-dbutils</finalName>
                     <includes>
                         <!-- 打jar包时cn.youyinnn包下的内容 -->
-                        <include>**/cn/youyinnn/**/*.*</include>
+                        <include>**/com/github/youyinnn/**/*.*</include>
                     </includes>
                 </configuration>
             </plugin>
@@ -41,10 +68,12 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.20.0</version>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/cglib/cglib-nodep -->
@@ -78,9 +107,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-webapp</artifactId>
-            <version>RELEASE</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
+
     </dependencies>
 </project>

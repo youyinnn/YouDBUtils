@@ -1,4 +1,9 @@
 ## YouDBUtils
+[![Travis](https://img.shields.io/badge/version-1.0-green.svg)]()
+[![Travis](https://img.shields.io/badge/druid-1.1.5-brightgreen.svg)]()
+[![Travis](https://img.shields.io/badge/cglibnodep-3.2.5-brightgreen.svg)]()
+[![Travis](https://img.shields.io/badge/sqlitejdbc-3.20.0-brightgreen.svg)]()
+[![Travis](https://img.shields.io/badge/mysqlconnectorjava-6.0.5-brightgreen.svg)]()
 ##### 这是一个“自用”的数据库工具包。
 - - -
 TODO:
@@ -10,7 +15,11 @@ TODO:
 使用
 maven:
 ```xml
-
+        <dependency>
+            <groupId>com.github.youyinnn</groupId>
+            <artifactId>you-db-utils</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 ```
 - - -
 
@@ -104,7 +113,7 @@ maven:
 
 架构总览：
 
-- `package` cn.youyinnn.youdbutils
+- `package` com.youyinnn.youdbutils
   - `package` dao
     - `package` model
       - `class` ModelHandler

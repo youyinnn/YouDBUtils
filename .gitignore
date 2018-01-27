@@ -1,8 +1,7 @@
 .idea
 src/test/
 target
-src/main/java/cn/lab/
+src/main/java/com/lab/
 YouDBUtils.iml
 log
 test.db
-YouDBUtilsShowCase/
