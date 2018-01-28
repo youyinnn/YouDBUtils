@@ -38,7 +38,7 @@ maven:
 
 1、以alibaba的Druid为基础（拒绝DBCP、C3P0），支持代码控制Druid的一些功能，拒绝配置。
 
-2、仅支持MysSQL、SQLite（自用、轻巧）。
+2、仅支持MySQL、SQLite（自用、轻巧）。
 
 3、类似spring的控制反转，主要用于生成指定包下的DAO类的代理类（依赖cglib），让其具有事务特性，Ioc容器中以类名获取。
 
@@ -59,7 +59,7 @@ maven:
 ##### 依赖
 
 必须依赖：cglib、druid
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>cglib</groupId>
@@ -75,7 +75,7 @@ maven:
 </dependencies>
 ```
 可选依赖：sqlite、mysql、lo4j2
-```
+```xml
 <dependencies>
     <dependency>
         <groupId>org.xerial</groupId>
