@@ -141,6 +141,10 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         try {
             ResultSet resultSet = executeStatementQuery(sql);
 
+            if (resultSet.isBeforeFirst()) {
+                resultSet.next();
+            }
+
             resultModel = modelResultFactory.getResultModel(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
@@ -153,6 +157,10 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         T resultModel = null;
         try {
             ResultSet resultSet = executePreparedStatementQuery(sql,conditionValues);
+
+            if (resultSet.isBeforeFirst()) {
+                resultSet.next();
+            }
 
             resultModel = modelResultFactory.getResultModel(resultSet);
         } catch (Exception e) {
@@ -171,6 +179,11 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
 
             ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap,separateMark);
+
+            if (resultSet.isBeforeFirst()) {
+                resultSet.next();
+            }
+
             resultModel = modelResultFactory.getResultModel(resultSet);
         } catch (Exception e) {
             e.printStackTrace();
