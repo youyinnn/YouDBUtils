@@ -188,6 +188,11 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
             fieldName = MappingHandler.mappingHandle(modelName,fieldName);
 
             ResultSet resultSet = executePreparedStatementQuery(modelName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap,separateMark);
+
+            if (resultSet.isBeforeFirst()) {
+                resultSet.next();
+            }
+
             value = resultSet.getObject(fieldName);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,9 +1,7 @@
 ## YouDBUtils
-[![Travis](https://img.shields.io/badge/version-1.0.2-green.svg)]()
+[![Travis](https://img.shields.io/badge/version-1.1.0-green.svg)]()
 [![Travis](https://img.shields.io/badge/druid-1.1.5-brightgreen.svg)]()
 [![Travis](https://img.shields.io/badge/cglibnodep-3.2.5-brightgreen.svg)]()
-[![Travis](https://img.shields.io/badge/sqlitejdbc-3.20.0-brightgreen.svg)]()
-[![Travis](https://img.shields.io/badge/mysqlconnectorjava-6.0.5-brightgreen.svg)]()
 ##### 这是一个“自用”的数据库工具包。
 - - -
 TODO:
@@ -20,7 +18,7 @@ maven:
         <dependency>
             <groupId>com.github.youyinnn</groupId>
             <artifactId>you-db-utils</artifactId>
-            <version>1.0.2</version>
+            <version>1.1.0</version>
         </dependency>
 ```
 - - -
