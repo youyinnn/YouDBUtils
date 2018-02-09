@@ -1,16 +1,14 @@
 package com.github.youyinnn.youdbutils.ioc;
 
-import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
-import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
-import com.github.youyinnn.youdbutils.ioc.proxy.TransactionProxyGenerator;
 import com.github.youyinnn.youdbutils.dao.YouDao;
 import com.github.youyinnn.youdbutils.dao.YouDaoContainer;
 import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.annotations.Autowired;
+import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
+import com.github.youyinnn.youdbutils.ioc.proxy.TransactionProxyGenerator;
 import com.github.youyinnn.youdbutils.utils.ReflectionUtils;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,24 +31,12 @@ public class YouServiceIocContainer {
     private YouServiceIocContainer() {}
 
     private static void addSingletonYouService(ServiceIocBean serviceBean) {
-
         String className = serviceBean.getClassName();
-        Class serviceClass = serviceBean.getServiceClass();
-        if (hasTransactionAnnotation(serviceClass)) {
-            serviceBean.setSingleton(TransactionProxyGenerator.getProxyObject(serviceBean.getServiceClass()));
-        } else {
-            try {
-                serviceBean.setSingleton(serviceClass.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }
-
+        serviceBean.setSingleton(TransactionProxyGenerator.getProxyObject(serviceBean.getServiceClass()));
         singletonServiceMap.put(className,serviceBean);
     }
 
     private static void addPrototypeYouService(ServiceIocBean serviceBean) {
-
         String className = serviceBean.getClassName();
         prototypeServiceMap.put(className,serviceBean);
     }
@@ -63,24 +49,13 @@ public class YouServiceIocContainer {
      * @throws AutowiredException the autowired limited exception
      */
     public static Object getYouService(Class serviceClass) throws AutowiredException {
-
         ServiceIocBean serviceIocBean = singletonServiceMap.get(serviceClass.getName());
-
         if (serviceIocBean == null) {
             serviceIocBean = prototypeServiceMap.get(serviceClass.getName());
             if (serviceIocBean == null) {
                 return null;
             } else {
-                if (hasTransactionAnnotation(serviceClass)) {
-                    return autowired(TransactionProxyGenerator.getProxyObject(serviceIocBean.getServiceClass()));
-                } else {
-                    try {
-                        return autowired(serviceClass.newInstance());
-                    } catch (InstantiationException | IllegalAccessException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
+                return autowired(TransactionProxyGenerator.getProxyObject(serviceIocBean.getServiceClass()));
             }
         } else {
             return autowired(serviceIocBean.getSingleton());
@@ -96,29 +71,8 @@ public class YouServiceIocContainer {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());
         }
         System.out.println("[ singleton service ]:");
-
         for (Map.Entry<String, ServiceIocBean> stringIocBeanEntry : singletonServiceMap.entrySet()) {
             System.out.println(stringIocBeanEntry.getKey()+" : "+stringIocBeanEntry.getValue());
-        }
-    }
-
-    /**
-     * 检查该YouService是否在类上或者方法中拥有Transaction注释 也即这个方法决定是否生成代理bean还是原生bean
-     * @param youService
-     * @return
-     */
-    private static boolean hasTransactionAnnotation(Class youService) {
-
-        if (youService.getAnnotation(Transaction.class) == null) {
-            Method[] declaredMethods = youService.getDeclaredMethods();
-            for (Method declaredMethod : declaredMethods) {
-                if (declaredMethod.getAnnotation(Transaction.class) != null){
-                    return true;
-                }
-            }
-            return false;
-        } else {
-            return true;
         }
     }
 
@@ -166,7 +120,6 @@ public class YouServiceIocContainer {
      */
     static void registerYouService(Class<?> aClass) {
         YouService youService = aClass.getAnnotation(YouService.class);
-
         if (!hasYouService(aClass)) {
             // 单例service
             if (youService.scope().equals(ServiceIocBean.SINGLETON)){

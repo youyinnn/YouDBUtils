@@ -63,6 +63,7 @@ public class ThreadLocalPropContainer {
         if (connection == null) {
             try {
                 connection = YouDbManager.youDruid.getCurrentDataSourceConn();
+                System.out.println("Request conn:["+ connection + "].");
                 bindConn(connection);
             } catch (SQLException | NoDataSourceInitException e) {
                 e.printStackTrace();
@@ -97,6 +98,7 @@ public class ThreadLocalPropContainer {
             }
             if (connection != null) {
                 connection.close();
+                System.out.println("Close conn:["+ connection + "].");
             }
         } catch (SQLException e) {
             e.printStackTrace();

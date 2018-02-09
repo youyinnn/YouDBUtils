@@ -13,7 +13,7 @@ import java.sql.Connection;
  * 过程完全在一条数据库连接下进行.
  * 过程:
  *  1.先在方法上扫描Transaction注解,若没有则去方法所属的类上扫描;
- *  2.获取Transaction注解上的allowNoneffectiveUpdate标识;
+ *  2.获取Transaction注解上的allowNoneffectiveUpdate标识, 若不存在注解,则使用默认值;
  *  3.invoke方法;
  *  4.查询当前线程的回滚flag,若需要回滚,则回滚事务;
  *  5.提交事务,关闭连接,移除线程绑定变量;
@@ -28,13 +28,12 @@ public class TransactionInterceptor implements MethodInterceptor{
         Connection conn = ThreadLocalPropContainer.getThreadConnection();
         conn.setAutoCommit(false);
 
-        Transaction transactionA = method.getAnnotation(Transaction.class);
-        if (transactionA == null) {
-            Class<?> declaringClass = method.getDeclaringClass();
-            transactionA = declaringClass.getAnnotation(Transaction.class);
-        }
+        Transaction transactionA = method.getAnnotation(Transaction.class)  != null ?
+                method.getAnnotation(Transaction.class) : method.getDeclaringClass().getAnnotation(Transaction.class);
 
-        ThreadLocalPropContainer.setNoneffectiveUpdateFlag(transactionA.allowNoneffectiveUpdate());
+        boolean allowNoneffectiveUpdate = transactionA == null ? true : transactionA.allowNoneffectiveUpdate();
+
+        ThreadLocalPropContainer.setNoneffectiveUpdateFlag(allowNoneffectiveUpdate);
 
         Object result = methodProxy.invokeSuper(o,objects);
 
@@ -44,7 +43,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         conn.commit();
-        conn.close();
+        ThreadLocalPropContainer.release(null, null, conn);
 
         ThreadLocalPropContainer.removeNoneffectiveUpdateFlag();
         ThreadLocalPropContainer.removeRollbackFlag();
