@@ -2,6 +2,7 @@ package com.github.youyinnn.youdbutils;
 
 import com.github.youyinnn.youdbutils.dao.model.ModelTableMessage;
 import com.github.youyinnn.youdbutils.dao.model.ModelTableScanner;
+import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
 import com.github.youyinnn.youdbutils.ioc.ServiceScanner;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.druid.YouDruid;
@@ -30,11 +31,13 @@ public class YouDbManager {
 
     public static YouDruid                          youDruid                        = new YouDruid();
 
+    private static boolean                          modelScanned                     = false;
+
     private static YouLog4j2Filter                  youLog4j2Filter ;
 
     private static YouStatFilter                    youStatFilter ;
 
-    public static YouLog4j2Filter youLog4j2Filter() {
+    public static YouLog4j2Filter youLog4j2Filter() throws Log4j2FilterException {
         checkLog4j2Filter();
         return youLog4j2Filter;
     }
@@ -44,7 +47,10 @@ public class YouDbManager {
         return youStatFilter;
     }
 
-    private static void checkLog4j2Filter() {
+    private static void checkLog4j2Filter() throws Log4j2FilterException {
+        if (modelScanned) {
+            throw new Log4j2FilterException("Log4j2Filter必须在扫描model之前进行注册!");
+        }
         if (youLog4j2Filter == null) {
             youLog4j2Filter = new YouLog4j2Filter();
         }
@@ -56,7 +62,7 @@ public class YouDbManager {
         }
     }
 
-    public static void signInLog4j2ProxyFilter() {
+    public static void signInLog4j2ProxyFilter() throws Log4j2FilterException {
         checkLog4j2Filter();
         youDruid.setProxyFilters(youLog4j2Filter.getLog4j2Filter());
     }
@@ -86,6 +92,7 @@ public class YouDbManager {
             e.printStackTrace();
         }
         ModelTableMessage.setFieldMapping();
+        modelScanned = true;
     }
 
     public static void showService() {

@@ -1,6 +1,6 @@
 ## YouDBUtils
-[![Travis](https://img.shields.io/badge/version-1.2.1-green.svg)]()
-[![Travis](https://img.shields.io/badge/druid-1.1.5-brightgreen.svg)]()
+[![Travis](https://img.shields.io/badge/version-1.2.2-green.svg)]()
+[![Travis](https://img.shields.io/badge/druid-1.1.8-brightgreen.svg)]()
 [![Travis](https://img.shields.io/badge/cglibnodep-3.2.5-brightgreen.svg)]()
 ##### 这是一个“自用”的数据库工具包。
 - - -
@@ -18,7 +18,7 @@ maven:
         <dependency>
             <groupId>com.github.youyinnn</groupId>
             <artifactId>you-db-utils</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2</version>
         </dependency>
 ```
 - - -
@@ -58,7 +58,7 @@ maven:
 
 ##### 依赖
 
-必须依赖：cglib、druid
+包含依赖：cglib、druid
 ```xml
 <dependencies>
     <dependency>
@@ -70,7 +70,7 @@ maven:
     <dependency>
         <groupId>com.alibaba</groupId>
         <artifactId>druid</artifactId>
-        <version>RELEASE</version>
+        <version>1.1.8</version>
     </dependency>
 </dependencies>
 ```
