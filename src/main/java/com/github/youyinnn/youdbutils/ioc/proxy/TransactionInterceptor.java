@@ -25,13 +25,20 @@ public class TransactionInterceptor implements MethodInterceptor{
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
+        String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
+        long callNano = System.nanoTime();
+        if (transactionRootServiceMethodName == null) {
+            transactionRootServiceMethodName = method.getName() + callNano;
+            ThreadLocalPropContainer.bindTransactionRootServiceMethodName(transactionRootServiceMethodName);
+        }
+
         Connection conn = ThreadLocalPropContainer.getThreadConnection();
         conn.setAutoCommit(false);
 
         Transaction transactionA = method.getAnnotation(Transaction.class)  != null ?
                 method.getAnnotation(Transaction.class) : method.getDeclaringClass().getAnnotation(Transaction.class);
 
-        boolean allowNoneffectiveUpdate = transactionA == null ? true : transactionA.allowNoneffectiveUpdate();
+        boolean allowNoneffectiveUpdate = transactionA == null || transactionA.allowNoneffectiveUpdate();
 
         ThreadLocalPropContainer.setNoneffectiveUpdateFlag(allowNoneffectiveUpdate);
 
@@ -43,11 +50,14 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         conn.commit();
-        ThreadLocalPropContainer.release(null, null, conn);
 
-        ThreadLocalPropContainer.removeNoneffectiveUpdateFlag();
-        ThreadLocalPropContainer.removeRollbackFlag();
-        ThreadLocalPropContainer.removeThreadConnection();
+        if (transactionRootServiceMethodName.equalsIgnoreCase(method.getName() + callNano)) {
+            ThreadLocalPropContainer.release(null, null, conn);
+            ThreadLocalPropContainer.removeNoneffectiveUpdateFlag();
+            ThreadLocalPropContainer.removeRollbackFlag();
+            ThreadLocalPropContainer.removeThreadConnection();
+            ThreadLocalPropContainer.removeTransactionRootServiceMethodName();
+        }
 
         return result;
     }
