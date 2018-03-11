@@ -13,39 +13,114 @@ public class YouLog4j2Filter {
 
     /**
      * 下面这些开关常量名 除了STATEMENT_EXECUTABLE_SQL_LOG_ENABLE是false以外 其它默认都是true
-     * */
+     */
     public static final String      CONNECTION_CONNECT_BEFORE_LOG_ENABLE        = "connectionConnectBeforeLogEnabled";
+    /**
+     * The constant CONNECTION_CONNECT_AFTER_LOG_ENABLE.
+     */
     public static final String      CONNECTION_CONNECT_AFTER_LOG_ENABLE         = "connectionConnectAfterLogEnabled";
+    /**
+     * The constant CONNECTION_COMMIT_AFTER_LOG_ENABLE.
+     */
     public static final String      CONNECTION_COMMIT_AFTER_LOG_ENABLE          = "connectionCommitAfterLogEnabled";
+    /**
+     * The constant CONNECTION_ROLLBACK_AFTER_LOG_ENABLE.
+     */
     public static final String      CONNECTION_ROLLBACK_AFTER_LOG_ENABLE        = "connectionRollbackAfterLogEnabled";
+    /**
+     * The constant CONNECTION_CLOSE_AFTER_LOG_ENABLE.
+     */
     public static final String      CONNECTION_CLOSE_AFTER_LOG_ENABLE           = "connectionCloseAfterLogEnabled";
 
+    /**
+     * The constant STATEMENT_CREATE_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_CREATE_AFTER_LOG_ENABLE           = "statementCreateAfterLogEnabled";
+    /**
+     * The constant STATEMENT_PREPARE_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_PREPARE_AFTER_LOG_ENABLE          = "statementPrepareAfterLogEnabled";
+    /**
+     * The constant STATEMENT_PREPARE_CALL_AFTER_ENABLE.
+     */
     public static final String      STATEMENT_PREPARE_CALL_AFTER_ENABLE         = "statementPrepareCallAfterLogEnabled";
 
+    /**
+     * The constant STATEMENT_EXECUTE_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_EXECUTE_AFTER_LOG_ENABLE          = "statementExecuteAfterLogEnabled";
+    /**
+     * The constant STATEMENT_EXECUTE_QUERY_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_EXECUTE_QUERY_AFTER_LOG_ENABLE    = "statementExecuteQueryAfterLogEnabled";
+    /**
+     * The constant STATEMENT_EXECUTE_UPDATE_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_EXECUTE_UPDATE_AFTER_LOG_ENABLE   = "statementExecuteUpdateAfterLogEnabled";
+    /**
+     * The constant STATEMENT_EXECUTE_BATCH_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_EXECUTE_BATCH_AFTER_LOG_ENABLE    = "statementExecuteBatchAfterLogEnabled";
 
+    /**
+     * The constant STATEMENT_EXECUTABLE_SQL_LOG_ENABLE.
+     */
     public static final String      STATEMENT_EXECUTABLE_SQL_LOG_ENABLE        = "statementExecutableSqlLogEnable";
 
+    /**
+     * The constant STATEMENT_CLOSE_AFTER_LOG_ENABLE.
+     */
     public static final String      STATEMENT_CLOSE_AFTER_LOG_ENABLE            = "statementCloseAfterLogEnabled";
 
+    /**
+     * The constant STATEMENT_PARAMETER_CLEAR_LOG_ENABLE.
+     */
     public static final String      STATEMENT_PARAMETER_CLEAR_LOG_ENABLE        = "statementParameterClearLogEnable";
+    /**
+     * The constant STATEMENT_PARAMETERSET_LOG_ENABLE.
+     */
     public static final String      STATEMENT_PARAMETERSET_LOG_ENABLE           = "statementParameterSetLogEnabled";
 
+    /**
+     * The constant RESULTSET_NEXT_AFTER_LOG_ENABLE.
+     */
     public static final String      RESULTSET_NEXT_AFTER_LOG_ENABLE             = "resultSetNextAfterLogEnabled";
+    /**
+     * The constant RESULTSET_OPEN_AFTER_LOG_ENABLE.
+     */
     public static final String      RESULTSET_OPEN_AFTER_LOG_ENABLE             = "resultSetOpenAfterLogEnabled";
+    /**
+     * The constant RESULTSET_CLOSE_AFTER_LOG_ENABLE.
+     */
     public static final String      RESULTSET_CLOSE_AFTER_LOG_ENABLE            = "resultSetCloseAfterLogEnabled";
 
+    /**
+     * The constant DATASOURCE_LOG_ENABLE.
+     */
     public static final String      DATASOURCE_LOG_ENABLE                       = "dataSourceLogEnabled";
+    /**
+     * The constant CONNECTION_LOG_ENABLE.
+     */
     public static final String      CONNECTION_LOG_ENABLE                       = "connectionLogEnabled";
+    /**
+     * The constant CONNECTION_LOG_ERROR_ENABLE.
+     */
     public static final String      CONNECTION_LOG_ERROR_ENABLE                 = "connectionLogErrorEnabled";
+    /**
+     * The constant STATEMENT_LOG_ENABLED.
+     */
     public static final String      STATEMENT_LOG_ENABLED                       = "statementLogEnabled";
+    /**
+     * The constant STETEMENT_LOG_ERROR_ENABLE.
+     */
     public static final String      STETEMENT_LOG_ERROR_ENABLE                  = "statementLogErrorEnabled";
+    /**
+     * The constant RESULTSET_LOG_ENABLE.
+     */
     public static final String      RESULTSET_LOG_ENABLE                        = "resultSetLogEnabled";
+    /**
+     * The constant RESULTSET_LOG_ERROR_ENABLE.
+     */
     public static final String      RESULTSET_LOG_ERROR_ENABLE                  = "resultSetLogErrorEnabled";
 
     private Log4j2Filter            log4j2Filter                                = new Log4j2Filter();
@@ -63,14 +138,14 @@ public class YouLog4j2Filter {
      * 获取一个关闭了所有开关的Log4j2Filter
      */
     public void setLog4j2FilterWithAllOff() {
-
         setAllEnableSwitch(false);
-
     }
 
     /**
      * 获取一个关闭了所有开关的Log4j2Filter
      * 但你可以指定sql执行的log是否开启
+     *
+     * @param sqlExecutor the sql executor
      */
     public void setLog4j2FilterWithAllOff(boolean sqlExecutor) {
 
@@ -83,14 +158,14 @@ public class YouLog4j2Filter {
      * 获取一个开启了所有开关的Log4j2Filter
      */
     public void setLog4j2FilterWithAllOn(){
-
         setAllEnableSwitch(true);
-
     }
 
     /**
      * 获取一个开启了所有开关的Log4j2Filter
      * 但你可以指定sql执行的log是否开启
+     *
+     * @param sqlExecutor the sql executor
      */
     public void setLog4j2FilterWithAllOn(boolean sqlExecutor){
 
