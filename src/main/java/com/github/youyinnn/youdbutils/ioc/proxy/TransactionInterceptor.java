@@ -1,9 +1,12 @@
 package com.github.youyinnn.youdbutils.ioc.proxy;
 
+import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
+import com.github.youyinnn.youdbutils.utils.LogUtils;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -22,6 +25,8 @@ import java.sql.Connection;
  */
 public class TransactionInterceptor implements MethodInterceptor{
 
+    private static Logger connectionLog = LogUtils.getConnectionLog();
+
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
 
@@ -33,6 +38,11 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         Connection conn = ThreadLocalPropContainer.getThreadConnection();
+        if (YouDbManager.isEmbeddedLogEnabled()) {
+            connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+                    ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+                    method.getName());
+        }
         conn.setAutoCommit(false);
 
         Transaction transactionA = method.getAnnotation(Transaction.class)  != null ?
@@ -52,11 +62,12 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.commit();
 
         if (transactionRootServiceMethodName.equalsIgnoreCase(method.getName() + callNano)) {
+            if (YouDbManager.isEmbeddedLogEnabled()) {
+                connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+                        ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+                        method.getName());
+            }
             ThreadLocalPropContainer.release(null, null, conn);
-            ThreadLocalPropContainer.removeNoneffectiveUpdateFlag();
-            ThreadLocalPropContainer.removeRollbackFlag();
-            ThreadLocalPropContainer.removeThreadConnection();
-            ThreadLocalPropContainer.removeTransactionRootServiceMethodName();
         }
 
         return result;

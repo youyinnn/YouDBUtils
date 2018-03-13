@@ -2,13 +2,13 @@ package com.github.youyinnn.youdbutils;
 
 import com.github.youyinnn.youdbutils.dao.model.ModelTableMessage;
 import com.github.youyinnn.youdbutils.dao.model.ModelTableScanner;
-import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
-import com.github.youyinnn.youdbutils.ioc.ServiceScanner;
-import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 import com.github.youyinnn.youdbutils.druid.YouDruid;
 import com.github.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
 import com.github.youyinnn.youdbutils.druid.filter.YouStatFilter;
-import com.github.youyinnn.youdbutils.exceptions.NoDataSourceInitException;
+import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
+import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
+import com.github.youyinnn.youdbutils.ioc.ServiceScanner;
+import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 
 import java.sql.SQLException;
 import java.util.Set;
@@ -31,7 +31,9 @@ public class YouDbManager {
 
     public static YouDruid                          youDruid                        = new YouDruid();
 
-    private static boolean                          modelScanned                     = false;
+    private static boolean                          modelScanned                    = false;
+
+    private static boolean                          embeddedLogEnabled              = false;
 
     private static YouLog4j2Filter                  youLog4j2Filter ;
 
@@ -88,11 +90,19 @@ public class YouDbManager {
         Set<String> modelNameSet = ModelTableMessage.getAllModelNameSet();
         try {
             ModelTableScanner.scanDataBaseForTable(modelNameSet,youDruid.getCurrentDataSourceConn());
-        } catch (SQLException | NoDataSourceInitException e) {
+        } catch (SQLException | DataSourceInitException e) {
             e.printStackTrace();
         }
         ModelTableMessage.setFieldMapping();
         modelScanned = true;
+    }
+
+    public static void enableEmbeddedLog() {
+        embeddedLogEnabled = true;
+    }
+
+    public static boolean isEmbeddedLogEnabled() {
+        return embeddedLogEnabled;
     }
 
     public static void showService() {

@@ -146,7 +146,7 @@ maven:
     ```
   - `package` druid
     - `package` exceptions
-      - `class` NoDataSourceInitException
+      - `class` DataSourceInitException
       ```
       描述数据源没有初始化时的异常
       ```

@@ -5,9 +5,9 @@ package com.github.youyinnn.youdbutils.exceptions;
  *
  * @author youyinnn
  */
-public class NoDataSourceInitException extends Exception {
+public class DataSourceInitException extends Exception {
 
-    public NoDataSourceInitException(String msg) {
+    public DataSourceInitException(String msg) {
         super(msg);
     }
 

@@ -6,7 +6,7 @@
 
     <groupId>com.github.youyinnn</groupId>
     <artifactId>you-db-utils</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -97,19 +97,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>2.9.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>2.9.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.jfinal</groupId>
             <artifactId>jfinal</artifactId>
             <version>3.2</version>
@@ -119,8 +106,25 @@
         <dependency>
             <groupId>com.github.youyinnn</groupId>
             <artifactId>you-web-utils</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
+            <version>1.4</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>fastjson</artifactId>
+                    <groupId>com.alibaba</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>java-jwt</artifactId>
+                    <groupId>com.auth0</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>cos</artifactId>
+                    <groupId>com.jfinal</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>javax.servlet-api</artifactId>
+                    <groupId>javax.servlet</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
     </dependencies>

@@ -1,9 +1,13 @@
 package com.github.youyinnn.youdbutils.druid;
 
-import com.github.youyinnn.youdbutils.exceptions.NoDataSourceInitException;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
+import com.alibaba.druid.pool.DruidPooledConnection;
+import com.github.youyinnn.youdbutils.YouDbManager;
+import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
+import com.github.youyinnn.youdbutils.utils.LogUtils;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,15 +35,13 @@ public class YouDruid {
     private static final String             MYSQL_TYPE                  = "mysql";
     private static final String             SQLITE_TYPE                 = "sqlite";
 
+    private static Logger                   druidLog                    = LogUtils.getDruidLog();
+
     private static DruidDataSource          currentDataSource ;
 
-    public Connection getCurrentDataSourceConn() throws SQLException, NoDataSourceInitException {
-
-        if (currentDataSource == null){
-            throw new NoDataSourceInitException("没有初始化数据源！");
-        }
-
-        return currentDataSource.getConnection();
+    public Connection getCurrentDataSourceConn() throws SQLException, DataSourceInitException {
+        DruidPooledConnection connection = currentDataSource.getConnection();
+        return connection;
     }
 
     /**
@@ -111,23 +113,23 @@ public class YouDruid {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            try {
+                currentDataSource.init();
+                if (YouDbManager.isEmbeddedLogEnabled()) {
+                    druidLog.info("数据源初始化成功, Url:{}", currentDataSource.getUrl());
+                }
+            } catch (SQLException e) {
+                if (YouDbManager.isEmbeddedLogEnabled()) {
+                    druidLog.error("数据源初始化失败, Url:{}", currentDataSource.getUrl());
+                }
+                System.exit(0);
+            }
         } else {
             try {
-                throw new NoDataSourceInitException("路径["+propertiesFile+"]下没有数据源配置文件可加载！");
-            } catch (NoDataSourceInitException e) {
+                throw new DataSourceInitException("路径["+propertiesFile+"]下没有数据源配置文件可加载！");
+            } catch (DataSourceInitException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * Init.
-     */
-    public void init(){
-        try {
-            currentDataSource.init();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
