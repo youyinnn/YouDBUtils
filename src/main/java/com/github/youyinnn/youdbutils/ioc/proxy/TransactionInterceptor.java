@@ -1,11 +1,11 @@
 package com.github.youyinnn.youdbutils.ioc.proxy;
 
 import com.github.youyinnn.youdbutils.YouDbManager;
-import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
-import com.github.youyinnn.youdbutils.utils.LogUtils;
+import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -25,7 +25,7 @@ import java.sql.Connection;
  */
 public class TransactionInterceptor implements MethodInterceptor{
 
-    private static Logger connectionLog = LogUtils.getConnectionLog();
+    private static Logger connectionLog = LogManager.getLogger("$db_connection");
 
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {

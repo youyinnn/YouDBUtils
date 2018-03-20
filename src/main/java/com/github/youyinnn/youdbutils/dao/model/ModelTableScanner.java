@@ -1,7 +1,7 @@
 package com.github.youyinnn.youdbutils.dao.model;
 
-import com.github.youyinnn.youdbutils.utils.ClassUtils;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
+import com.github.youyinnn.youwebutils.third.ClassUtils;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;

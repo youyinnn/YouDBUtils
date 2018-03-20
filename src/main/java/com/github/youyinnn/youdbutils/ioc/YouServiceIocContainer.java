@@ -6,7 +6,7 @@ import com.github.youyinnn.youdbutils.exceptions.AutowiredException;
 import com.github.youyinnn.youdbutils.ioc.annotations.Autowired;
 import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
 import com.github.youyinnn.youdbutils.ioc.proxy.TransactionProxyGenerator;
-import com.github.youyinnn.youdbutils.utils.ReflectionUtils;
+import com.github.youyinnn.youwebutils.third.ReflectionUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

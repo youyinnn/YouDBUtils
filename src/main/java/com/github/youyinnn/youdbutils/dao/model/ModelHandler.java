@@ -3,9 +3,9 @@ package com.github.youyinnn.youdbutils.dao.model;
 import com.github.youyinnn.youdbutils.dao.SqlExecutor;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import com.github.youyinnn.youdbutils.exceptions.NoneffectiveUpdateExecuteException;
-import com.github.youyinnn.youdbutils.utils.ReflectionUtils;
+import com.github.youyinnn.youwebutils.third.ReflectionUtils;
 import com.github.youyinnn.youdbutils.utils.SqlStringUtils;
-import com.github.youyinnn.youdbutils.utils.YouCollectionsUtils;
+import com.github.youyinnn.youwebutils.third.YouCollectionsUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

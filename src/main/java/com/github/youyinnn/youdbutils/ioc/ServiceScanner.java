@@ -1,7 +1,7 @@
 package com.github.youyinnn.youdbutils.ioc;
 
 import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
-import com.github.youyinnn.youdbutils.utils.ClassUtils;
+import com.github.youyinnn.youwebutils.third.ClassUtils;
 
 import java.lang.reflect.Field;
 import java.util.Set;

@@ -2,7 +2,7 @@ package com.github.youyinnn.youdbutils.dao.model;
 
 
 import com.github.youyinnn.youdbutils.exceptions.ModelResultTransferException;
-import com.github.youyinnn.youdbutils.utils.ReflectionUtils;
+import com.github.youyinnn.youwebutils.third.ReflectionUtils;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

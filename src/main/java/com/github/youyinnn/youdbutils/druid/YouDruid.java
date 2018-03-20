@@ -6,8 +6,10 @@ import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
-import com.github.youyinnn.youdbutils.utils.LogUtils;
+import com.github.youyinnn.youwebutils.third.Log4j2Helper;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,12 +32,20 @@ import java.util.Properties;
  */
 public class YouDruid {
 
+    static {
+        try {
+            Log4j2Helper.useConfig("youdblog4j2.xml");
+        } catch (DocumentException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private static final String             MYSQL_PROPERTIES_FILE       = "conf/mysql.properties";
     private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
     private static final String             MYSQL_TYPE                  = "mysql";
     private static final String             SQLITE_TYPE                 = "sqlite";
 
-    private static Logger                   druidLog                    = LogUtils.getDruidLog();
+    private static Logger                   druidLog                    = LogManager.getLogger("$db_druid");
 
     private static DruidDataSource          currentDataSource ;
 
