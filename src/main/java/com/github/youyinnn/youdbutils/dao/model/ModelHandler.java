@@ -26,10 +26,11 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
     private String modelName;
 
-    public ModelHandler(Class<T> modelClass) {
+    public ModelHandler(Class<T> modelClass, String dataSourceName) {
         this.modelResultFactory = new ModelResultFactory<>(modelClass);
         this.modelClass = modelClass;
         this.modelName = modelClass.getSimpleName();
+        super.setDataSourceName(dataSourceName);
     }
 
     public Class<T> getModelClass() {
@@ -204,9 +205,10 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
             if (!resultSet.isBeforeFirst()) {
                 return null;
+            } else {
+                resultSet.next();
+                value = resultSet.getObject(fieldName);
             }
-
-            value = resultSet.getObject(fieldName);
         } catch (Exception e) {
             e.printStackTrace();
         }

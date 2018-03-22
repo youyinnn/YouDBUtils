@@ -1,5 +1,6 @@
 package com.github.youyinnn.youdbutils.dao;
 
+import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.dao.model.ModelHandler;
 import com.github.youyinnn.youdbutils.dao.model.ModelResultFactory;
 
@@ -39,9 +40,9 @@ public class YouDao<T> {
 
     public YouDao() {
         setModelClass();
-        modelHandler = new ModelHandler<>(modelClass);
-        modelResultFactory = modelHandler.getModelResultFactory();
         modelName = modelClass.getSimpleName();
+        modelHandler = new ModelHandler<>(modelClass, YouDbManager.getModelMappingDataSourceName(modelName));
+        modelResultFactory = modelHandler.getModelResultFactory();
     }
 
 }

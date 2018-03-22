@@ -17,6 +17,12 @@ import java.util.HashMap;
  */
 public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interfaces.SqlExecutor {
 
+    private String dataSourceName;
+
+    public void setDataSourceName(String dataSourceName) {
+        this.dataSourceName = dataSourceName;
+    }
+
     private ResultSet statementQuery(Connection conn, String sql) throws SQLException {
         ResultSet resultSet;
         Statement statement;
@@ -79,7 +85,7 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
     public int executeStatementUpdate(String sql) throws NoneffectiveUpdateExecuteException {
 
         int result = 0;
-        Connection conn = ThreadLocalPropContainer.getThreadConnection();
+        Connection conn = ThreadLocalPropContainer.getThreadConnection(dataSourceName);
         Statement statement = null;
         try {
             statement = conn.createStatement();
@@ -104,13 +110,13 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
 
         String sql = SqlStringUtils.getUpdateSetWhereSql(modelName,newFieldValuesMap.keySet(),separateMark,conditionsMap != null ? conditionsMap.keySet() : null);
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,newFieldValuesMap.values(), conditionsMap != null ? conditionsMap.values() : null);
     }
 
     @Override
     public int executePreparedStatementUpdate(String sql, ArrayList newFieldValues, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValues, conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,newFieldValues, conditionValues);
     }
 
     @Override
@@ -122,7 +128,7 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
     @Override
     public int executePreparedStatementInsert(String sql, ArrayList newFieldValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValues,null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,newFieldValues,null);
     }
 
     @Override
@@ -130,7 +136,7 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
 
         String sql = SqlStringUtils.getInsertSql(modelName,newFieldValuesMap.keySet());
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,newFieldValuesMap.values(),null);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,newFieldValuesMap.values(),null);
     }
 
     @Override
@@ -142,7 +148,7 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
     @Override
     public int executePreparedStatementDelete(String sql, ArrayList conditionValues) throws NoneffectiveUpdateExecuteException {
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,null,conditionValues);
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,null,conditionValues);
     }
 
     @Override
@@ -150,19 +156,19 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
 
         String sql = SqlStringUtils.getDeleteSql(modelName,separateMark,conditionsMap.keySet());
 
-        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(),sql,null,conditionsMap.values());
+        return preparedStatementUpdate(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,null,conditionsMap.values());
     }
 
     @Override
     public ResultSet executeStatementQuery(String sql) throws SQLException {
 
-        return statementQuery(ThreadLocalPropContainer.getThreadConnection(),sql);
+        return statementQuery(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql);
     }
 
     @Override
     public ResultSet executePreparedStatementQuery(String sql, ArrayList values) throws SQLException {
 
-        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(),sql,values);
+        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql,values);
     }
 
     @Override
@@ -170,6 +176,6 @@ public class SqlExecutor implements com.github.youyinnn.youdbutils.dao.interface
 
         String sql = SqlStringUtils.getSelectFromWhereSql(modelName,conditionMap.keySet(),separateMark,queryFieldList);
 
-        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(),sql, conditionMap.values());
+        return preparedStatementQuery(ThreadLocalPropContainer.getThreadConnection(dataSourceName),sql, conditionMap.values());
     }
 }

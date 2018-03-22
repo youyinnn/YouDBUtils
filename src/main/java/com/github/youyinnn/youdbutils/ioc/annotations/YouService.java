@@ -15,4 +15,6 @@ import java.lang.annotation.*;
 public @interface YouService {
 
     String scope() default ServiceIocBean.SINGLETON;
+
+    String dataSourceName();
 }

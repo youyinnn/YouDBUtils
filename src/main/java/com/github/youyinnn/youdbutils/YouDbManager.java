@@ -5,7 +5,6 @@ import com.github.youyinnn.youdbutils.dao.model.ModelTableScanner;
 import com.github.youyinnn.youdbutils.druid.YouDruid;
 import com.github.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
 import com.github.youyinnn.youdbutils.druid.filter.YouStatFilter;
-import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
 import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
 import com.github.youyinnn.youdbutils.exceptions.YouDbManagerException;
 import com.github.youyinnn.youdbutils.ioc.ServiceScanner;
@@ -13,6 +12,7 @@ import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -41,6 +41,19 @@ public class YouDbManager {
 
     private static HashMap<String, YouStatFilter> youStatFilterHashMap = new HashMap<>(3);
 
+    private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
+
+    public static String getModelMappingDataSourceName(String modelName) {
+        for (Map.Entry<String, Set<String>> entry : dataSourceMappingModels.entrySet()) {
+            for (String name : entry.getValue()) {
+                if (name.equalsIgnoreCase(modelName)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return null;
+    }
+
     public static YouLog4j2Filter youLog4j2Filter(String dataSourceName) throws Log4j2FilterException, YouDbManagerException {
         checkLog4j2Filter(dataSourceName);
         return youLog4j2FilterMap.get(dataSourceName);
@@ -51,26 +64,30 @@ public class YouDbManager {
         return youStatFilterHashMap.get(dataSourceName);
     }
 
+    public static YouDruid youDruid(String dataSourceName) {
+        return youDruidMap.get(dataSourceName);
+    }
+
     private static void checkStatFilter(String dataSourceName) throws YouDbManagerException {
-        if (!youDruidMap.containsKey(dataSourceName)) {
-            throw new YouDbManagerException("没有该名名称的数据源在YouDbManager中注册过!");
-        } else {
-            if (!youStatFilterHashMap.containsKey(dataSourceName)) {
-                youStatFilterHashMap.put(dataSourceName, new YouStatFilter());
-            }
+        checkDataSourceName(dataSourceName);
+        if (!youStatFilterHashMap.containsKey(dataSourceName)) {
+            youStatFilterHashMap.put(dataSourceName, new YouStatFilter());
         }
     }
 
     private static void checkLog4j2Filter(String dataSourceName) throws Log4j2FilterException, YouDbManagerException {
-        if (!youDruidMap.containsKey(dataSourceName)){
-            throw new YouDbManagerException("没有该名名称的数据源在YouDbManager中注册过!");
-        } else {
-            if (!modelScannedMap.get(dataSourceName)) {
-                throw new Log4j2FilterException("Log4j2Filter必须在扫描model之前进行注册!");
-            }
-            if (!youLog4j2FilterMap.containsKey(dataSourceName)) {
-                youLog4j2FilterMap.put(dataSourceName, new YouLog4j2Filter());
-            }
+        checkDataSourceName(dataSourceName);
+        if (modelScannedMap.get(dataSourceName)) {
+            throw new Log4j2FilterException("Log4j2Filter必须在扫描model之前进行注册!");
+        }
+        if (!youLog4j2FilterMap.containsKey(dataSourceName)) {
+            youLog4j2FilterMap.put(dataSourceName, new YouLog4j2Filter());
+        }
+    }
+
+    public static void checkDataSourceName(String dataSourceName) throws YouDbManagerException {
+        if (!youDruidMap.containsKey(dataSourceName)) {
+            throw new YouDbManagerException("没有该名称的数据源在YouDbManager中注册过!");
         }
     }
 
@@ -84,8 +101,9 @@ public class YouDbManager {
         youDruidMap.get(dataSourceName).setProxyFilters(youStatFilterHashMap.get(dataSourceName).getStatFilter());
     }
 
-    public static void signInYouDruid(String dataSourceName, YouDruid youDruid) {
-        youDruidMap.put(dataSourceName, youDruid);
+    public static void signInYouDruid(YouDruid youDruid) {
+        youDruidMap.put(youDruid.getDataSourceName(), youDruid);
+        modelScannedMap.put(youDruid.getDataSourceName(), false);
     }
 
     /**
@@ -95,16 +113,19 @@ public class YouDbManager {
      *
      * @param packageName the package name
      */
-    public static void scanPackageForService(String packageName){
+    public static void scanPackageForService(String packageName, String dataSourceName) throws YouDbManagerException {
+        checkDataSourceName(dataSourceName);
         ServiceScanner.scanPackageForService(packageName);
     }
 
-    public static void scanPackageForModel(String packageName, String dataSourceName) {
+    public static void scanPackageForModel(String packageName, String dataSourceName) throws YouDbManagerException {
+        checkDataSourceName(dataSourceName);
         ModelTableScanner.scanPackageForModel(packageName);
         Set<String> modelNameSet = ModelTableMessage.getAllModelNameSet();
+        dataSourceMappingModels.put(dataSourceName, modelNameSet);
         try {
             ModelTableScanner.scanDataBaseForTable(modelNameSet,youDruidMap.get(dataSourceName).getCurrentDataSourceConn());
-        } catch (SQLException | DataSourceInitException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         ModelTableMessage.setFieldMapping();
@@ -116,7 +137,7 @@ public class YouDbManager {
     }
 
     public static Boolean isEmbeddedLogEnabled(String dataSourceName) {
-        return embeddedLogEnabledMap.get(dataSourceName);
+        return embeddedLogEnabledMap.get(dataSourceName) == null ? false : embeddedLogEnabledMap.get(dataSourceName);
     }
 
     public static void showService() {

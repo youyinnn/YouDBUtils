@@ -1,7 +1,9 @@
 package com.github.youyinnn.youdbutils.ioc.proxy;
 
+import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
+import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +30,9 @@ public class TransactionInterceptor implements MethodInterceptor{
 
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        YouService service = o.getClass().getAnnotation(YouService.class);
+        String dataSourceName = service.dataSourceName();
+        YouDbManager.checkDataSourceName(dataSourceName);
 
         String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
         long callNano = System.nanoTime();
@@ -36,12 +41,12 @@ public class TransactionInterceptor implements MethodInterceptor{
             ThreadLocalPropContainer.bindTransactionRootServiceMethodName(transactionRootServiceMethodName);
         }
 
-        Connection conn = ThreadLocalPropContainer.getThreadConnection();
-        //if (YouDbManager.isEmbeddedLogEnabled()) {
-        //    connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
-        //            ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
-        //            method.getName());
-        //}
+        Connection conn = ThreadLocalPropContainer.getThreadConnection(dataSourceName);
+        if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
+            connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+                    ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+                    method.getName());
+        }
         conn.setAutoCommit(false);
 
         Transaction transactionA = method.getAnnotation(Transaction.class)  != null ?
@@ -61,11 +66,11 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.commit();
 
         if (transactionRootServiceMethodName.equalsIgnoreCase(method.getName() + callNano)) {
-            //if (YouDbManager.isEmbeddedLogEnabled()) {
-            //    connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
-            //            ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
-            //            method.getName());
-            //}
+            if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
+                connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+                        ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+                        method.getName());
+            }
             ThreadLocalPropContainer.release(null, null, conn);
         }
 
