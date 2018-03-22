@@ -1,6 +1,5 @@
 package com.github.youyinnn.youdbutils.ioc.proxy;
 
-import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -38,11 +37,11 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         Connection conn = ThreadLocalPropContainer.getThreadConnection();
-        if (YouDbManager.isEmbeddedLogEnabled()) {
-            connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
-                    ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
-                    method.getName());
-        }
+        //if (YouDbManager.isEmbeddedLogEnabled()) {
+        //    connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+        //            ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+        //            method.getName());
+        //}
         conn.setAutoCommit(false);
 
         Transaction transactionA = method.getAnnotation(Transaction.class)  != null ?
@@ -62,11 +61,11 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.commit();
 
         if (transactionRootServiceMethodName.equalsIgnoreCase(method.getName() + callNano)) {
-            if (YouDbManager.isEmbeddedLogEnabled()) {
-                connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
-                        ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
-                        method.getName());
-            }
+            //if (YouDbManager.isEmbeddedLogEnabled()) {
+            //    connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
+            //            ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
+            //            method.getName());
+            //}
             ThreadLocalPropContainer.release(null, null, conn);
         }
 

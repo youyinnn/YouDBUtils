@@ -1,8 +1,5 @@
 package com.github.youyinnn.youdbutils.druid;
 
-import com.github.youyinnn.youdbutils.YouDbManager;
-import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -72,14 +69,14 @@ public class ThreadLocalPropContainer {
 
         Connection connection = threadConnection.get();
 
-        if (connection == null) {
-            try {
-                connection = YouDbManager.youDruid.getCurrentDataSourceConn();
-                bindConn(connection);
-            } catch (SQLException | DataSourceInitException e) {
-                e.printStackTrace();
-            }
-        }
+        //if (connection == null) {
+        //    try {
+        //        connection = YouDbManager.youDruid.getCurrentDataSourceConn();
+        //        bindConn(connection);
+        //    } catch (SQLException | DataSourceInitException e) {
+        //        e.printStackTrace();
+        //    }
+        //}
 
         return connection;
     }

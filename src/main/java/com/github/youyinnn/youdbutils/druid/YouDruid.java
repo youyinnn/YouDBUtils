@@ -4,7 +4,6 @@ import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
 import com.alibaba.druid.pool.DruidPooledConnection;
-import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.LogManager;
@@ -47,7 +46,7 @@ public class YouDruid {
 
     private static Logger                   druidLog                    = LogManager.getLogger("$db_druid");
 
-    private static DruidDataSource          currentDataSource ;
+    private DruidDataSource                 currentDataSource ;
 
     public Connection getCurrentDataSourceConn() throws SQLException, DataSourceInitException {
         DruidPooledConnection connection = currentDataSource.getConnection();
@@ -125,14 +124,14 @@ public class YouDruid {
             }
             try {
                 currentDataSource.init();
-                if (YouDbManager.isEmbeddedLogEnabled()) {
-                    druidLog.info("数据源初始化成功, Url:{}", currentDataSource.getUrl());
-                }
+                //if (YouDbManager.isEmbeddedLogEnabled()) {
+                //    druidLog.info("数据源初始化成功, Url:{}", currentDataSource.getUrl());
+                //}
             } catch (SQLException e) {
-                if (YouDbManager.isEmbeddedLogEnabled()) {
-                    druidLog.error("数据源初始化失败, Url:{}", currentDataSource.getUrl());
-                }
-                System.exit(0);
+                //if (YouDbManager.isEmbeddedLogEnabled()) {
+                //    druidLog.error("数据源初始化失败, Url:{}", currentDataSource.getUrl());
+                //}
+                //System.exit(0);
             }
         } else {
             try {
