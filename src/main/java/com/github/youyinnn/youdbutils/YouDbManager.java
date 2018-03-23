@@ -15,22 +15,19 @@ import java.util.Set;
 /**
  * 整合整个YouDBUtils的Feature的类.
  * 该类持有:
- *  1.YouDruid类;
- *  2.两个Druid相关的过滤器;
+ *  1. 按照数据源名称为key的YouDruid为value的map对象
+ *  2. 以数据源名词为key, 该数据源管理的Model类集合为value的map对象
  *
  * 改类提供:
- *  1.数据源相关操作;
- *  2.数据源监控相关操作;
- *  3.Model/Service包下类的扫描方法;
- *  4.一些相关的信息输出;
+ *  1.数据源的注册
+ *  2.model类和service类的扫描方法
+ *  3.按照model名索引管理该model类对应的YouDruid对象
  *
  * @author youyinnn
  */
 public class YouDbManager {
 
     private static HashMap<String, YouDruid> youDruidMap = new HashMap<>(3);
-
-    private static HashMap<String, Boolean> embeddedLogEnabledMap = new HashMap<>(3);
 
     private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
 
@@ -59,19 +56,17 @@ public class YouDbManager {
         youDruidMap.put(youDruid.getDataSourceName(), youDruid);
     }
 
-    /**
-     * 扫描指定包下的类 生成代理Service 可以在cn.youyinnn.youdbutils.YouServiceIocContainer类中取出
-     *
-     * 同spring的Ioc容器
-     *
-     * @param packageName the package name
-     */
-    public static void scanPackageForService(String packageName, String dataSourceName) throws YouDbManagerException {
+    public static void scanPackageForModelAndService(String modelPackagePath, String servicePackagePath, String dataSourceName) throws YouDbManagerException {
+        scanPackageForModel(modelPackagePath, dataSourceName);
+        scanPackageForService(servicePackagePath, dataSourceName);
+    }
+
+    private static void scanPackageForService(String packageName, String dataSourceName) throws YouDbManagerException {
         checkDataSourceName(dataSourceName);
         ServiceScanner.scanPackageForService(packageName);
     }
 
-    public static void scanPackageForModel(String packageName, String dataSourceName) throws YouDbManagerException {
+    private static void scanPackageForModel(String packageName, String dataSourceName) throws YouDbManagerException {
         checkDataSourceName(dataSourceName);
         ModelTableScanner.scanPackageForModel(packageName);
         Set<String> modelNameSet = ModelTableMessage.getAllModelNameSet();
@@ -82,14 +77,6 @@ public class YouDbManager {
             e.printStackTrace();
         }
         ModelTableMessage.setFieldMapping();
-    }
-
-    public static void enableEmbeddedLog(String dataSourceName) {
-        embeddedLogEnabledMap.put(dataSourceName, true);
-    }
-
-    public static Boolean isEmbeddedLogEnabled(String dataSourceName) {
-        return embeddedLogEnabledMap.get(dataSourceName) == null ? false : embeddedLogEnabledMap.get(dataSourceName);
     }
 
     public static void showService() {
@@ -106,9 +93,5 @@ public class YouDbManager {
 
     public static void printAllModelTableFieldMapping() {
         System.out.println(ModelTableMessage.getAllModelTableFieldMapping());
-    }
-
-    public static YouDruid getYouDruid(String dataSourceName) {
-        return youDruidMap.get(dataSourceName);
     }
 }

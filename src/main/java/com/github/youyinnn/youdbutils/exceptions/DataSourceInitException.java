@@ -1,7 +1,7 @@
 package com.github.youyinnn.youdbutils.exceptions;
 
 /**
- * 数据连接池的数据源没有初始化.
+ * 数据连接池的数据源初始化异常
  *
  * @author youyinnn
  */

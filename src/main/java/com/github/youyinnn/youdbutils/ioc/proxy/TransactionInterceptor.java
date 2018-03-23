@@ -32,7 +32,7 @@ public class TransactionInterceptor implements MethodInterceptor{
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         YouService service = o.getClass().getAnnotation(YouService.class);
         String dataSourceName = service.dataSourceName();
-        boolean embeddedLogEnable = YouDbManager.getYouDruid(dataSourceName).isEmbeddedLogEnable();
+        boolean embeddedLogEnable = YouDbManager.youDruid(dataSourceName).isEmbeddedLogEnable();
 
         String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
         long callNano = System.nanoTime();
