@@ -32,7 +32,7 @@ public class TransactionInterceptor implements MethodInterceptor{
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
         YouService service = o.getClass().getAnnotation(YouService.class);
         String dataSourceName = service.dataSourceName();
-        YouDbManager.checkDataSourceName(dataSourceName);
+        boolean embeddedLogEnable = YouDbManager.getYouDruid(dataSourceName).isEmbeddedLogEnable();
 
         String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
         long callNano = System.nanoTime();
@@ -42,7 +42,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         }
 
         Connection conn = ThreadLocalPropContainer.getThreadConnection(dataSourceName);
-        if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
+        if (embeddedLogEnable) {
             connectionLog.info("业务连接获取:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
                     ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
                     method.getName());
@@ -66,7 +66,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         conn.commit();
 
         if (transactionRootServiceMethodName.equalsIgnoreCase(method.getName() + callNano)) {
-            if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
+            if (embeddedLogEnable) {
                 connectionLog.info("业务连接释放:" + conn.toString().split("@")[1] +", 所属业务:{}, 调用方法{}.",
                         ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
                         method.getName());

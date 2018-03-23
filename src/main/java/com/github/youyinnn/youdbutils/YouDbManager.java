@@ -3,9 +3,6 @@ package com.github.youyinnn.youdbutils;
 import com.github.youyinnn.youdbutils.dao.model.ModelTableMessage;
 import com.github.youyinnn.youdbutils.dao.model.ModelTableScanner;
 import com.github.youyinnn.youdbutils.druid.YouDruid;
-import com.github.youyinnn.youdbutils.druid.filter.YouLog4j2Filter;
-import com.github.youyinnn.youdbutils.druid.filter.YouStatFilter;
-import com.github.youyinnn.youdbutils.exceptions.Log4j2FilterException;
 import com.github.youyinnn.youdbutils.exceptions.YouDbManagerException;
 import com.github.youyinnn.youdbutils.ioc.ServiceScanner;
 import com.github.youyinnn.youdbutils.ioc.YouServiceIocContainer;
@@ -33,13 +30,7 @@ public class YouDbManager {
 
     private static HashMap<String, YouDruid> youDruidMap = new HashMap<>(3);
 
-    private static HashMap<String, Boolean> modelScannedMap = new HashMap<>(3);
-
     private static HashMap<String, Boolean> embeddedLogEnabledMap = new HashMap<>(3);
-
-    private static HashMap<String, YouLog4j2Filter> youLog4j2FilterMap = new HashMap<>(3);
-
-    private static HashMap<String, YouStatFilter> youStatFilterHashMap = new HashMap<>(3);
 
     private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
 
@@ -54,35 +45,8 @@ public class YouDbManager {
         return null;
     }
 
-    public static YouLog4j2Filter youLog4j2Filter(String dataSourceName) throws Log4j2FilterException, YouDbManagerException {
-        checkLog4j2Filter(dataSourceName);
-        return youLog4j2FilterMap.get(dataSourceName);
-    }
-
-    public static YouStatFilter youStatFilter(String dataSourceName) throws YouDbManagerException {
-        checkStatFilter(dataSourceName);
-        return youStatFilterHashMap.get(dataSourceName);
-    }
-
     public static YouDruid youDruid(String dataSourceName) {
         return youDruidMap.get(dataSourceName);
-    }
-
-    private static void checkStatFilter(String dataSourceName) throws YouDbManagerException {
-        checkDataSourceName(dataSourceName);
-        if (!youStatFilterHashMap.containsKey(dataSourceName)) {
-            youStatFilterHashMap.put(dataSourceName, new YouStatFilter());
-        }
-    }
-
-    private static void checkLog4j2Filter(String dataSourceName) throws Log4j2FilterException, YouDbManagerException {
-        checkDataSourceName(dataSourceName);
-        if (modelScannedMap.get(dataSourceName)) {
-            throw new Log4j2FilterException("Log4j2Filter必须在扫描model之前进行注册!");
-        }
-        if (!youLog4j2FilterMap.containsKey(dataSourceName)) {
-            youLog4j2FilterMap.put(dataSourceName, new YouLog4j2Filter());
-        }
     }
 
     public static void checkDataSourceName(String dataSourceName) throws YouDbManagerException {
@@ -91,19 +55,8 @@ public class YouDbManager {
         }
     }
 
-    public static void signInLog4j2ProxyFilter(String dataSourceName) throws YouDbManagerException {
-        checkStatFilter(dataSourceName);
-        youDruidMap.get(dataSourceName).setProxyFilters(youLog4j2FilterMap.get(dataSourceName).getLog4j2Filter());
-    }
-
-    public static void signInStatFilter(String dataSourceName) throws YouDbManagerException {
-        checkStatFilter(dataSourceName);
-        youDruidMap.get(dataSourceName).setProxyFilters(youStatFilterHashMap.get(dataSourceName).getStatFilter());
-    }
-
     public static void signInYouDruid(YouDruid youDruid) {
         youDruidMap.put(youDruid.getDataSourceName(), youDruid);
-        modelScannedMap.put(youDruid.getDataSourceName(), false);
     }
 
     /**
@@ -129,7 +82,6 @@ public class YouDbManager {
             e.printStackTrace();
         }
         ModelTableMessage.setFieldMapping();
-        modelScannedMap.put(dataSourceName, true);
     }
 
     public static void enableEmbeddedLog(String dataSourceName) {
@@ -154,5 +106,9 @@ public class YouDbManager {
 
     public static void printAllModelTableFieldMapping() {
         System.out.println(ModelTableMessage.getAllModelTableFieldMapping());
+    }
+
+    public static YouDruid getYouDruid(String dataSourceName) {
+        return youDruidMap.get(dataSourceName);
     }
 }

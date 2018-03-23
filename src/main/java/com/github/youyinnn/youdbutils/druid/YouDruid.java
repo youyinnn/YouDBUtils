@@ -3,7 +3,6 @@ package com.github.youyinnn.youdbutils.druid;
 import com.alibaba.druid.filter.Filter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidDataSourceFactory;
-import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.LogManager;
@@ -14,8 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -48,7 +46,11 @@ public class YouDruid {
 
     private DruidDataSource                 currentDataSource ;
 
+    private List<Filter>                    filters;
+
     private String                          dataSourceName;
+
+    private boolean                         embeddedLogEnable           = false;
 
     private YouDruid() {}
 
@@ -77,9 +79,16 @@ public class YouDruid {
      * @throws DataSourceInitException the data source init exception
      */
     public static YouDruid initMySQLDataSource(String dataSourceName) throws DataSourceInitException {
-        return generateDataSource("mysql", null, dataSourceName);
+        return generateDataSource("mysql", null, dataSourceName, false, null);
     }
 
+    public static YouDruid initMySQLDataSource(String dataSourceName, boolean embeddedLogEnable) throws DataSourceInitException {
+        return generateDataSource("mysql", null, dataSourceName, embeddedLogEnable, null);
+    }
+
+    public static YouDruid initMySQLDataSource(String dataSourceName, boolean embeddedLogEnable, List<Filter> filters) throws DataSourceInitException {
+        return generateDataSource("mysql", null, dataSourceName, embeddedLogEnable, filters);
+    }
 
     /**
      * 按照给定的配置文件路径去初始化数据源
@@ -90,7 +99,15 @@ public class YouDruid {
      * @throws DataSourceInitException the data source init exception
      */
     public static YouDruid initMySQLDataSource(String propFilePath, String dataSourceName) throws DataSourceInitException {
-        return generateDataSource("mysql", propFilePath, dataSourceName);
+        return generateDataSource("mysql", propFilePath, dataSourceName, false, null);
+    }
+
+    public static YouDruid initMySQLDataSource(String propFilePath, String dataSourceName, boolean embeddedLogEnable) throws DataSourceInitException {
+        return generateDataSource("mysql", propFilePath, dataSourceName, embeddedLogEnable, null);
+    }
+
+    public static YouDruid initMySQLDataSource(String propFilePath, String dataSourceName, boolean embeddedLogEnable, List<Filter> filters) throws DataSourceInitException {
+        return generateDataSource("mysql", propFilePath, dataSourceName, embeddedLogEnable, filters);
     }
 
     /**
@@ -101,7 +118,15 @@ public class YouDruid {
      * @throws DataSourceInitException the data source init exception
      */
     public static YouDruid initSQLiteDataSource(String dataSourceName) throws DataSourceInitException {
-        return generateDataSource("sqlite", null, dataSourceName);
+        return generateDataSource("sqlite", null, dataSourceName, false, null);
+    }
+
+    public static YouDruid initSQLiteDataSource(String dataSourceName, boolean embeddedLogEnable) throws DataSourceInitException {
+        return generateDataSource("sqlite", null, dataSourceName, embeddedLogEnable, null);
+    }
+
+    public static YouDruid initSQLiteDataSource(String dataSourceName, boolean embeddedLogEnable, List<Filter> filters) throws DataSourceInitException {
+        return generateDataSource("sqlite", null, dataSourceName, embeddedLogEnable, filters);
     }
 
     /**
@@ -113,12 +138,21 @@ public class YouDruid {
      * @throws DataSourceInitException the data source init exception
      */
     public static YouDruid initSQLiteDataSource(String propFilePath, String dataSourceName) throws DataSourceInitException {
-        return generateDataSource("sqlite", propFilePath, dataSourceName);
+        return generateDataSource("sqlite", propFilePath, dataSourceName, false, null);
+    }
+
+    public static YouDruid initSQLiteDataSource(String propFilePath, String dataSourceName, boolean embeddedLogEnable) throws DataSourceInitException {
+        return generateDataSource("sqlite", propFilePath, dataSourceName, embeddedLogEnable, null);
+    }
+
+    public static YouDruid initSQLiteDataSource(String propFilePath, String dataSourceName, boolean embeddedLogEnable, List<Filter> filters) throws DataSourceInitException {
+        return generateDataSource("sqlite", propFilePath, dataSourceName, embeddedLogEnable, filters);
     }
 
 
-    private static YouDruid generateDataSource(String dataSourceType, String propertiesFile, String dataSourceName) throws DataSourceInitException {
+    private static YouDruid generateDataSource(String dataSourceType, String propertiesFile, String dataSourceName, boolean embeddedLogEnable ,  List<Filter> filters) throws DataSourceInitException {
         YouDruid youDruid = new YouDruid();
+        youDruid.embeddedLogEnable = embeddedLogEnable;
         if (dataSourceName == null || dataSourceName.length() == 0) {
             throw new DataSourceInitException("必须指定数据源名!");
         } else {
@@ -141,22 +175,25 @@ public class YouDruid {
                     e.printStackTrace();
                 }
                 try {
+                    youDruid.currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
                     if (MYSQL_TYPE.equals(dataSourceType)){
-                        youDruid.currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
-                    } else if (SQLITE_TYPE.equals(dataSourceType)){
-                        youDruid.currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
+                        // 默认开启这个监控
+                        youDruid.currentDataSource.addFilters("wall");
                     }
+                    youDruid.currentDataSource.setProxyFilters(filters);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
                     youDruid.currentDataSource.init();
-                    if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
-                        druidLog.info("数据源初始化成功, Url:{}", youDruid.currentDataSource.getUrl());
+                    System.out.println(youDruid.currentDataSource.getFilterClassNames());
+                    System.out.println(youDruid.currentDataSource.getProxyFilters());
+                    if (embeddedLogEnable) {
+                        druidLog.info("数据源初始化成功, Url:{} , DataSourceName: {}.", youDruid.currentDataSource.getUrl().split("\\?")[0], dataSourceName);
                     }
                 } catch (SQLException e) {
-                    if (YouDbManager.isEmbeddedLogEnabled(dataSourceName)) {
-                        druidLog.error("数据源初始化失败, Url:{}", youDruid.currentDataSource.getUrl());
+                    if (embeddedLogEnable) {
+                        druidLog.error("数据源初始化失败, Url:{} , DataSourceName: {}.", youDruid.currentDataSource.getUrl().split("\\?")[0], dataSourceName);
                     }
                     System.exit(0);
                 }
@@ -169,60 +206,6 @@ public class YouDruid {
             }
         }
         return youDruid;
-    }
-
-    /**
-     * Is init boolean.
-     *
-     * @return the boolean
-     */
-    public boolean isInit(){
-        return currentDataSource.isInited();
-    }
-
-    /**
-     * Stat on by filter.
-     */
-    public void statOnByFilter(){
-        addFilters("stat");
-    }
-
-    /**
-     * Log 4 j on by filter.
-     */
-    public void log4jOnByFilter(){
-        addFilters("log4j");
-    }
-
-    /**
-     * Log 4 j 2 on by filter.
-     */
-    public void log4j2OnByFilter(){
-        addFilters("log4j2");
-    }
-
-    /**
-     * Wall on by filter.
-     */
-    public void wallOnByFilter(){
-        addFilters("wall");
-    }
-
-    private void addFilters(String filterName){
-        try {
-            currentDataSource.addFilters(filterName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Set proxy filters.
-     *
-     * @param filter the filter
-     */
-    public void setProxyFilters(Filter filter){
-        currentDataSource.setProxyFilters(new ArrayList<>(Collections.singletonList(filter)));
     }
 
     /**
@@ -244,11 +227,8 @@ public class YouDruid {
         return dataSourceName;
     }
 
-    /**
-     * Show proxy filters.
-     */
-    public void showProxyFilters(){
-        System.out.println(currentDataSource.getProxyFilters());
+    public boolean isEmbeddedLogEnable() {
+        return embeddedLogEnable;
     }
 
 }
