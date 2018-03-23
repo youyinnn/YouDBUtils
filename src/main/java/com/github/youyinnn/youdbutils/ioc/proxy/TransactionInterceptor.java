@@ -4,9 +4,9 @@ import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import com.github.youyinnn.youdbutils.ioc.annotations.Transaction;
 import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
+import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
@@ -26,10 +26,9 @@ import java.sql.Connection;
  */
 public class TransactionInterceptor implements MethodInterceptor{
 
-    private static Logger connectionLog = LogManager.getLogger("$db_connection");
-
     @Override
     public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+        Logger connectionLog = Log4j2Helper.getLogger("$db_connection");
         YouService service = o.getClass().getAnnotation(YouService.class);
         String dataSourceName = service.dataSourceName();
         boolean embeddedLogEnable = YouDbManager.youDruid(dataSourceName).isEmbeddedLogEnable();

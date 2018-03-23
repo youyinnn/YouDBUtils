@@ -9,7 +9,6 @@ import com.github.youyinnn.youdbutils.druid.filter.YouLog4j2FilterConfig;
 import com.github.youyinnn.youdbutils.druid.filter.YouStatFilterConfig;
 import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dom4j.DocumentException;
 
@@ -35,7 +34,7 @@ public class YouDruid {
 
     static {
         try {
-            Log4j2Helper.useConfig("youdblog4j2.xml");
+            Log4j2Helper.useConfig("$dbconf/$youdblog4j2.xml");
         } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
@@ -45,8 +44,6 @@ public class YouDruid {
     private static final String             SQLITE_PROPERTIES_FILE      = "conf/sqlite.properties";
     private static final String             MYSQL_TYPE                  = "mysql";
     private static final String             SQLITE_TYPE                 = "sqlite";
-
-    private static Logger                   druidLog                    = LogManager.getLogger("$db_druid");
 
     private DruidDataSource                 currentDataSource ;
 
@@ -164,6 +161,7 @@ public class YouDruid {
             (String dataSourceType, String propertiesFile, String dataSourceName, boolean embeddedLogEnable ,
              YouLog4j2FilterConfig log4j2FilterConfig,
              YouStatFilterConfig statFilterConfig) throws DataSourceInitException {
+        Logger druidLog = Log4j2Helper.getLogger("$db_druid");
         YouDruid youDruid = new YouDruid();
         youDruid.embeddedLogEnable = embeddedLogEnable;
         if (dataSourceName == null || dataSourceName.length() == 0) {
