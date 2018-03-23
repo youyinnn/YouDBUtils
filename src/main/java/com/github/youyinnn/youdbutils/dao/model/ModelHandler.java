@@ -146,7 +146,7 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
                 return null;
             }
 
-            resultModel = modelResultFactory.getResultModel(resultSet);
+            resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -163,7 +163,7 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
                 return null;
             }
 
-            resultModel = modelResultFactory.getResultModel(resultSet);
+            resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -185,7 +185,7 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
                 return null;
             }
 
-            resultModel = modelResultFactory.getResultModel(resultSet);
+            resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
         }

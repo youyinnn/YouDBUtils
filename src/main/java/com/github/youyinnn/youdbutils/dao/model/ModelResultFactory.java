@@ -30,7 +30,7 @@ public class ModelResultFactory<T> {
         ArrayList<T> resultModelList = new ArrayList<>();
         try {
             while (resultSet.next()) {
-                T instance = getResultModel(resultSet);
+                T instance = getResultModel(resultSet, false);
                 resultModelList.add(instance);
             }
         } catch (Exception e) {
@@ -40,10 +40,12 @@ public class ModelResultFactory<T> {
     }
 
 
-    public T getResultModel(ResultSet resultSet) {
-
+    public T getResultModel(ResultSet resultSet, boolean isOneResult) {
         T instance = null;
         try {
+            if (isOneResult) {
+                resultSet.next();
+            }
             if (fieldList == null | fieldMapping == null) {
                 throw new ModelResultTransferException("Model：["+modelClass.getSimpleName()+"] " +
                         "没有在ModelTableMessage中注册。");
