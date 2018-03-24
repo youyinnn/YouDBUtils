@@ -211,18 +211,18 @@ public class YouDruid {
                 }
                 try {
                     youDruid.currentDataSource.init();
-                    if (embeddedLogEnable) {
+                    if (youDruid.embeddedLogEnable) {
                         druidLog.info("数据源初始化成功, Url:{} , DataSourceName: {}.", youDruid.currentDataSource.getUrl().split("\\?")[0], dataSourceName);
                     }
                 } catch (SQLException e) {
-                    if (embeddedLogEnable) {
+                    if (youDruid.embeddedLogEnable) {
                         druidLog.error("数据源初始化失败, Url:{} , DataSourceName: {}.", youDruid.currentDataSource.getUrl().split("\\?")[0], dataSourceName);
                     }
                     System.exit(0);
                 }
             } else {
                 try {
-                    throw new DataSourceInitException("路径["+propertiesFile+"]下没有数据源配置文件可加载！");
+                    throw new DataSourceInitException("Resource路径["+propertiesFile+"]下没有数据源配置文件可加载！");
                 } catch (DataSourceInitException e) {
                     e.printStackTrace();
                 }

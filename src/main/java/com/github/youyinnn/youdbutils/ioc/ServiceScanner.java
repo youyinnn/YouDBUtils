@@ -1,7 +1,9 @@
 package com.github.youyinnn.youdbutils.ioc;
 
+import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.ioc.annotations.YouService;
 import com.github.youyinnn.youwebutils.third.ClassUtils;
+import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 
 import java.lang.reflect.Field;
 import java.util.Set;
@@ -18,10 +20,13 @@ public class ServiceScanner {
 
     private ServiceScanner() {}
 
-    public static void scanPackageForService(String servicePackageNamePrefix)  {
+    public static void scanPackageForService(String servicePackageNamePrefix, String dataSourceName)  {
 
         Set<Class<?>> serviceClassSet = ClassUtils.findFileClass(servicePackageNamePrefix);
-
+        if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+            Log4j2Helper.getLogger("$db_scanner").
+                    info("数据源: \"{}\" 所持有的Service类扫描结果为: {}.", dataSourceName, serviceClassSet);
+        }
         for (Class<?> aClass : serviceClassSet) {
             YouService annotation = aClass.getAnnotation(YouService.class);
             if (annotation != null){

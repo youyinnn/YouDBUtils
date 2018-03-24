@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="off" monitorInterval="300">
+
+    <Appenders>
+        <Console name="$db_Console" target="SYSTEM_ERR">
+            <PatternLayout pattern="[YouDBUtils %15c] [Time: %d{yyyy-MM-dd HH:mm:ss,SSS} ][%-5p: %msg ]%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="$db_druid" level="info" additivity="false">
+            <AppenderRef ref="$db_Console"/>
+        </Logger>
+
+        <Logger name="$db_connection" level="info" additivity="false">
+            <AppenderRef ref="$db_Console"/>
+        </Logger>
+
+        <Logger name="$db_scanner" level="info" additivity="false">
+            <AppenderRef ref="$db_Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>
