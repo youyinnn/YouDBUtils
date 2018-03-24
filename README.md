@@ -1,7 +1,7 @@
 # 女票言: 生是我的大肥猪,死是我的五花肉!!
 
 ## YouDBUtils
-[![Travis](https://img.shields.io/badge/version-1.2.2-green.svg)]()
+[![Travis](https://img.shields.io/badge/version-2.1-green.svg)]()
 [![Travis](https://img.shields.io/badge/druid-1.1.8-brightgreen.svg)]()
 [![Travis](https://img.shields.io/badge/cglibnodep-3.2.5-brightgreen.svg)]()
 ##### 这是一个“自用”的数据库工具包。
@@ -20,7 +20,7 @@ maven:
         <dependency>
             <groupId>com.github.youyinnn</groupId>
             <artifactId>you-db-utils</artifactId>
-            <version>2.0</version>
+            <version>2.1</version>
         </dependency>
 ```
 - - -

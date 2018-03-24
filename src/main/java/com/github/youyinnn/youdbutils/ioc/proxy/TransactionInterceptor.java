@@ -31,7 +31,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         Logger connectionLog = Log4j2Helper.getLogger("$db_connection");
         YouService service = o.getClass().getAnnotation(YouService.class);
         String dataSourceName = service.dataSourceName();
-        boolean embeddedLogEnable = YouDbManager.youDruid(dataSourceName).isEmbeddedLogEnable();
+        boolean embeddedLogEnable = YouDbManager.isYouDruidLogEnable(dataSourceName);
 
         String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
         long callNano = System.nanoTime();
