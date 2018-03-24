@@ -24,7 +24,7 @@ public class ServiceScanner {
 
         Set<Class<?>> serviceClassSet = ClassUtils.findFileClass(servicePackageNamePrefix);
         if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-            Log4j2Helper.getLogger("$db_scanner").
+            Log4j2Helper.getLogger("$db_manager").
                     info("数据源: \"{}\" 所持有的Service类扫描结果为: {}.", dataSourceName, serviceClassSet);
         }
         for (Class<?> aClass : serviceClassSet) {

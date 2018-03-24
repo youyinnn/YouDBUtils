@@ -1,5 +1,9 @@
 package com.github.youyinnn.youdbutils.dao.model;
 
+import com.github.youyinnn.youdbutils.YouDbManager;
+import com.github.youyinnn.youwebutils.third.Log4j2Helper;
+import org.apache.logging.log4j.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -61,11 +65,35 @@ public class ModelTableMessage {
 
     /**
      * 初始化model对应的FieldMapping对象 并添加到allFieldMapping当中
+     * @param dataSourceName
      */
-    public static void setFieldMapping() {
-        for (String modelName : allModelField.keySet()) {
+    public static void setFieldMapping(String dataSourceName) {
+        Logger logger = Log4j2Helper.getLogger("$db_manager");
+        Set<String> modelNames = allModelField.keySet();
+        for (String modelName : modelNames) {
+            ArrayList<String> mFields = allModelField.get(modelName);
+            ArrayList<String> tColumns = allTableField.get(modelName);
+            if (mFields.size() != tColumns.size()) {
+                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                    logger.error("数据源: \"{}\" 的Model类和数据表的扫描结果有误, Model:{}的字段数和对应表的列数不一致, 程序终止!",
+                            dataSourceName, modelName);
+                }
+                System.exit(0);
+            }
+            for (String mField : mFields) {
+                if (!tColumns.contains(mField)) {
+                    if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                        logger.error("数据源: \"{}\" 的Model类和数据表的扫描结果有误, 表:{}中不存在{}列, 程序终止!",
+                                dataSourceName, modelName, mField);
+                    }
+                    System.exit(0);
+                }
+            }
             allModelTableFieldMapping.put(modelName,
                     new FieldMapping(modelName,allModelField.get(modelName),allTableField.get(modelName)));
+        }
+        if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+            logger.info("数据源: \"{}\" Model和表的映射对应完成!", dataSourceName);
         }
     }
 

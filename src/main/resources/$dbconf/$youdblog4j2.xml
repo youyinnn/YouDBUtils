@@ -16,7 +16,7 @@
             <AppenderRef ref="$db_Console"/>
         </Logger>
 
-        <Logger name="$db_scanner" level="info" additivity="false">
+        <Logger name="$db_manager" level="info" additivity="false">
             <AppenderRef ref="$db_Console"/>
         </Logger>
     </Loggers>

@@ -46,11 +46,13 @@ public class YouDruid {
     private static final String             SQLITE_TYPE                 = "sqlite";
 
     private DruidDataSource                 currentDataSource ;
-
     private String                          dataSourceName;
-
     private boolean                         embeddedLogEnable           = false;
 
+    private String                          userName;
+    private String                          password;
+    private String                          url;
+    private String                          driverClass;
     private YouDruid() {}
 
     /**
@@ -189,7 +191,7 @@ public class YouDruid {
                     youDruid.currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
                     if (MYSQL_TYPE.equals(dataSourceType)){
                         // 默认开启这个监控
-                        youDruid.currentDataSource.addFilters("wall");
+                        //youDruid.currentDataSource.addFilters("wall");
                     }
                     List<Filter> filters = new ArrayList<>();
                     if (log4j2FilterConfig != null) {
@@ -211,6 +213,13 @@ public class YouDruid {
                 }
                 try {
                     youDruid.currentDataSource.init();
+                    youDruid.userName = properties.getProperty("username");
+                    youDruid.password = properties.getProperty("password");
+                    youDruid.url = properties.getProperty("url");
+                    youDruid.driverClass = properties.getProperty("driverClass");
+                    if (youDruid.driverClass == null) {
+                        youDruid.driverClass = youDruid.currentDataSource.getDriverClassName();
+                    }
                     if (youDruid.embeddedLogEnable) {
                         druidLog.info("数据源初始化成功, Url:{} , DataSourceName: {}.", youDruid.currentDataSource.getUrl().split("\\?")[0], dataSourceName);
                     }
@@ -249,4 +258,20 @@ public class YouDruid {
         return embeddedLogEnable;
     }
 
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getDriverClass() {
+        return driverClass;
+    }
 }

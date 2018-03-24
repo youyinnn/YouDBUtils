@@ -3,14 +3,12 @@ package com.github.youyinnn.youdbutils.dao.model;
 import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.druid.ThreadLocalPropContainer;
 import com.github.youyinnn.youwebutils.third.ClassUtils;
-import com.github.youyinnn.youwebutils.third.DbMetaDataUtils;
+import com.github.youyinnn.youwebutils.third.DbUtils;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -35,7 +33,7 @@ public class ModelTableScanner {
     public static void scanPackageForModel(String modelPackageNamePrefix, String dataSourceName) {
         Set<Class<?>> modelClassSet = ClassUtils.findFileClass(modelPackageNamePrefix);
         if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-            Log4j2Helper.getLogger("$db_scanner")
+            Log4j2Helper.getLogger("$db_manager")
                     .info("数据源: \"{}\" 所管理的Model类扫描结果为: {}.", dataSourceName, modelClassSet);
         }
         for (Class<?> aClass : modelClassSet) {
@@ -58,60 +56,55 @@ public class ModelTableScanner {
      * @param dataSourceName
      */
     public static void scanDataBaseForTable(Set<String> modelNameSet, Connection connection, String dataSourceName) {
-        Logger logger = Log4j2Helper.getLogger("$db_scanner");
-        ResultSet tableColumn = null;
+        Logger logger = Log4j2Helper.getLogger("$db_manager");
         try {
-            DatabaseMetaData databaseMetaData = connection.getMetaData();
-            for (String modelName : modelNameSet) {
-                checkTableAndTryToCreate(modelName, dataSourceName, connection, logger);
-                ArrayList<String> fieldList = new ArrayList<>();
-                tableColumn = databaseMetaData.getColumns(null,
-                        null,modelName,null);
-
-                while (tableColumn.next()) {
-                    String columnName = tableColumn.getString("COLUMN_NAME");
-                    fieldList.add(columnName);
+            ArrayList<String> tablesFromDB = DbUtils.getTablesFromDB(connection);
+            if (tablesFromDB.size() != 0) {
+                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                    logger.info("数据源: \"{}\" 中所包含的表有: \"{}\".", dataSourceName, tablesFromDB);
                 }
-                ModelTableMessage.registerTableFieldMessage(modelName,fieldList);
+            } else {
+                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                    logger.info("扫描数据源:\"{}\", 没有任何表, 尝试索引配置好的初始化SQL文件.", dataSourceName);
+                }
+                checkTableAndTryToCreate(dataSourceName, connection, logger);
+            }
+
+            tablesFromDB = DbUtils.getTablesFromDB(connection);
+            for (String modelName : modelNameSet) {
+                if (!tablesFromDB.contains(modelName.toLowerCase())) {
+                    if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                        logger.info("数据源: \"{}\" 中没有表:{}.", dataSourceName, modelName);
+                    }
+                    checkTableAndTryToCreate(dataSourceName, connection, logger);
+                }
+                ArrayList<String> columnsFromTable = DbUtils.getColumnsFromTable(connection, modelName);
+                ModelTableMessage.registerTableFieldMessage(modelName,columnsFromTable);
+            }
+            tablesFromDB = DbUtils.getTablesFromDB(connection);
+            if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                logger.info("数据源: \"{}\" 中所包含的表有: \"{}\".", dataSourceName, tablesFromDB);
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            ThreadLocalPropContainer.release(tableColumn,null,connection);
+            ThreadLocalPropContainer.release(null,null,connection);
         }
     }
 
-    private static void checkTableAndTryToCreate(String tableName, String dataSourceName, Connection connection, Logger logger) throws Exception {
-        if (!DbMetaDataUtils.isTableExist(connection, tableName)) {
+    private static void checkTableAndTryToCreate(String dataSourceName, Connection connection, Logger logger) throws Exception {
+        String dataSourceInitSqlFilePath = YouDbManager.getDataSourceInitSqlFilePath(dataSourceName);
+        if (dataSourceInitSqlFilePath != null) {
             if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                logger.info("扫描数据源:\"{}\", 没有表:\"{}\", 尝试索引配置好的初始化SQL文件.", dataSourceName, tableName);
+                logger.info("正在使用配置的初始化SQL文件, 并执行文件....");
             }
-            String dataSourceMappingInitSql = YouDbManager.getDataSourceMappingInitSql(dataSourceName);
-            if (dataSourceMappingInitSql != null) {
-                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                    logger.info("正在使用配置的初始化SQL文件, 并执行文件....");
-                }
-                connection.createStatement().execute(dataSourceMappingInitSql);
-                if (DbMetaDataUtils.isTableExist(connection, tableName)) {
-                    if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                        logger.info("执行初始化SQL文件结果正确, 数据源中已存在表:{}.", tableName);
-                    }
-                } else {
-                    if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                        logger.error("执行始化SQL文件结果错误, 请检查用于初始化的SQL文件, 程序终止.");
-                    }
-                    System.exit(0);
-                }
-            } else {
-                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                    logger.error("扫描表时终止,数据源:\"{}\"中并没有表:\"{}\",也没有设置默认的初始化SQL文件!", dataSourceName, tableName);
-                }
-                System.exit(0);
-            }
+            DbUtils.runSqlScript(connection, dataSourceInitSqlFilePath);
         } else {
             if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                logger.info("数据源: \"{}\" 库中所包含的表有: \"{}\"", dataSourceName, tableName);
+                logger.error("尝试初始化表时终止, 用户既没有指定用于初始化的SQL文件, 默认资源路径下也没有{}文件!", dataSourceName + "-init.sql");
             }
+            System.exit(0);
         }
+
     }
 }

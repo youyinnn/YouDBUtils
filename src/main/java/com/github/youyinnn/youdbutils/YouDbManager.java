@@ -35,7 +35,7 @@ public class YouDbManager {
 
     private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
 
-    private static HashMap<String, String> dataSourceMappingInitSql = new HashMap<>(3);
+    private static HashMap<String, String> dataSourceInitSqlFilePath = new HashMap<>(3);
 
     public static String getModelMappingDataSourceName(String modelName) {
         for (Map.Entry<String, Set<String>> entry : dataSourceMappingModels.entrySet()) {
@@ -82,7 +82,7 @@ public class YouDbManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ModelTableMessage.setFieldMapping();
+        ModelTableMessage.setFieldMapping(dataSourceName);
     }
 
     public static void showService() {
@@ -101,39 +101,33 @@ public class YouDbManager {
         System.out.println(ModelTableMessage.getAllModelTableFieldMapping());
     }
 
-    public static boolean setInitSql(String dataSourceName, String initSqlFilePath) throws YouDbManagerException, IOException {
+    public static boolean setInitSql(String dataSourceName, String initSqlFilePath) throws YouDbManagerException {
         checkDataSourceName(dataSourceName);
         InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream(initSqlFilePath);
         if (resourceAsStream != null) {
-            StringBuffer sb = new StringBuffer("");
-            int len;
-            byte[] buf = new byte[1024];
-            while ( (len = resourceAsStream.read(buf)) != -1) {
-                sb.append(new String(buf, 0 , len));
-            }
-            dataSourceMappingInitSql.put(dataSourceName, String.valueOf(sb));
+            dataSourceInitSqlFilePath.put(dataSourceName, initSqlFilePath);
             return true;
         } else {
             return false;
         }
     }
 
-    public static String getDataSourceMappingInitSql(String dataSourceName) throws YouDbManagerException, IOException {
-        Logger logger = Log4j2Helper.getLogger("$db_scanner");
+    public static String getDataSourceInitSqlFilePath(String dataSourceName) throws YouDbManagerException, IOException {
+        Logger logger = Log4j2Helper.getLogger("$db_manager");
         checkDataSourceName(dataSourceName);
-        String initSql = dataSourceMappingInitSql.get(dataSourceName);
+        String initSql = dataSourceInitSqlFilePath.get(dataSourceName);
         if (initSql == null) {
             if (isYouDruidLogEnable(dataSourceName)) {
-                logger.info("用户并无配置好的初始化文件, 尝试索引默认SQL初始化文件:{}", dataSourceName + "-init.sql");
+                logger.info("用户并无配置好的初始化文件, 尝试索引默认的初始化SQL文件:{}", dataSourceName + "-init.sql");
             }
             boolean b = setInitSql(dataSourceName, dataSourceName + "-init.sql");
             if (b) {
                 if (isYouDruidLogEnable(dataSourceName)) {
-                    logger.info("存在数据库对应的默认SQL初始化文件:{}.",dataSourceName + "-init.sql" );
+                    logger.info("存在数据库对应的默认的初始化SQL文件:{}, 启用该配置.",dataSourceName + "-init.sql" );
                 }
             }
         }
-        return dataSourceMappingInitSql.get(dataSourceName);
+        return dataSourceInitSqlFilePath.get(dataSourceName);
     }
 
     public static boolean isYouDruidLogEnable(String dataSourceName) {
