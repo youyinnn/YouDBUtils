@@ -20,13 +20,10 @@ public class MappingHandler {
      * @throws NoSuchFieldException the no such field exception
      */
     public static ArrayList<String> mappingHandle(String modelName, ArrayList<String> modelField) throws NoSuchFieldException {
-
         if (modelField == null) {
             return null;
         }
-
         FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
-
         if (fieldMapping != null) {
             ArrayList<String> result = new ArrayList<>();
 
@@ -37,7 +34,6 @@ public class MappingHandler {
                     result.add(mField);
                 }
             }
-
             return result;
         } else {
             return modelField;
@@ -65,17 +61,12 @@ public class MappingHandler {
      * @throws NoSuchFieldException the no such field exception
      */
     public static HashMap<String, Object> mappingHandle(String modelName, HashMap<String, Object> modelField) throws NoSuchFieldException {
-
         if (modelField == null) {
             return null;
         }
-
         HashMap<String, Object> tableField = new HashMap<>(10);
-
         FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
-
         Set<String> mFieldSet = modelField.keySet();
-
         for (String mField : mFieldSet) {
             Object value = modelField.get(mField);
             if (fieldMapping.needToReplace(mField)) {
@@ -85,7 +76,6 @@ public class MappingHandler {
             }
 
         }
-
         return tableField;
     }
 
@@ -98,13 +88,10 @@ public class MappingHandler {
      * @throws NoSuchFieldException the no such field exception
      */
     public static String mappingHandle(String modelName, String modelField) throws NoSuchFieldException {
-
         FieldMapping fieldMapping = ModelTableMessage.getFieldMapping(modelName);
-
         if (fieldMapping.needToReplace(modelField)) {
             return fieldMapping.getTableField(modelField);
         }
-
         return modelField;
     }
 

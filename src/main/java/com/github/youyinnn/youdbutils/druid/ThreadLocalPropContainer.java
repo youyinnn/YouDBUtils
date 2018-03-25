@@ -106,10 +106,6 @@ public class ThreadLocalPropContainer {
     public static void removeTransactionRootServiceMethodName() {transactionRootServiceMethodName.remove();}
 
     public static void release(ResultSet resultSet,Statement statement, Connection connection) {
-        removeNoneffectiveUpdateFlag();
-        removeRollbackFlag();
-        removeThreadConnection();
-        removeTransactionRootServiceMethodName();
         try {
             if (resultSet != null) {
                 resultSet.close();
@@ -123,5 +119,12 @@ public class ThreadLocalPropContainer {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void removeAllThreadProp(){
+        removeNoneffectiveUpdateFlag();
+        removeRollbackFlag();
+        removeThreadConnection();
+        removeTransactionRootServiceMethodName();
     }
 }

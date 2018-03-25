@@ -51,14 +51,14 @@ public interface SqlExecutor {
     /**
      * 使用PreparedStatement执行update操作
      *
-     * @param modelName         需要更新的model类名 我们使用这个来对应数据表
+     * @param tableName         需要更新的表名
      * @param newFieldValuesMap 需要更新的字段以及新值组成的键值对
      * @param conditionsMap     需要定位更新记录的条件字段以及条件值组成的键值对
      * @param separateMark      连接条件的连词
      * @return 更新操作影响到的记录数 int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int executePreparedStatementUpdate(String modelName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
+    int executePreparedStatementUpdate(String tableName, HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 使用Statement执行insert操作
@@ -82,12 +82,12 @@ public interface SqlExecutor {
     /**
      * 使用PreparedStatement执行insert操作
      *
-     * @param modelName         需要插入的model类名 我们使用这个来对应数据表
+     * @param tableName         需要表名
      * @param newFieldValuesMap 填充的新值列表
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int executePreparedStatementInsert(String modelName, HashMap<String, Object> newFieldValuesMap) throws NoneffectiveUpdateExecuteException;
+    int executePreparedStatementInsert(String tableName, HashMap<String, Object> newFieldValuesMap) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 使用Statement执行delete操作
@@ -111,13 +111,13 @@ public interface SqlExecutor {
     /**
      * 使用PreparedStatement执行delete操作
      *
-     * @param modelName     需要删除的model类名 我们使用这个来对应数据表
+     * @param tableName     需要删除的数据的表名
      * @param conditionsMap 需要定位删除记录的条件字段以及条件值组成的键值对
      * @param separateMark  连接条件的连词
      * @return the int
      * @throws NoneffectiveUpdateExecuteException the noneffective update execute exception
      */
-    int executePreparedStatementDelete(String modelName, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
+    int executePreparedStatementDelete(String tableName, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException;
 
     /**
      * 使用Statement执行query操作
@@ -141,14 +141,14 @@ public interface SqlExecutor {
     /**
      * 使用PreparedStatement执行query操作
      *
-     * @param modelName      需要查询的model类名 我们使用这个来对应数据表
+     * @param tableName      需要查询数据的表名
      * @param queryFieldList 需要查询的字段列名
      * @param conditionMap   需要定位查询记录的条件字段以及条件值组成的键值对
      * @param separateMark   连接条件的连词
      * @return the result set
      * @throws SQLException the sql exceptions
      */
-    ResultSet executePreparedStatementQuery(String modelName, ArrayList<String> queryFieldList, HashMap<String,Object> conditionMap,String separateMark) throws SQLException;
+    ResultSet executePreparedStatementQuery(String tableName, ArrayList<String> queryFieldList, HashMap<String,Object> conditionMap,String separateMark) throws SQLException;
 
 
 }

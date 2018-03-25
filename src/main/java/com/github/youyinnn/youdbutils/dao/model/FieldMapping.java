@@ -1,5 +1,7 @@
 package com.github.youyinnn.youdbutils.dao.model;
 
+import com.github.youyinnn.youwebutils.third.DbUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,9 +18,9 @@ public class FieldMapping {
     private String modelName;
 
     /**
-     * 存储小写化的Mapping,键是modelField,值是tableField
+     * 存储字段Mapping,键是modelField,值是tableField
      */
-    private HashMap<String,String> lowerCaseFieldMapping = new HashMap<>();
+    private HashMap<String,String> fieldMapping = new HashMap<>();
 
     /**
      * 存储modelField和一个布尔值,布尔值决定我们使用modelField的时候,是否需要映射成tableField
@@ -35,11 +37,14 @@ public class FieldMapping {
      */
     FieldMapping(String modelName, ArrayList<String> modelFieldList, ArrayList<String> tableFieldList) {
         this.modelName = modelName;
-        for (int i = 0 ; i < modelFieldList.size() ; ++i) {
-            String modelField = modelFieldList.get(i).toLowerCase();
-            String tableField = tableFieldList.get(i).toLowerCase();
-            fieldMappingCheck.put(modelField,!modelField.equals(tableField));
-            lowerCaseFieldMapping.put(modelField, tableField);
+        for (String modelField : modelFieldList) {
+            int index = tableFieldList.indexOf(modelField);
+            if (index == -1) {
+                index = tableFieldList.indexOf(DbUtils.turnToAlibabaDataBaseNamingRules(modelField));
+            }
+            String tableField = tableFieldList.get(index);
+            fieldMappingCheck.put(modelField, !modelField.equals(tableField));
+            fieldMapping.put(modelField, tableField);
         }
     }
 
@@ -50,7 +55,7 @@ public class FieldMapping {
      * @return the table field
      */
     public String getTableField(String modelField) {
-        return lowerCaseFieldMapping.get(modelField.toLowerCase());
+        return fieldMapping.get(modelField);
     }
 
     /**
@@ -61,7 +66,7 @@ public class FieldMapping {
      * @throws NoSuchFieldException the no such field exception
      */
     public boolean needToReplace(String modelField) throws NoSuchFieldException {
-        Boolean check = fieldMappingCheck.get(modelField.toLowerCase());
+        Boolean check = fieldMappingCheck.get(modelField);
         if (check != null) {
             return check;
         } else {
@@ -73,7 +78,7 @@ public class FieldMapping {
     public String toString() {
         return "FieldMapping{" +
                 "modelName='" + modelName + '\'' +
-                ", lowerCaseFieldMapping=" + lowerCaseFieldMapping +
+                ", fieldMapping=" + fieldMapping +
                 ", fieldMappingCheck=" + fieldMappingCheck +
                 '}';
     }

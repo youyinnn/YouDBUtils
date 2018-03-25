@@ -31,6 +31,7 @@ public class TransactionInterceptor implements MethodInterceptor{
         Logger connectionLog = Log4j2Helper.getLogger("$db_connection");
         YouService service = o.getClass().getAnnotation(YouService.class);
         String dataSourceName = service.dataSourceName();
+        YouDbManager.checkDataSourceName(dataSourceName);
         boolean embeddedLogEnable = YouDbManager.isYouDruidLogEnable(dataSourceName);
 
         String transactionRootServiceMethodName = ThreadLocalPropContainer.getTransactionRootServiceMethodName();
@@ -70,6 +71,7 @@ public class TransactionInterceptor implements MethodInterceptor{
                         ThreadLocalPropContainer.getTransactionRootServiceMethodName(),
                         method.getName());
             }
+            ThreadLocalPropContainer.removeAllThreadProp();
             ThreadLocalPropContainer.release(null, null, conn);
         }
 

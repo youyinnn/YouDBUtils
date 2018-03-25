@@ -54,7 +54,7 @@ public class YouDbManager {
 
     public static void checkDataSourceName(String dataSourceName) throws YouDbManagerException {
         if (!youDruidMap.containsKey(dataSourceName)) {
-            throw new YouDbManagerException("没有该名称的数据源在YouDbManager中注册过!");
+            throw new YouDbManagerException("没有名称为:" + dataSourceName + "的数据源在YouDbManager中注册过!");
         }
     }
 

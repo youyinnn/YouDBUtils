@@ -54,7 +54,7 @@ public class ModelResultFactory<T> {
             for (String field : fieldList) {
                 boolean rsHasThisField = true;
                 try {
-                    resultSet.findColumn(field);
+                    resultSet.findColumn(fieldMapping.getTableField(field));
                 } catch (Exception ignore) {
                     rsHasThisField = false;
                 }

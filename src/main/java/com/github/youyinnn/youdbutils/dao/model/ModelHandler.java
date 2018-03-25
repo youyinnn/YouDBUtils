@@ -26,15 +26,14 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
     private String modelName;
 
+    private String tableName;
+
     public ModelHandler(Class<T> modelClass, String dataSourceName) {
         this.modelResultFactory = new ModelResultFactory<>(modelClass);
         this.modelClass = modelClass;
         this.modelName = modelClass.getSimpleName();
+        this.tableName = ModelTableMessage.getTableName(modelName);
         super.setDataSourceName(dataSourceName);
-    }
-
-    public Class<T> getModelClass() {
-        return modelClass;
     }
 
     public ModelResultFactory<T> getModelResultFactory() {
@@ -59,36 +58,29 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
     @Override
     public ArrayList<T> getList(String sql) {
-
         return getStatementResultModelList(sql);
     }
 
     @Override
     public ArrayList<T> getListForAll(ArrayList<String> queryFieldList){
-
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        String sql = SqlStringUtils.getSelectAllSql(modelName,queryFieldList);
-
+        String sql = SqlStringUtils.getSelectAllSql(tableName,queryFieldList);
         return getStatementResultModelList(sql);
-
     }
 
     @Override
     public ArrayList<T> getListWhere(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
-
-
         ResultSet resultSet = null;
         ArrayList<T> resultModelList = null;
         Statement statement = null;
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-            resultSet = executePreparedStatementQuery(modelName,queryFieldList,conditionsMap,separateMark);
+            resultSet = executePreparedStatementQuery(tableName,queryFieldList,conditionsMap,separateMark);
             statement = resultSet.getStatement();
             resultModelList = modelResultFactory.getResultModelList(resultSet);
         } catch (Exception e) {
@@ -96,44 +88,34 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         } finally {
             ThreadLocalPropContainer.release(resultSet,statement,null);
         }
-
         return resultModelList;
     }
 
     @Override
     public ArrayList<T> getListWhereLike(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
-
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        String sql = SqlStringUtils.getSelectFromWhereLikeSql(modelName,conditionsMap,separateMark,queryFieldList);
-
+        String sql = SqlStringUtils.getSelectFromWhereLikeSql(tableName,conditionsMap,separateMark,queryFieldList);
         return getStatementResultModelList(sql);
     }
 
     @Override
     public int saveModel(T model) throws NoneffectiveUpdateExecuteException {
-
-        Class<?> aClass = model.getClass();
-
         HashMap<String, Object> newFieldValuesMap = new HashMap<>(10);
-
-        for (String field : ModelTableMessage.getModelFieldList(aClass.getSimpleName())) {
+        for (String field : ModelTableMessage.getModelFieldList(modelName)) {
             Object fieldValue = ReflectionUtils.getFieldValue(model, field);
             newFieldValuesMap.put(field,fieldValue);
         }
-
         try {
             newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        return executePreparedStatementInsert(aClass.getSimpleName(), newFieldValuesMap);
+        return executePreparedStatementInsert(tableName, newFieldValuesMap);
     }
 
     @Override
@@ -141,11 +123,9 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         T resultModel = null;
         try {
             ResultSet resultSet = executeStatementQuery(sql);
-
             if (!resultSet.isBeforeFirst()) {
                 return null;
             }
-
             resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,11 +138,9 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         T resultModel = null;
         try {
             ResultSet resultSet = executePreparedStatementQuery(sql,conditionValues);
-
             if (!resultSet.isBeforeFirst()) {
                 return null;
             }
-
             resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
@@ -172,37 +150,28 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
     @Override
     public T getModel(HashMap<String, Object> conditionsMap, ArrayList<String> queryFieldList,String separateMark) {
-
-
         T resultModel = null;
         try {
             queryFieldList = MappingHandler.mappingHandle(modelName,queryFieldList);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
-
-            ResultSet resultSet = executePreparedStatementQuery(modelName, queryFieldList, conditionsMap,separateMark);
-
+            ResultSet resultSet = executePreparedStatementQuery(tableName, queryFieldList, conditionsMap,separateMark);
             if (!resultSet.isBeforeFirst()) {
                 return null;
             }
-
             resultModel = modelResultFactory.getResultModel(resultSet, true);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return resultModel;
     }
 
     @Override
     public Object getModelFieldValue(String fieldName, HashMap<String, Object> conditionsMap,String separateMark) {
-
         Object value = null;
         try {
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
             fieldName = MappingHandler.mappingHandle(modelName,fieldName);
-
-            ResultSet resultSet = executePreparedStatementQuery(modelName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap,separateMark);
-
+            ResultSet resultSet = executePreparedStatementQuery(tableName, YouCollectionsUtils.getYouArrayList(fieldName), conditionsMap,separateMark);
             if (!resultSet.isBeforeFirst()) {
                 return null;
             } else {
@@ -212,38 +181,32 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return value;
     }
 
     @Override
     public int updateModel(HashMap<String, Object> newFieldValuesMap, HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
-
         try {
             newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        return executePreparedStatementUpdate(modelName,newFieldValuesMap,conditionsMap,separateMark);
+        return executePreparedStatementUpdate(tableName,newFieldValuesMap,conditionsMap,separateMark);
     }
 
     @Override
     public int deleteModel(HashMap<String, Object> conditionsMap,String separateMark) throws NoneffectiveUpdateExecuteException {
-
         try {
             conditionsMap = MappingHandler.mappingHandle(modelName,conditionsMap);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
-        return executePreparedStatementDelete(modelName,conditionsMap,separateMark);
+        return executePreparedStatementDelete(tableName,conditionsMap,separateMark);
     }
 
     @Override
     public int addition(String modelField, double b, HashMap<String, Object> conditionsMap) throws NoneffectiveUpdateExecuteException {
-
         return basicArithmetic(modelField,b,conditionsMap,"+");
     }
 
@@ -263,7 +226,6 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
     }
 
     private int basicArithmetic(String modelField, double b, HashMap<String, Object> conditionsMap, String op) throws NoneffectiveUpdateExecuteException {
-
         String tableField = null;
         try {
             tableField = MappingHandler.mappingHandle(modelName, modelField);
@@ -271,9 +233,8 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-
         StringBuffer sql = new StringBuffer("UPDATE ")
-                .append(modelName)
+                .append(tableName)
                 .append(" SET ")
                 .append(tableField)
                 .append(" = ")
@@ -281,11 +242,8 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
                 .append(op)
                 .append(" ?")
                 .append(SqlStringUtils.getWhereSubStr(conditionsMap.keySet(),"AND"));
-
         ArrayList conditionValues = new ArrayList();
-
         conditionValues.addAll(conditionsMap.values());
-
         return executePreparedStatementUpdate(sql.toString(), YouCollectionsUtils.getYouArrayList(b+""), conditionValues);
     }
 }

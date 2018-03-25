@@ -59,11 +59,7 @@ public class ModelTableScanner {
         Logger logger = Log4j2Helper.getLogger("$db_manager");
         try {
             ArrayList<String> tablesFromDB = DbUtils.getTablesFromDB(connection);
-            if (tablesFromDB.size() != 0) {
-                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                    logger.info("数据源: \"{}\" 中所包含的表有: \"{}\".", dataSourceName, tablesFromDB);
-                }
-            } else {
+            if (tablesFromDB.size() == 0) {
                 if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
                     logger.info("扫描数据源:\"{}\", 没有任何表, 尝试索引配置好的初始化SQL文件.", dataSourceName);
                 }
@@ -72,13 +68,23 @@ public class ModelTableScanner {
 
             tablesFromDB = DbUtils.getTablesFromDB(connection);
             for (String modelName : modelNameSet) {
-                if (!tablesFromDB.contains(modelName.toLowerCase())) {
+                String tableName = modelName.toLowerCase();
+                String alibabaTableName = DbUtils.turnToAlibabaDataBaseNamingRules(modelName);
+                if (!tablesFromDB.contains(tableName)) {
                     if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                        logger.info("数据源: \"{}\" 中没有表:{}.", dataSourceName, modelName);
+                        logger.info("数据源: \"{}\" 中没有表:{}, 尝试寻找表:{}", dataSourceName, tableName, alibabaTableName);
+                    }
+                }
+                if (!tablesFromDB.contains(alibabaTableName)) {
+                    if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+                        logger.info("数据源: \"{}\" 中没有表:{}.", dataSourceName, alibabaTableName);
                     }
                     checkTableAndTryToCreate(dataSourceName, connection, logger);
+                } else {
+                    tableName = alibabaTableName;
                 }
-                ArrayList<String> columnsFromTable = DbUtils.getColumnsFromTable(connection, modelName);
+                ArrayList<String> columnsFromTable = DbUtils.getColumnsFromTable(connection, tableName);
+                ModelTableMessage.registerModelTableNameMappingMessage(modelName, tableName);
                 ModelTableMessage.registerTableFieldMessage(modelName,columnsFromTable);
             }
             tablesFromDB = DbUtils.getTablesFromDB(connection);

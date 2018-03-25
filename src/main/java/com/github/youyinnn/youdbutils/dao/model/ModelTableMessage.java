@@ -1,6 +1,7 @@
 package com.github.youyinnn.youdbutils.dao.model;
 
 import com.github.youyinnn.youdbutils.YouDbManager;
+import com.github.youyinnn.youwebutils.third.DbUtils;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.Logger;
 
@@ -19,19 +20,24 @@ import java.util.Set;
 public class ModelTableMessage {
 
     /**
+     * 里面保存了model名和对应table名的组成的键值对
+     */
+    private static HashMap<String, String> modelTableNameMapping = new HashMap<>(5);
+
+    /**
      * 里面保存了所有model和其所有model字段组成的列表的键值对
      */
-    private static HashMap<String,ArrayList<String>> allModelField = new HashMap<>();
+    private static HashMap<String,ArrayList<String>> allModelField = new HashMap<>(5);
 
     /**
      * 里面保存了所有table和其所有model字段组成的列表的键值对
      */
-    private static HashMap<String,ArrayList<String>> allTableField = new HashMap<>();
+    private static HashMap<String,ArrayList<String>> allTableField = new HashMap<>(5);
 
     /**
      * 里面保存了所有的model名和其对应的FieldMapping对象组成的键值对
      */
-    private static HashMap<String,FieldMapping> allModelTableFieldMapping = new HashMap<>();
+    private static HashMap<String,FieldMapping> allModelTableFieldMapping = new HashMap<>(5);
 
     /**
      * 把model和其对应field组成的列表作为键值对保存到allModelField当中
@@ -51,6 +57,10 @@ public class ModelTableMessage {
      */
     public static void registerTableFieldMessage(String tableName, ArrayList<String> fieldList) {
         allTableField.put(tableName,fieldList);
+    }
+
+    public static void registerModelTableNameMappingMessage(String modelName, String tableName) {
+        modelTableNameMapping.put(modelName, tableName);
     }
 
     /**
@@ -73,18 +83,12 @@ public class ModelTableMessage {
         for (String modelName : modelNames) {
             ArrayList<String> mFields = allModelField.get(modelName);
             ArrayList<String> tColumns = allTableField.get(modelName);
-            if (mFields.size() != tColumns.size()) {
-                if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                    logger.error("数据源: \"{}\" 的Model类和数据表的扫描结果有误, Model:{}的字段数和对应表的列数不一致, 程序终止!",
-                            dataSourceName, modelName);
-                }
-                System.exit(0);
-            }
             for (String mField : mFields) {
-                if (!tColumns.contains(mField)) {
+                boolean mapping = tColumns.contains(mField) || tColumns.contains(DbUtils.turnToAlibabaDataBaseNamingRules(mField));
+                if (!mapping) {
                     if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-                        logger.error("数据源: \"{}\" 的Model类和数据表的扫描结果有误, 表:{}中不存在{}列, 程序终止!",
-                                dataSourceName, modelName, mField);
+                        logger.error("数据源: \"{}\" 的Model类和数据表的扫描结果有误, 表:{}中不存在{}或者{}列, 程序终止!",
+                                dataSourceName, modelName, mField, DbUtils.turnToAlibabaDataBaseNamingRules(mField));
                     }
                     System.exit(0);
                 }
@@ -141,5 +145,9 @@ public class ModelTableMessage {
      */
     public static HashMap<String, FieldMapping> getAllModelTableFieldMapping() {
         return allModelTableFieldMapping;
+    }
+
+    public static String getTableName(String modelName) {
+        return modelTableNameMapping.get(modelName);
     }
 }
