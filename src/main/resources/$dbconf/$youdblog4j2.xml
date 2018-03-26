@@ -5,6 +5,10 @@
         <Console name="$db_Console" target="SYSTEM_ERR">
             <PatternLayout pattern="[YouDBUtils %15c] [Time: %d{yyyy-MM-dd HH:mm:ss,SSS} ][%-5p: %msg ]%n"/>
         </Console>
+
+        <Console name="$db_sql_statement" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss,SSS}]%n[SQL: %msg]%n"/>
+        </Console>
     </Appenders>
 
     <Loggers>
@@ -18,6 +22,10 @@
 
         <Logger name="$db_manager" level="info" additivity="false">
             <AppenderRef ref="$db_Console"/>
+        </Logger>
+
+        <Logger name="druid.sql.Statement" level="debug" additivity="false">
+            <AppenderRef ref="$db_sql_statement"/>
         </Logger>
     </Loggers>
 </Configuration>

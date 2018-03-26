@@ -189,8 +189,7 @@ public class YouDruid {
                 try {
                     youDruid.currentDataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(properties);
                     if (MYSQL_TYPE.equals(dataSourceType)){
-                        // 默认开启这个监控
-                        //youDruid.currentDataSource.addFilters("wall");
+                        youDruid.currentDataSource.addFilters("wall");
                     }
                     List<Filter> filters = new ArrayList<>();
                     if (log4j2FilterConfig != null) {
