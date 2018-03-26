@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * YouService的Ioc容器管理.
@@ -130,4 +131,11 @@ public class YouServiceIocContainer {
         }
     }
 
+    public static Set<String> getPrototypeServiceMap() {
+        return prototypeServiceMap.keySet();
+    }
+
+    public static Set<String> getSingletonServiceMap() {
+        return singletonServiceMap.keySet();
+    }
 }

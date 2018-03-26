@@ -21,17 +21,19 @@ public class ServiceScanner {
     private ServiceScanner() {}
 
     public static void scanPackageForService(String servicePackageNamePrefix, String dataSourceName)  {
-
         Set<Class<?>> serviceClassSet = ClassUtils.findFileClass(servicePackageNamePrefix);
-        if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-            Log4j2Helper.getLogger("$db_manager").
-                    info("数据源: \"{}\" 所持有的Service类扫描结果为: {}.", dataSourceName, serviceClassSet);
-        }
         for (Class<?> aClass : serviceClassSet) {
             YouService annotation = aClass.getAnnotation(YouService.class);
             if (annotation != null){
                 YouServiceIocContainer.registerYouService(aClass);
             }
+        }
+        if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
+            Log4j2Helper.getLogger("$db_manager").
+                    info("数据源: \"{}\" 所持有的Service类扫描结果为:" + System.lineSeparator()
+                            + "|--多例: {}." + System.lineSeparator()
+                            + "---单例: {}.",
+                            dataSourceName, YouServiceIocContainer.getPrototypeServiceMap(), YouServiceIocContainer.getSingletonServiceMap());
         }
     }
 

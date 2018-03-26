@@ -28,7 +28,7 @@ public class ModelTableScanner {
      * Scan package for model.
      *
      * @param modelPackageNamePrefix the model package name prefix
-     * @param dataSourceName
+     * @param dataSourceName         the data source name
      */
     public static void scanPackageForModel(String modelPackageNamePrefix, String dataSourceName) {
         Set<Class<?>> modelClassSet = ClassUtils.findFileClass(modelPackageNamePrefix);
@@ -38,22 +38,20 @@ public class ModelTableScanner {
         }
         for (Class<?> aClass : modelClassSet) {
             Field[] declaredFields = aClass.getDeclaredFields();
-
             ArrayList<String> fieldList = new ArrayList<>();
-
             for (Field declaredField : declaredFields) {
                 fieldList.add(declaredField.getName());
             }
-
             ModelTableMessage.registerModelFieldMessage(aClass.getSimpleName(),fieldList);
         }
     }
 
     /**
      * Scan data base for table.
-     *  @param modelNameSet the model name set
-     * @param connection   the connection
-     * @param dataSourceName
+     *
+     * @param modelNameSet   the model name set
+     * @param connection     the connection
+     * @param dataSourceName the data source name
      */
     public static void scanDataBaseForTable(Set<String> modelNameSet, Connection connection, String dataSourceName) {
         Logger logger = Log4j2Helper.getLogger("$db_manager");
@@ -65,7 +63,6 @@ public class ModelTableScanner {
                 }
                 checkTableAndTryToCreate(dataSourceName, connection, logger);
             }
-
             tablesFromDB = DbUtils.getTablesFromDB(connection);
             for (String modelName : modelNameSet) {
                 String tableName = modelName.toLowerCase();
@@ -80,6 +77,7 @@ public class ModelTableScanner {
                         logger.info("数据源: \"{}\" 中没有表:{}.", dataSourceName, alibabaTableName);
                     }
                     checkTableAndTryToCreate(dataSourceName, connection, logger);
+                    tableName = alibabaTableName;
                 } else {
                     tableName = alibabaTableName;
                 }
