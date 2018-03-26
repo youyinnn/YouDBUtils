@@ -10,7 +10,6 @@ import com.github.youyinnn.youdbutils.druid.filter.YouStatFilterConfig;
 import com.github.youyinnn.youdbutils.exceptions.DataSourceInitException;
 import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.Logger;
-import org.dom4j.DocumentException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +33,8 @@ public class YouDruid {
 
     static {
         try {
-            Log4j2Helper.useConfig("$dbconf/$youdblog4j2.xml");
-        } catch (DocumentException | IOException e) {
+            Log4j2Helper.useConfig(YouDruid.class.getResource("/$dbconf/$youdblog4j2.xml"));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
