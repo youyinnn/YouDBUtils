@@ -22,6 +22,8 @@ import java.util.Set;
  */
 public class ModelTableScanner {
 
+    private static final Logger logger = Log4j2Helper.getLogger("$db_manager");
+
     private ModelTableScanner(){}
 
     /**
@@ -33,8 +35,7 @@ public class ModelTableScanner {
     public static void scanPackageForModel(String modelPackageNamePrefix, String dataSourceName) {
         Set<Class<?>> modelClassSet = ClassUtils.findFileClass(modelPackageNamePrefix);
         if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
-            Log4j2Helper.getLogger("$db_manager")
-                    .info("数据源: \"{}\" 所管理的Model类扫描结果为: {}.", dataSourceName, modelClassSet);
+            logger.info("数据源: \"{}\" 所管理的Model类扫描结果为: {}.", dataSourceName, modelClassSet);
         }
         for (Class<?> aClass : modelClassSet) {
             Field[] declaredFields = aClass.getDeclaredFields();
@@ -54,14 +55,13 @@ public class ModelTableScanner {
      * @param dataSourceName the data source name
      */
     public static void scanDataBaseForTable(Set<String> modelNameSet, Connection connection, String dataSourceName) {
-        Logger logger = Log4j2Helper.getLogger("$db_manager");
         try {
             ArrayList<String> tablesFromDB = DbUtils.getTablesFromDB(connection);
             if (tablesFromDB.size() == 0) {
                 if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
                     logger.info("扫描数据源:\"{}\", 没有任何表, 尝试索引配置好的初始化SQL文件.", dataSourceName);
                 }
-                checkTableAndTryToCreate(dataSourceName, connection, logger);
+                checkTableAndTryToCreate(dataSourceName, connection);
             }
             tablesFromDB = DbUtils.getTablesFromDB(connection);
             for (String modelName : modelNameSet) {
@@ -76,7 +76,7 @@ public class ModelTableScanner {
                     if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
                         logger.info("数据源: \"{}\" 中没有表:{}.", dataSourceName, alibabaTableName);
                     }
-                    checkTableAndTryToCreate(dataSourceName, connection, logger);
+                    checkTableAndTryToCreate(dataSourceName, connection);
                     tableName = alibabaTableName;
                 } else {
                     tableName = alibabaTableName;
@@ -96,7 +96,7 @@ public class ModelTableScanner {
         }
     }
 
-    private static void checkTableAndTryToCreate(String dataSourceName, Connection connection, Logger logger) throws Exception {
+    private static void checkTableAndTryToCreate(String dataSourceName, Connection connection) throws Exception {
         String dataSourceInitSqlFilePath = YouDbManager.getDataSourceInitSqlFilePath(dataSourceName);
         if (dataSourceInitSqlFilePath != null) {
             if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {

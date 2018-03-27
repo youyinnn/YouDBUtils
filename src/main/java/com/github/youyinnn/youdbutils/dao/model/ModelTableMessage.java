@@ -19,6 +19,8 @@ import java.util.Set;
  */
 public class ModelTableMessage {
 
+    private static final Logger logger = Log4j2Helper.getLogger("$db_manager");
+
     /**
      * 里面保存了model名和对应table名的组成的键值对
      */
@@ -78,7 +80,6 @@ public class ModelTableMessage {
      * @param dataSourceName
      */
     public static void setFieldMapping(String dataSourceName) {
-        Logger logger = Log4j2Helper.getLogger("$db_manager");
         Set<String> modelNames = allModelField.keySet();
         for (String modelName : modelNames) {
             ArrayList<String> mFields = allModelField.get(modelName);

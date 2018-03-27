@@ -31,6 +31,8 @@ import java.util.Set;
  */
 public class YouDbManager {
 
+    private static final Logger logger = Log4j2Helper.getLogger("$db_manager");
+
     private static HashMap<String, YouDruid> youDruidMap = new HashMap<>(3);
 
     private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
@@ -113,7 +115,6 @@ public class YouDbManager {
     }
 
     public static String getDataSourceInitSqlFilePath(String dataSourceName) throws YouDbManagerException, IOException {
-        Logger logger = Log4j2Helper.getLogger("$db_manager");
         checkDataSourceName(dataSourceName);
         String initSql = dataSourceInitSqlFilePath.get(dataSourceName);
         if (initSql == null) {
