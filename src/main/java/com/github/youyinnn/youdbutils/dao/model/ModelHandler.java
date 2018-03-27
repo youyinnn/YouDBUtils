@@ -108,7 +108,9 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         HashMap<String, Object> newFieldValuesMap = new HashMap<>(10);
         for (String field : ModelTableMessage.getModelFieldList(modelName)) {
             Object fieldValue = ReflectionUtils.getFieldValue(model, field);
-            newFieldValuesMap.put(field,fieldValue);
+            if (fieldValue != null) {
+                newFieldValuesMap.put(field,fieldValue);
+            }
         }
         try {
             newFieldValuesMap = MappingHandler.mappingHandle(modelName,newFieldValuesMap);
