@@ -54,6 +54,9 @@ public class YouDruid {
     private String                          driverClass;
     private YouDruid() {}
 
+    public DruidDataSource getCurrentDataSource() {
+        return currentDataSource;
+    }
     /**
      * Gets current data source conn.
      *
