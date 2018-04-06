@@ -8,6 +8,7 @@ import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Set;
@@ -97,12 +98,12 @@ public class ModelTableScanner {
     }
 
     private static void checkTableAndTryToCreate(String dataSourceName, Connection connection) throws Exception {
-        String dataSourceInitSqlFilePath = YouDbManager.getDataSourceInitSqlFilePath(dataSourceName);
-        if (dataSourceInitSqlFilePath != null) {
+        URL dataSourceInitSqlFileURL = YouDbManager.getDataSourceInitSqlFileURL(dataSourceName);
+        if (dataSourceInitSqlFileURL != null) {
             if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
                 logger.info("正在使用配置的初始化SQL文件, 并执行文件....");
             }
-            DbUtils.runSqlScript(connection, dataSourceInitSqlFilePath);
+            DbUtils.runSqlScript(connection, dataSourceInitSqlFileURL.openStream());
         } else {
             if (YouDbManager.isYouDruidLogEnable(dataSourceName)) {
                 logger.error("尝试初始化表时终止, 用户既没有指定用于初始化的SQL文件, 默认资源路径下也没有{}文件!", dataSourceName + "-init.sql");

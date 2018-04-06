@@ -10,7 +10,7 @@ import com.github.youyinnn.youwebutils.third.Log4j2Helper;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,7 +37,7 @@ public class YouDbManager {
 
     private static HashMap<String, Set<String>> dataSourceMappingModels = new HashMap<>(3);
 
-    private static HashMap<String, String> dataSourceInitSqlFilePath = new HashMap<>(3);
+    private static HashMap<String, URL> dataSourceInitSqlFileURL = new HashMap<>(3);
 
     public static String getModelMappingDataSourceName(String modelName) {
         for (Map.Entry<String, Set<String>> entry : dataSourceMappingModels.entrySet()) {
@@ -103,32 +103,27 @@ public class YouDbManager {
         System.out.println(ModelTableMessage.getAllModelTableFieldMapping());
     }
 
-    public static boolean setInitSql(String dataSourceName, String initSqlFilePath) throws YouDbManagerException {
+    public static void setInitSql(String dataSourceName, URL initSqlFileURL) throws YouDbManagerException, IOException {
         checkDataSourceName(dataSourceName);
-        InputStream resourceAsStream = ClassLoader.getSystemClassLoader().getResourceAsStream(initSqlFilePath);
-        if (resourceAsStream != null) {
-            dataSourceInitSqlFilePath.put(dataSourceName, initSqlFilePath);
-            return true;
-        } else {
-            return false;
-        }
+        dataSourceInitSqlFileURL.put(dataSourceName, initSqlFileURL);
     }
 
-    public static String getDataSourceInitSqlFilePath(String dataSourceName) throws YouDbManagerException, IOException {
+    public static URL getDataSourceInitSqlFileURL(String dataSourceName) throws YouDbManagerException, IOException {
         checkDataSourceName(dataSourceName);
-        String initSql = dataSourceInitSqlFilePath.get(dataSourceName);
-        if (initSql == null) {
+        URL url = dataSourceInitSqlFileURL.get(dataSourceName);
+        if (url == null) {
             if (isYouDruidLogEnable(dataSourceName)) {
                 logger.info("用户并无配置好的初始化文件, 尝试索引默认的初始化SQL文件:{}", dataSourceName + "-init.sql");
             }
-            boolean b = setInitSql(dataSourceName, dataSourceName + "-init.sql");
-            if (b) {
+            URL resource = ClassLoader.getSystemClassLoader().getResource(dataSourceName + "-init.sql");
+            if (resource != null) {
                 if (isYouDruidLogEnable(dataSourceName)) {
                     logger.info("存在数据库对应的默认的初始化SQL文件:{}, 启用该配置.",dataSourceName + "-init.sql" );
+                    setInitSql(dataSourceName, resource);
                 }
             }
         }
-        return dataSourceInitSqlFilePath.get(dataSourceName);
+        return dataSourceInitSqlFileURL.get(dataSourceName);
     }
 
     public static boolean isYouDruidLogEnable(String dataSourceName) {
