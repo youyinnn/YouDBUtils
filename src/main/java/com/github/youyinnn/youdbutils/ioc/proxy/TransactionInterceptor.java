@@ -16,11 +16,14 @@ import java.sql.Connection;
  * 这是使用cglib代理进行事务过程代理的主过程.
  * 过程完全在一条数据库连接下进行.
  * 过程:
- *  1.先在方法上扫描Transaction注解,若没有则去方法所属的类上扫描;
- *  2.获取Transaction注解上的allowNoneffectiveUpdate标识, 若不存在注解,则使用默认值;
- *  3.invoke方法;
- *  4.查询当前线程的回滚flag,若需要回滚,则回滚事务;
- *  5.提交事务,关闭连接,移除线程绑定变量;
+ *  1.先获取方法所属类的YouService注解, 根据注解索引service类所服务的数据源
+ *  2.记录当次connection中所包含的根service方法token, 以便包裹多个service方法来一次性释放连接
+ *  3.获取连接, 开启事务
+ *  4.先在方法上扫描Transaction注解,若没有则去方法所属的类上扫描;
+ *  5.获取Transaction注解上的allowNoneffectiveUpdate标识, 若不存在注解,则使用默认值;
+ *  6.invoke方法;
+ *  7.查询当前线程的回滚flag,若需要回滚,则回滚事务;
+ *  8.提交事务,关闭连接,移除线程绑定变量;
  *
  * @author youyinnn
  */

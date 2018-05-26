@@ -104,7 +104,7 @@ public class SqlStringUtils {
      * @return the update set where sql
      */
     public static String getUpdateSetWhereSql(String tableName, Set<String> updateFieldSet, String separateMark, Set<String> conditionKeySet) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("UPDATE ")
                 .append(tableName)
@@ -132,7 +132,7 @@ public class SqlStringUtils {
      * @return the insert sql
      */
     public static String getInsertSql(String tableName, Set<String> insertFieldSet) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 
         sb.append("INSERT INTO ")
                 .append(tableName)
@@ -169,14 +169,9 @@ public class SqlStringUtils {
      * @return the delete sql
      */
     public static String getDeleteSql(String tableName,String separateMark, Set<String> conditionKeySet) {
-        StringBuffer sb = new StringBuffer();
-
-        sb.append("DELETE FROM ")
-                .append(tableName);
-
-        sb.append(getWhereSubStr(conditionKeySet,separateMark));
-
-        return sb.toString();
+        return "DELETE FROM " +
+                tableName +
+                getWhereSubStr(conditionKeySet, separateMark);
     }
 
     /**
@@ -185,7 +180,7 @@ public class SqlStringUtils {
      * @param sb             the sb
      * @param queryFieldList the query field list
      */
-    public static void getSelectFromSubStr(StringBuffer sb, ArrayList<String> queryFieldList) {
+    private static void getSelectFromSubStr(StringBuffer sb, ArrayList<String> queryFieldList) {
         if (queryFieldList == null) {
             sb.append(SELECT_ALL_FROM);
         } else {
@@ -208,7 +203,7 @@ public class SqlStringUtils {
      */
     public static String getWhereSubStr(Set<String> conditionKeySet, String separateMark) {
 
-        StringBuffer sb = new StringBuffer(" WHERE ");
+        StringBuilder sb = new StringBuilder(" WHERE ");
 
         for (String s : conditionKeySet) {
             sb.append(s).append(" = ? ").append(separateMark).append(" ");
@@ -226,9 +221,9 @@ public class SqlStringUtils {
      * @param separateMark  连接条件的连词
      * @return where like sub str
      */
-    public static String getWhereLikeSubStr(HashMap<String,Object> conditionsMap, String separateMark) {
+    private static String getWhereLikeSubStr(HashMap<String, Object> conditionsMap, String separateMark) {
 
-        StringBuffer sb = new StringBuffer(" WHERE ");
+        StringBuilder sb = new StringBuilder(" WHERE ");
 
         for (Map.Entry<String, Object> stringObjectEntry : conditionsMap.entrySet()) {
             sb.append(stringObjectEntry.getKey())

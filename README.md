@@ -1,5 +1,5 @@
 ## YouDBUtils
-[![Travis](https://img.shields.io/badge/version-2.2.2-green.svg)]()
+[![Travis](https://img.shields.io/badge/version-2.2.3-green.svg)]()
 [![Travis](https://img.shields.io/badge/druid-1.1.8-brightgreen.svg)]()
 [![Travis](https://img.shields.io/badge/cglibnodep-3.2.5-brightgreen.svg)]()
 
@@ -12,7 +12,7 @@
     <dependency>
         <groupId>com.github.youyinnn</groupId>
         <artifactId>you-db-utils</artifactId>
-        <version>2.2.2</version>
+        <version>2.2.3</version>
     </dependency>
 ```
 
@@ -42,5 +42,6 @@
 - [x] 其他重要监控的配置(done:wall默认, stat, log4j2可高度配置)
 - [x] 启动初始化信息的输出(done:基本的启动和业务流)
 - [x] log4j2的引入(done:嵌入)
+- [ ] 一级甚至多级缓存
 
 ###### 更多详情请移步[wiki页](https://github.com/youyinnn/YouDBUtils/wiki)了解

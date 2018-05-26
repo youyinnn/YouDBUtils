@@ -2,7 +2,6 @@ package com.github.youyinnn.youdbutils.dao;
 
 import com.github.youyinnn.youdbutils.YouDbManager;
 import com.github.youyinnn.youdbutils.dao.model.ModelHandler;
-import com.github.youyinnn.youdbutils.dao.model.ModelResultFactory;
 
 import java.lang.reflect.ParameterizedType;
 
@@ -17,12 +16,7 @@ import java.lang.reflect.ParameterizedType;
  */
 public class YouDao<T> {
 
-    protected ModelResultFactory<T> modelResultFactory;
-
     protected ModelHandler<T> modelHandler;
-
-    protected String modelName;
-
     private Class<T> modelClass;
 
     private void setModelClass() {
@@ -40,9 +34,7 @@ public class YouDao<T> {
 
     public YouDao() {
         setModelClass();
-        modelName = modelClass.getSimpleName();
-        modelHandler = new ModelHandler<>(modelClass, YouDbManager.getModelMappingDataSourceName(modelName));
-        modelResultFactory = modelHandler.getModelResultFactory();
+        modelHandler = new ModelHandler<>(modelClass, YouDbManager.getModelMappingDataSourceName(modelClass.getSimpleName()));
     }
 
 }

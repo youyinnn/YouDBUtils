@@ -8,6 +8,7 @@ import java.lang.annotation.*;
  * 这个注释用于标识持有YouDao的Service类.
  * 被YouService标识的类可以被ServiceScanner.scanPackageForService方法扫描进YouServiceIocContainer.
  * 这个注解可以指定YouService类是单例还是多例.
+ * 并且我们必须指定这个Service类所服务的数据源名.
  */
 @Inherited
 @Target({ElementType.TYPE})

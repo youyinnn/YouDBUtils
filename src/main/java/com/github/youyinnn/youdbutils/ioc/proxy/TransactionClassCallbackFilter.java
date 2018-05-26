@@ -28,7 +28,15 @@ public class TransactionClassCallbackFilter implements CallbackFilter {
 
         String name = method.getName();
 
-        if ("toString".equals(name) || "equals".equals(name) || "hashCode".equals(name) || "clone".equals(name)) {
+        if ("clone".equals(name) ||
+                "equals".equals(name) ||
+                "finalize".equals(name) ||
+                "getClass".equals(name) ||
+                "hashCode".equals(name) ||
+                "notify".equals(name) ||
+                "notifyAll".equals(name) ||
+                "toString".equals(name) ||
+                "wait".equals(name)) {
             return 0;
         }
 

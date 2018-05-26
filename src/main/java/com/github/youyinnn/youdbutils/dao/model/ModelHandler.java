@@ -22,22 +22,15 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
 
     private ModelResultFactory<T> modelResultFactory;
 
-    private Class<T> modelClass;
-
     private String modelName;
 
     private String tableName;
 
     public ModelHandler(Class<T> modelClass, String dataSourceName) {
         this.modelResultFactory = new ModelResultFactory<>(modelClass);
-        this.modelClass = modelClass;
         this.modelName = modelClass.getSimpleName();
         this.tableName = ModelTableMessage.getTableName(modelName);
         super.setDataSourceName(dataSourceName);
-    }
-
-    public ModelResultFactory<T> getModelResultFactory() {
-        return modelResultFactory;
     }
 
     private ArrayList<T> getStatementResultModelList(String sql){
@@ -235,17 +228,16 @@ public class ModelHandler<T> extends SqlExecutor implements com.github.youyinnn.
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
-        StringBuffer sql = new StringBuffer("UPDATE ")
-                .append(tableName)
-                .append(" SET ")
-                .append(tableField)
-                .append(" = ")
-                .append(tableField)
-                .append(op)
-                .append(" ?")
-                .append(SqlStringUtils.getWhereSubStr(conditionsMap.keySet(),"AND"));
-        ArrayList conditionValues = new ArrayList();
-        conditionValues.addAll(conditionsMap.values());
-        return executePreparedStatementUpdate(sql.toString(), YouCollectionsUtils.getYouArrayList(b+""), conditionValues);
+        ArrayList<Object> conditionValues = new ArrayList<>(conditionsMap.values());
+        String sql = "UPDATE " +
+                tableName +
+                " SET " +
+                tableField +
+                " = " +
+                tableField +
+                op +
+                " ?" +
+                SqlStringUtils.getWhereSubStr(conditionsMap.keySet(), "AND");
+        return executePreparedStatementUpdate(sql, YouCollectionsUtils.getYouArrayList(b+""), conditionValues);
     }
 }
